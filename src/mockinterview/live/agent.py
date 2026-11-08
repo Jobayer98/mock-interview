@@ -38,7 +38,7 @@ TURN_TIMEOUT_S = 30.0
 SESSION_BUDGET_S = 30 * 60
 STT_MODEL = os.environ.get("MOCKINTERVIEW_STT", "deepgram/nova-3:en")  # English only (I1)
 TTS_MODEL = os.environ.get("MOCKINTERVIEW_TTS", "cartesia/sonic-3")
-TTS_SPEED = os.environ.get("MOCKINTERVIEW_TTS_SPEED", "slow")
+TTS_SPEED = os.environ.get("MOCKINTERVIEW_TTS_SPEED", "0.9")
 END_OF_TURN_PAUSE_S = 2.0
 MAX_TURN_WAIT_S = 6.0
 SESSIONS_DIR = ROOT / "data" / "sessions"
@@ -88,12 +88,12 @@ def session_options() -> TurnHandlingOptions:
 
 
 def interviewer_voice() -> inference.TTS:
-    """Set MOCKINTERVIEW_TTS_SPEED to slow, normal or fast, or a number the voice model accepts."""
+    """Set MOCKINTERVIEW_TTS_SPEED to a number from 0.6 to 1.5, where 1.0 is natural, or to normal. The word slow distorts the voice."""
     try:
         speed: str | float = float(TTS_SPEED)
     except ValueError:
         speed = TTS_SPEED
-    return inference.TTS(model=TTS_MODEL, extra_kwargs={"speed": speed})
+    return inference.TTS(model=TTS_MODEL, language="en", extra_kwargs={"speed": speed})  # English only (I1)
 
 
 def build_engine() -> InterviewEngine:

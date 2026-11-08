@@ -100,13 +100,17 @@ def test_a_thinking_pause_does_not_end_the_turn():
     assert options["turn_detection"] == "vad" and options["endpointing"]["min_delay"] >= 2.0 and options["endpointing"]["max_delay"] > options["endpointing"]["min_delay"]
 
 
-@pytest.mark.parametrize("setting,expected", [("slow", "slow"), ("0.9", 0.9)])
+@pytest.mark.parametrize("setting,expected", [("normal", "normal"), ("0.9", 0.9)])
 def test_the_voice_speed_can_be_a_word_or_a_number(monkeypatch, setting, expected):
     captured = {}
     monkeypatch.setattr(live_agent, "TTS_SPEED", setting)
-    monkeypatch.setattr(live_agent.inference, "TTS", lambda model, extra_kwargs: captured.update(model=model, **extra_kwargs))
+    monkeypatch.setattr(live_agent.inference, "TTS", lambda model, language, extra_kwargs: captured.update(model=model, language=language, **extra_kwargs))
     live_agent.interviewer_voice()
-    assert captured == {"model": live_agent.TTS_MODEL, "speed": expected}
+    assert captured == {"model": live_agent.TTS_MODEL, "language": "en", "speed": expected}
+
+
+def test_the_default_voice_speed_is_a_gentle_slowdown():
+    assert 0.8 <= float(live_agent.TTS_SPEED) < 1.0
 
 
 def test_the_latest_candidate_message_is_found():
