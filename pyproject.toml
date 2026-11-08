@@ -3,7 +3,7 @@ name = "mockinterview"
 version = "0.0.1"
 description = "AI mock interview agent (junior software engineer, CLI)"
 requires-python = ">=3.11"
-dependencies = ["pyyaml>=6"]
+dependencies = ["pyyaml>=6", "pypdf>=5"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
