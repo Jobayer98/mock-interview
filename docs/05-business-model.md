@@ -5,6 +5,8 @@ This changes the earlier (USD-style) recommendation materially. See [06-banglade
 market constraints behind it. All numbers are **assumptions to validate**: FX 122 BDT/USD (unverified), local gateway fee 2.5% (unverified),
 and cost per session by mode (unmeasured). Re-run `econ_bd.py`-style math once spike S1 gives real costs.
 
+**Build order changed 2026-11-08 (user decision):** live voice is now part of V1, and the pre-sale waits until the app is complete, so the advice below to validate demand before building voice is no longer the plan. The plans and cost estimates remain assumptions to validate.
+
 ## 1. What changed and why
 
 | Fact | Consequence |

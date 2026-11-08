@@ -18,6 +18,8 @@ Deep dives:
 Consequence: realtime voice (about $0.6–1.00 per session) is too costly to be the default at local price points, so
 text and voice-note modes ship first and live voice becomes a capped premium after demand is proven.
 
+**Changed 2026-11-08 (user decision):** V1 now includes live voice through LiveKit, real juniors test the finished V1 live, and the pre-sale waits until the app is complete (IMPLEMENTATION_PLAN.md sections 4 and 8). The phase table below shows the earlier order. The cost reasoning still stands: live voice is the costliest mode and its cost is still unmeasured.
+
 ---
 
 ## 1. Product in one paragraph
