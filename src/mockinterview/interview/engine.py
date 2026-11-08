@@ -28,6 +28,7 @@ MEMORY_ITEMS = 4
 RECENT_OPENERS = 3
 WARMUP_MEMORY_WORDS = 40
 GRADER_THREADS = 2
+CONTINUATION_KINDS = {"answer", "filler", "thinking"}  # anything else, such as stop or distress, always gets its own turn
 SAY_KINDS = frozenset({"intro", "warmup", "ack", "question", "follow_up", "clarify", "meta_guard", "support", "closing", "outro"})
 
 NON_ANSWER_LINES = {
@@ -171,6 +172,17 @@ class InterviewEngine:
         if self.state.phase not in handlers:
             raise EngineStateError(f"cannot take a reply in phase {self.state.phase!r}")
         return handlers[self.state.phase](None if reply is None else redact_contact(reply)[0])
+
+    def continue_answer(self, reply: str) -> bool:
+        """Add words spoken while the interviewer was thinking to the latest answer. Returns False if they need a proper turn."""
+        text = redact_contact(reply)[0]
+        if classify_reply(text) not in CONTINUATION_KINDS:
+            return False
+        target = next((record for record in reversed(self.state.records) if record["answers"]), None)
+        self._log("candidate", text=text, question_id=target["question_id"] if target else "warmup", reply_kind="continuation")
+        if target is not None:
+            target["answers"][-1] = f"{target['answers'][-1]} {text}"
+        return True
 
     def settle_grades(self) -> float:
         """Finish every recorded grading job, running any that no thread owns. Returns the seconds spent waiting."""

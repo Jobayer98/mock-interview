@@ -13,11 +13,15 @@ from statistics import median
 from mockinterview.interview.engine import Finished, InterviewEngine, Say
 
 
+QUESTION_KINDS = {"warmup", "question", "follow_up", "closing"}
+
+
 class LiveInterview:
     def __init__(self, engine: InterviewEngine):
         self._engine = engine
         self._running: asyncio.Future | None = None
         self._last_transcript = ""
+        self._last_question: Say | None = None
         self.result: dict | None = None
 
     def opening(self) -> list[Say]:
@@ -29,6 +33,8 @@ class LiveInterview:
             for action in self._engine.step(reply):
                 if isinstance(action, Finished):
                     self.result = action.session
+                elif isinstance(action, Say) and action.kind in QUESTION_KINDS:
+                    self._last_question = action
                 emit(action)
         finally:
             emit(None)
@@ -57,15 +63,25 @@ class LiveInterview:
         return queue
 
     async def reply(self, transcript: str) -> AsyncIterator[Say]:
-        """Yield what the interviewer says, as each line becomes ready."""
+        """Yield what the interviewer says, as each line becomes ready.
+
+        Words that arrive while the interviewer is still thinking finish the previous answer. Being a new turn, they also cut off
+        the line that was being prepared, so it is said again.
+        """
+        still_thinking = self._running is not None and not self._running.done()
         await self._finish_running_step()
         text = self._new_part(transcript)
         if self.result is not None or not text:
+            return
+        if still_thinking and self._engine.continue_answer(text):
+            if self._last_question is not None:
+                yield self._last_question
             return
         queue = self._start_step(text)
         while (action := await queue.get()) is not None:
             if isinstance(action, Say):
                 yield action
+        await self._finish_running_step()  # so the very next reply is not mistaken for one spoken during this step
 
     async def close(self) -> dict | None:
         """The candidate has gone: finish grading what they answered. Safe to call more than once."""

@@ -77,7 +77,7 @@ def test_the_acknowledgement_arrives_while_the_model_is_still_thinking():
     assert first.kind == "ack" and turns_so_far == 0 and [line.kind for line in rest] == ["follow_up"]
 
 
-def test_an_interrupted_turn_still_completes_and_the_next_reply_waits_for_it():
+def test_words_spoken_while_the_interviewer_thinks_finish_the_answer():
     async def run():
         gate = threading.Event()
         live, engine = interview(Fake(gate))
@@ -85,15 +85,60 @@ def test_an_interrupted_turn_still_completes_and_the_next_reply_waits_for_it():
         stream = live.reply("First answer about keys.")
         await anext(stream)
         await stream.aclose()  # the candidate interrupted, so the voice framework dropped this turn
-        second = asyncio.create_task(collect(live.reply("Second answer about hashing.")))
+        second = asyncio.create_task(collect(live.reply("And it uses hashing.")))
         await asyncio.sleep(0.05)
         waited = not second.done() and engine.state.records[0]["answers"] == ["First answer about keys."]
         gate.set()
-        await second
-        return waited, engine.state.records[0]["answers"]
+        return waited, await second, engine.state.records[0]["answers"], engine.state.records[0]["followups"]
 
-    waited, answers = asyncio.run(run())
-    assert waited and answers == ["First answer about keys.", "Second answer about hashing."]
+    waited, spoken, answers, followups = asyncio.run(run())
+    assert waited and answers == ["First answer about keys. And it uses hashing."] and followups == ["Why does that matter here?"]
+    assert [line.text for line in spoken] == ["Why does that matter here?"]  # the follow-up was cut off, so it is said again
+
+
+def test_a_reply_after_the_interviewer_finished_thinking_is_a_new_answer():
+    async def run():
+        live, engine = interview(Fake())
+        live.opening()
+        await collect(live.reply("First answer about keys."))
+        await collect(live.reply("Second answer about hashing."))
+        return engine.state.records[0]["answers"]
+
+    assert asyncio.run(run()) == ["First answer about keys.", "Second answer about hashing."]
+
+
+def test_a_stop_request_while_the_interviewer_thinks_is_still_honoured():
+    async def run():
+        gate = threading.Event()
+        live, _ = interview(Fake(gate))
+        live.opening()
+        stream = live.reply("First answer about keys.")
+        await anext(stream)
+        await stream.aclose()
+        second = asyncio.create_task(collect(live.reply("I want to stop the interview now.")))
+        await asyncio.sleep(0.05)
+        gate.set()
+        return await second, live.result
+
+    spoken, result = asyncio.run(run())
+    assert spoken[-1].text == voice.STOPPING and result["ended_reason"] == "stop"
+
+
+def test_a_crisis_while_the_interviewer_thinks_is_never_treated_as_more_answer():
+    async def run():
+        gate = threading.Event()
+        live, _ = interview(Fake(gate))
+        live.opening()
+        stream = live.reply("First answer about keys.")
+        await anext(stream)
+        await stream.aclose()
+        second = asyncio.create_task(collect(live.reply("I want to kill myself")))
+        await asyncio.sleep(0.05)
+        gate.set()
+        return await second, live.result
+
+    spoken, result = asyncio.run(run())
+    assert spoken[-1].text == voice.CRISIS and "kill myself" not in json.dumps(result)
 
 
 def test_a_resent_turn_only_counts_its_new_words():
