@@ -9,15 +9,11 @@ import random
 import re
 from dataclasses import dataclass, field
 
-VOICE_VERSION = "voice/0.3"
+VOICE_VERSION = "voice/0.4"
 PERSONA_NAME = "Alex"  # placeholder persona; see IMPLEMENTATION_PLAN.md section 8
 DEFAULT_ROLE_LABEL = "junior software engineer"
 
-OPENING = (
-    "Hi, I'm {name}, an AI interviewer, and I'll be running your practice interview today for a {role} role. "
-    "We'll start with a little about your background, then go through {n} questions, and I may ask a few follow-ups along the way. "
-    "Answer as you would in a real interview. I'll save all my feedback for the end, so I won't be able to give hints as we go."
-)
+OPENING = "Hi, I'm {name}, an AI interviewer. Today is a practice interview for a {role} role, with {n} questions. I'll save my feedback for the end."
 WARMUP = "To start us off, tell me a little about yourself."
 CANDIDATE_QUESTIONS = "That's all my questions. Before we wrap up, do you have any questions for me?"
 OUTRO_NO_QUESTIONS = "No problem. Thanks for your time today. I'll put your feedback together now."
