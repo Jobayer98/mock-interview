@@ -14,6 +14,7 @@ from mockinterview.interview.session import InterviewSession, plan_questions
 from mockinterview.llm.base import MeteredLLM
 from mockinterview.llm.claude_cli import ClaudeCliLLM
 from mockinterview.report.scorecard import build_scorecard, render_scorecard
+from mockinterview.resume.loaders import ResumeError, load_resume
 from mockinterview.resume.profile import extract_profile
 from mockinterview.resume.questions import personalize_plan
 
@@ -45,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--minutes", type=float, default=30.0, help="session time budget")
     ap.add_argument("--technical", type=int, default=3)
     ap.add_argument("--behavioral", type=int, default=2)
-    ap.add_argument("--resume", default=None, help="path to a plain-text resume to tailor questions to")
+    ap.add_argument("--resume", default=None, help="resume to tailor questions to (PDF, .docx or .txt)")
     ap.add_argument("--no-save", action="store_true")
     args = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
@@ -54,7 +55,13 @@ def main(argv: list[str] | None = None) -> int:
     llm = MeteredLLM(ClaudeCliLLM(model=args.model))
     questions = plan_questions(load_questions(), seed=args.seed, n_behavioral=args.behavioral, n_technical=args.technical)
     if args.resume:
-        resume_text = Path(args.resume).read_text(encoding="utf-8")
+        try:
+            resume_text, resume_warnings = load_resume(args.resume)
+        except ResumeError as error:
+            print(f"Could not use that resume: {error}", file=sys.stderr)
+            return 2
+        for warning in resume_warnings:
+            print(f"Note: {warning}")
         resume_llm = llm.for_purpose("resume")
         profile = extract_profile(resume_llm, resume_text, model=args.model)
         questions, report = personalize_plan(resume_llm, questions, profile, resume_text, model=args.model)
