@@ -14,7 +14,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-from livekit.agents import Agent, AgentServer, AgentSession, JobContext, JobProcess, cli, llm
+from livekit.agents import Agent, AgentServer, AgentSession, JobContext, JobProcess, cli, inference, llm
 from livekit.agents.types import FlushSentinel
 from livekit.agents.voice.turn import TurnHandlingOptions
 from livekit.plugins import silero
@@ -38,6 +38,9 @@ TURN_TIMEOUT_S = 30.0
 SESSION_BUDGET_S = 30 * 60
 STT_MODEL = os.environ.get("MOCKINTERVIEW_STT", "deepgram/nova-3:en")  # English only (I1)
 TTS_MODEL = os.environ.get("MOCKINTERVIEW_TTS", "cartesia/sonic-3")
+TTS_SPEED = os.environ.get("MOCKINTERVIEW_TTS_SPEED", "slow")
+END_OF_TURN_PAUSE_S = 2.0
+MAX_TURN_WAIT_S = 6.0
 SESSIONS_DIR = ROOT / "data" / "sessions"
 
 
@@ -76,8 +79,21 @@ class InterviewAgent(Agent):
 
 
 def session_options() -> TurnHandlingOptions:
-    """Speculative generation must stay off: each engine step changes the interview, so a discarded guess would count as an answer."""
-    return TurnHandlingOptions(preemptive_generation={"enabled": False})
+    """Candidates pause to think, so the turn ends only after a real silence: a half-second default cut sentences in two.
+
+    Speculative generation must stay off: each engine step changes the interview, so a discarded guess would count as an answer.
+    """
+    return TurnHandlingOptions(turn_detection="vad", endpointing={"min_delay": END_OF_TURN_PAUSE_S, "max_delay": MAX_TURN_WAIT_S},
+                               preemptive_generation={"enabled": False})
+
+
+def interviewer_voice() -> inference.TTS:
+    """Set MOCKINTERVIEW_TTS_SPEED to slow, normal or fast, or a number the voice model accepts."""
+    try:
+        speed: str | float = float(TTS_SPEED)
+    except ValueError:
+        speed = TTS_SPEED
+    return inference.TTS(model=TTS_MODEL, extra_kwargs={"speed": speed})
 
 
 def build_engine() -> InterviewEngine:
@@ -129,7 +145,7 @@ server.setup_fnc = prewarm
 async def entrypoint(ctx: JobContext) -> None:
     logger.warning("This agent uses claude -p and is for developer testing only. Real candidates need the API backend.")
     live, timer = LiveInterview(await asyncio.to_thread(build_engine)), TurnTimer()
-    session = AgentSession(stt=STT_MODEL, tts=TTS_MODEL, llm=NoBuiltInLLM(), vad=ctx.proc.userdata["vad"], turn_handling=session_options())
+    session = AgentSession(stt=STT_MODEL, tts=interviewer_voice(), llm=NoBuiltInLLM(), vad=ctx.proc.userdata["vad"], turn_handling=session_options())
     watch_turns(session, timer)
 
     async def finish() -> None:

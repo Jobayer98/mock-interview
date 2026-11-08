@@ -95,6 +95,20 @@ def test_speculative_generation_is_off():
     assert session_options()["preemptive_generation"] == {"enabled": False}
 
 
+def test_a_thinking_pause_does_not_end_the_turn():
+    options = session_options()
+    assert options["turn_detection"] == "vad" and options["endpointing"]["min_delay"] >= 2.0 and options["endpointing"]["max_delay"] > options["endpointing"]["min_delay"]
+
+
+@pytest.mark.parametrize("setting,expected", [("slow", "slow"), ("0.9", 0.9)])
+def test_the_voice_speed_can_be_a_word_or_a_number(monkeypatch, setting, expected):
+    captured = {}
+    monkeypatch.setattr(live_agent, "TTS_SPEED", setting)
+    monkeypatch.setattr(live_agent.inference, "TTS", lambda model, extra_kwargs: captured.update(model=model, **extra_kwargs))
+    live_agent.interviewer_voice()
+    assert captured == {"model": live_agent.TTS_MODEL, "speed": expected}
+
+
 def test_the_latest_candidate_message_is_found():
     context = llm.ChatContext.empty()
     context.add_message(role="assistant", content="First question?")
