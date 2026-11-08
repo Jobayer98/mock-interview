@@ -85,6 +85,16 @@ Evaluator/0.3 on draft labels: ±1 100%, exact 88%, QWK 0.95, consistency 100% (
 
 **Step engine (2026-11-08)**: `interview/engine.py` replaces the blocking loop. `start()` and `step(reply)` yield `Say`, `Wait` and `Finished` actions as they become ready, so an acknowledgement goes out before any slow call. `SessionState` is plain JSON-safe data, including wording draws, session clock start and the list of grading jobs, so a web request or voice turn can save and resume an interview. `InterviewSession` remains as the blocking adapter for the CLI, tests and simulations.
 
+**Human labeling how-to (P0-10)**: `evals/label_tools.py`. Run commands from the project root with `./.venv/Scripts/python`.
+1. `evals/label_tools.py export` writes `evals/label_sheet.csv`, a blind sheet of every answer still marked `draft`, with no draft scores or reasons.
+2. Give each labeler their own copy named after them, for example `evals/labels/alice.csv`, because the file name becomes the labeler's name. They work separately and score 1-4 in the last column, leaving blank anything they cannot judge.
+3. `evals/label_tools.py import evals/labels/alice.csv evals/labels/bob.csv` reports pairwise QWK, within ±1 and exact agreement, and lists disagreements. Human-human agreement is the ceiling the grader can be expected to reach; if it is low, fix the rubric before blaming the grader.
+4. Discuss the disagreements and put the settled ones in a CSV with `id` and `score` columns.
+5. `evals/label_tools.py adjudicate evals/labels/alice.csv evals/labels/bob.csv --resolved evals/labels/resolved.csv` writes the results into `evals/dataset.yaml`. Add `--dry-run` to preview. Answers need at least two labels, and consensus means more than half gave the same score, so two labelers must match exactly. Nothing is averaged.
+6. Re-run the baseline to a new results file (P0-12). Never change a label to make a gate pass.
+
+Sheets are git-ignored because they can hold real candidates' answers.
+
 ## 4. Decision gate
 
 **If v1 passes:** grow bank to ~50 -> adaptive difficulty -> cross-session progress ->
@@ -108,4 +118,6 @@ system design -> API + web UI + voice -> other roles.
 - Scale: 1 = incorrect/missing, 2 = partial/shallow, 3 = correct and clear, 4 = correct with trade-offs/depth/real example.
 - `data/questions/*.yaml`: question, rubric anchors, expected signals, red flags, follow-up hints.
 - `evals/dataset.yaml`: answers with human labels. `label_status: draft` means written by Claude and
-  NOT yet human-verified; metric 1 is only meaningful once labels are `reviewed`.
+  NOT yet human-verified; metric 1 is only meaningful once labels are `reviewed`. A reviewed item also has
+  `labelers` (who scored it) and `draft_score` (the score before review). Its `score` is the human consensus, while
+  `reason` still holds the draft's justification unless a person has edited it.

@@ -48,7 +48,7 @@ Python 3.12.5; virtualenv at `.venv` (use it explicitly; system Python lacks the
 
 ```bash
 cd /d/dev/playground/python/mock_interview
-./.venv/Scripts/python -m pytest -q                          # expect: 202 passed
+./.venv/Scripts/python -m pytest -q                          # expect: 243 passed
 ./.venv/Scripts/python -m pip install -e .                   # after adding modules/dependencies
 ./.venv/Scripts/python -m mockinterview.cli --help
 ./.venv/Scripts/python -m mockinterview.cli --resume evals/resumes/junior_backend_01.txt --seed 1
@@ -79,6 +79,7 @@ Gotchas:
 | Evaluator (rubric, per-signal quotes, schema validation, retry, injection flag) | `src/mockinterview/evaluate/evaluator.py` | DONE | Versions: `EVALUATOR_VERSION`, `RUBRIC_VERSION` |
 | Metrics (within-1, exact, MAE, QWK, confusion, consistency) | `src/mockinterview/evaluate/metrics.py` | DONE | |
 | Eval runner | `evals/run_eval.py` | DONE | Writes JSON to `evals/results/` |
+| Human labeling tools (blind export, pairwise agreement, adjudication) | `evals/label_tools.py` | DONE | How-to in DESIGN.md section 3b; not yet used by real labelers |
 | Interview policy (reply classification, limits, leak guards, session clock) | `src/mockinterview/interview/policy.py` | DONE | Text patterns; adversarial suite is P0-18 |
 | Interviewer voice (fixed lines, acknowledgements, transitions) | `src/mockinterview/interview/voice.py` | DONE | Persona name is a placeholder |
 | Interviewer turn (one light-model call: move + wording, guards, memory) | `src/mockinterview/interview/interviewer.py` | DONE | Retries once, then falls back to a generic probe |
@@ -90,7 +91,7 @@ Gotchas:
 | Text CLI | `src/mockinterview/cli.py` | DONE | `--resume` supported |
 | Resume profile (PII redaction, grounded extraction, claim ranking) | `src/mockinterview/resume/profile.py` | DONE | Text input only |
 | Question personalization (guards + seed fallback, global matching) | `src/mockinterview/resume/questions.py` | DONE | Keyword matching; no LLM judge yet |
-| Tests | `tests/` | 202 passing | All use fakes (I13) |
+| Tests | `tests/` | 243 passing | All use fakes (I13) |
 | Design docs | `PRODUCT.md`, `DESIGN.md`, `docs/01-06` | DONE, v2 | |
 
 Measured so far (draft labels, optimistic upper bound), evaluator/0.3: grader within ±1 100%, exact 88%, QWK 0.95, identical across 3 runs 100%,
@@ -122,13 +123,13 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 - **P0-01 … P0-09 — foundation (scaffold, bank, eval dataset, LLM interface, evaluator, eval runner, interview engine, scorecard + CLI, resume pipeline)** · DONE. See section 3.
 
-- **P0-10 — Human labeling tooling** · TODO · none
+- **P0-10 — Human labeling tooling** · DONE · none
   *Files:* new `evals/label_tools.py`, `tests/test_label_tools.py`, update `evals/dataset.yaml` schema doc in DESIGN.md.
   *What:* (a) `export` writes `evals/label_sheet.csv` with columns `id,question,rubric_summary,answer,score` (score blank, **no draft labels or reasons**) for each labeler; (b) `import` reads two or more labeler CSVs, computes pairwise QWK and % within ±1 between humans, lists disagreements; (c) `adjudicate` writes consensus scores into `dataset.yaml` with `label_status: reviewed`, `labelers: [..]`, and keeps the old draft in `draft_score`.
   *Acceptance:* round-trip test on synthetic CSVs; human-human QWK computed; export contains no `reason`/draft score; a short how-to added to DESIGN.md section 3b.
   *Verify:* `./.venv/Scripts/python -m pytest -q tests/test_label_tools.py`
 
-- **P0-11 — Collect ≥30 real junior answers** · BLOCKED-USER · P0-10
+- **P0-11 — Collect ≥30 real junior answers** · BLOCKED-USER · P0-10 (done)
   *Needs from user:* real answers (ideally spoken then transcribed, from juniors the user knows, with permission, identifying details removed) spanning the 10+ questions, and 2 people willing to label (the user + one engineer).
   *Acceptance:* ≥30 items in `evals/dataset.yaml` with `source: real`, consent noted, ≥2 independent labels each, human-human QWK reported.
 
@@ -258,10 +259,10 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 ## 6. Next up (do in this order; stop and report after each)
 
-1. **P0-10** Human labeling tooling. 2. **P0-15** Resume loaders (PDF/DOCX). 3. **P0-16** Golden resumes + extraction eval. 4. **P0-19** Expand the question bank (flag everything `draft`).
-5. **P0-18** Adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay (unblocked by P0-13). After P0-16: **P0-17**.
-6. In parallel as soon as the user supplies inputs: **P0-30** (real-user test; highest value next step), **P0-11** (real answers) and **P1a-01** (pre-sale page).
-7. **P0-14** stays open until its cost and turn-wait targets are re-measured on the API backend. That backend is P1a-09, which sits behind the P0 gate that P0-14 is part of, so the user must decide whether to allow an API spike inside P0 (section 7).
+1. **P0-15** Resume loaders (PDF/DOCX). 2. **P0-16** Golden resumes + extraction eval. 3. **P0-19** Expand the question bank (flag everything `draft`).
+4. **P0-18** Adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay (unblocked by P0-13). After P0-16: **P0-17**.
+5. In parallel as soon as the user supplies inputs: **P0-30** (real-user test; highest value next step), **P0-11** (real answers) and **P1a-01** (pre-sale page).
+6. **P0-14** stays open until its cost and turn-wait targets are re-measured on the API backend. That backend is P1a-09, which sits behind the P0 gate that P0-14 is part of, so the user must decide whether to allow an API spike inside P0 (section 7).
 
 ## 7. Blocked on the user (collect, don't guess)
 
@@ -311,3 +312,4 @@ Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a, V
 - 2026-11-08 — Measured on `claude -p`. Evaluator/0.3 on **draft** labels: ±1 100%, exact 88% (was 91%), QWK 0.95 (was 0.96), consistency 100%; agreement with the original baseline ±1 100%, 33 of 34 items identical (a21 moved 2→1). Results: `evals/results/baseline_sonnet55_evaluator03_draftlabels.json`. Simulated session: $0.218 and median 6.1 s without a resume, $0.301 and 8.1 s with one (`evals/results/sim_final_*.json`, one run each). **P0-14's cost (≤ $0.10) and turn-wait (< 6 s) targets are not met**, so it stays open. Follow-up relevance and natural feel are still unmeasured with real candidates (P0-30): the simulated replies are pre-written.
 - 2026-11-08 — Real CLI run verified end to end against the real model (`python -m mockinterview.cli`, piped answers). Project put under local git on `main`, with real candidates' data ignored.
 - 2026-11-08 — P0-13 done on branch `p0-13-step-engine`. `engine.py` yields `Say`/`Wait`/`Finished` actions from `start()` and `step()`, and all progress lives in a JSON-safe `SessionState`. A test saves and restores the interview at every turn and finishes identically to an uninterrupted run, with state round-tripped through JSON. `InterviewSession` is a thin adapter; the 187 existing tests passed without any change to them, and one piped CLI run completed against the real model. 202 tests pass. Not exercised yet: a real web or voice client, and a grade still running when an interview is saved is redone by whoever resumes it, costing one extra call.
+- 2026-11-08 — P0-10 done on branch `p0-10-label-tools`. `evals/label_tools.py` exports blind sheets, compares labelers (pairwise QWK, within ±1, disagreements) and writes consensus into `dataset.yaml` with `labelers` and `draft_score`, leaving comments and answer text untouched. Disputed answers change only with a recorded resolution. 243 tests pass, and all three commands ran on a scratch copy of the real dataset using synthetic sheets. Not yet used by real labelers; every label in `dataset.yaml` is still `draft`.
