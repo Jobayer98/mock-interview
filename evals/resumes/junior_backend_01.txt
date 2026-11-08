@@ -1,0 +1,21 @@
+Arif Rahman (synthetic sample resume - fictional person)
+arif.sample@example.com | +880 1700-000000 | Dhaka
+
+EDUCATION
+BSc in Computer Science and Engineering, Example University, 2025
+
+EXPERIENCE
+Software Engineering Intern, Sample Tech Ltd. (Jun 2025 - Dec 2025)
+- Built REST endpoints in Flask for an order tracking service used by 3 internal teams
+- Reduced the average response time of the orders API from 800 ms to 350 ms by adding a Redis cache and fixing slow SQL queries
+- Wrote pytest unit tests for the pricing module, raising coverage from 40% to 78%
+- Fixed a production bug where duplicate orders were created when users double-clicked submit
+
+PROJECTS
+Campus Marketplace (Final-year project)
+- Designed a PostgreSQL schema for users, listings and chats and wrote the joins for the search page
+- Led a team of 4 using Git feature branches and pull request reviews on GitHub
+- Deployed the app with Docker on a free-tier VPS
+
+SKILLS
+Python, Flask, PostgreSQL, SQL, Redis, Git, Docker, pytest, JavaScript

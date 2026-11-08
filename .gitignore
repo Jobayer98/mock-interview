@@ -1,0 +1,16 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Secrets (I15)
+.env
+.env.*
+
+# Personal data from real candidates: never commit (I4)
+data/sessions/*
+!data/sessions/smoke_sim.json
+data/users/
+data/testers/

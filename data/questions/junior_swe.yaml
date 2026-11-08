@@ -1,0 +1,228 @@
+# Question bank: junior software engineer.
+# Scale: 1 incorrect/missing | 2 partial/shallow | 3 correct and clear | 4 correct + trade-offs/depth/real example
+role: software_engineer
+level: junior
+rubric_version: junior_swe/0.1
+topic_keywords:  # words that connect a resume line to a topic when tailoring questions
+  data_structures: [cache, dictionary, hash, index, queue, graph, tree, algorithm, lookup]
+  http_rest: [api, rest, http, endpoint, flask, django, fastapi, express, spring, duplicate, double-click, retry]
+  sql: [sql, postgres, mysql, database, query, orm, sqlite]
+  git: [git, github, pull request, branch, ci/cd, pipeline, deploy]
+  oop: [oop, design pattern, architecture, refactor, inheritance, class diagram, interface]
+  testing: [test, pytest, junit, coverage, qa, quality]
+  problem_solving: [bug, performance, latency, fix, debug, optimi, reduced, improved]
+  teamwork: [team, collaborat, led, pair, review, mentor]
+  accountability: [incident, outage, migration, production, released, launched]
+  learning: [learn, migrat, adopt, new, introduced, framework]
+questions:
+
+  - id: tech_hashmap
+    type: technical
+    topic: data_structures
+    question: "When would you use a hash map (dictionary) instead of a list, and what are the trade-offs?"
+    expected_signals:
+      - "Hash map gives average O(1) lookup/insert by key; list lookup by value is O(n)"
+      - "Keys must be hashable/unique; order and memory trade-offs"
+      - "Gives a concrete use case (counting, caching, de-duplication, index by id)"
+      - "Mentions worst case or collisions, or memory overhead"
+    red_flags:
+      - "Says hash maps are always faster"
+      - "Confuses hash map with sorted structure or says lookup is O(log n) by default"
+    rubric:
+      1: "Incorrect or cannot explain lookup difference; no concrete use."
+      2: "Knows dict is 'faster for lookup' but cannot explain why or give a use case."
+      3: "Correctly explains O(1) average vs O(n), gives a sensible use case."
+      4: "As 3, plus names trade-offs (memory, unordered/hashability, collisions/worst case) with a real example."
+    follow_up_hints:
+      - "Ask what makes a good dictionary key."
+      - "Ask what happens if many keys collide."
+
+  - id: tech_http_methods
+    type: technical
+    topic: http_rest
+    question: "What is the difference between GET and POST, and what does it mean for an HTTP method to be idempotent?"
+    expected_signals:
+      - "GET retrieves, should be safe/no side effects; POST creates or triggers an action"
+      - "GET params in URL, POST data in body"
+      - "Idempotent: repeating the request gives the same server state (GET, PUT, DELETE yes; POST no)"
+      - "Practical consequence: retries, caching, or double-submit risk"
+    red_flags:
+      - "Claims POST is 'secure' and GET is not because of the body"
+      - "Claims POST is idempotent"
+    rubric:
+      1: "Cannot distinguish GET/POST or gives wrong semantics."
+      2: "Knows GET reads and POST sends data but does not understand idempotency."
+      3: "Correct semantics and defines idempotency with an example."
+      4: "As 3, plus practical consequences (safe retries, caching, duplicate orders) and PUT/DELETE contrast."
+    follow_up_hints:
+      - "Ask whether a payment endpoint should be retried automatically and why."
+      - "Ask which of PUT/DELETE are idempotent."
+
+  - id: tech_sql_joins
+    type: technical
+    topic: sql
+    question: "Explain the difference between an INNER JOIN and a LEFT JOIN. Give an example of when you'd use each."
+    expected_signals:
+      - "INNER JOIN returns only rows with matches in both tables"
+      - "LEFT JOIN returns all rows from the left table, with NULLs where no match"
+      - "Concrete example (users and orders: users with no orders)"
+      - "Awareness of NULL handling or filtering in WHERE turning LEFT into INNER"
+    red_flags:
+      - "Swaps the semantics of left and inner"
+      - "Cannot give any table example"
+    rubric:
+      1: "Incorrect or cannot explain either join."
+      2: "Knows joins combine tables but blurs inner vs left, or no example."
+      3: "Correct definitions with a clear example."
+      4: "As 3, plus NULL behavior / finding unmatched rows / WHERE-clause pitfall."
+    follow_up_hints:
+      - "Ask how to find users who have never placed an order."
+      - "Ask what a RIGHT JOIN would be equivalent to."
+
+  - id: tech_git_merge_rebase
+    type: technical
+    topic: git
+    question: "What is the difference between git merge and git rebase, and when would you prefer one over the other?"
+    expected_signals:
+      - "Merge combines histories with a merge commit; preserves true history"
+      - "Rebase replays commits on top of another base, giving linear history and rewriting commits"
+      - "Do not rebase shared/public branches"
+      - "Stated preference with reasoning (e.g. rebase local feature branch before PR)"
+    red_flags:
+      - "Says rebase and merge are the same"
+      - "Recommends force-pushing rebased shared branches without caution"
+    rubric:
+      1: "Cannot explain either, or confuses with other commands."
+      2: "Knows both integrate branches but not how they differ in history."
+      3: "Correct difference and a reasonable preference."
+      4: "As 3, plus the golden rule about shared branches and consequences (rewritten SHAs, conflicts)."
+    follow_up_hints:
+      - "Ask what happens to commit hashes after a rebase."
+      - "Ask what they would do if a teammate already pulled their branch."
+
+  - id: tech_composition
+    type: technical
+    topic: oop
+    question: "What is the difference between inheritance and composition? When would you prefer composition?"
+    expected_signals:
+      - "Inheritance is an 'is-a' relationship; composition is 'has-a'"
+      - "Inheritance couples subclass tightly to parent; composition is more flexible"
+      - "Concrete example (e.g. Car has an Engine; avoid deep hierarchies)"
+      - "Mentions 'favor composition over inheritance' or testability/substitution"
+    red_flags:
+      - "Defines them backwards"
+      - "Says inheritance is always bad"
+    rubric:
+      1: "Incorrect definitions or no understanding."
+      2: "Gives is-a/has-a loosely without consequences or example."
+      3: "Correct definitions, sensible example, states a preference."
+      4: "As 3, plus coupling, fragile base class or testing/mocking benefits, and when inheritance is still right."
+    follow_up_hints:
+      - "Ask for a case where inheritance IS appropriate."
+      - "Ask how composition helps unit testing."
+
+  - id: tech_unit_tests
+    type: technical
+    topic: testing
+    question: "What makes a good unit test? How would you test a function that calculates a discount from a cart total?"
+    expected_signals:
+      - "Fast, isolated, deterministic, tests one behavior"
+      - "Covers normal cases and edge cases (zero, boundary, negative, max)"
+      - "Clear arrange/act/assert and descriptive names"
+      - "Avoids testing implementation details; mocks external dependencies only"
+    red_flags:
+      - "Only tests the happy path"
+      - "Says tests are a waste for small functions"
+    rubric:
+      1: "No coherent idea of what a unit test is."
+      2: "Mentions testing a normal case only; vague qualities."
+      3: "Lists good properties and tests normal plus some edge cases for the discount."
+      4: "As 3, with boundary values, parametrized tests, behavior vs implementation, and what to mock."
+    follow_up_hints:
+      - "Ask what boundary values they would pick."
+      - "Ask whether they would mock the database here."
+
+  - id: beh_stuck_bug
+    type: behavioral
+    topic: problem_solving
+    question: "Tell me about a time you were stuck on a difficult bug or problem. What did you do?"
+    expected_signals:
+      - "Specific situation (not hypothetical) with context"
+      - "Systematic approach: reproduce, isolate, logs/debugger, hypotheses"
+      - "Asked for help appropriately or researched"
+      - "Clear outcome and what they learned"
+    red_flags:
+      - "Purely hypothetical or generic answer"
+      - "Blames others, or gave up with no resolution or lesson"
+    rubric:
+      1: "No real example or no actions described."
+      2: "Real example but vague actions, or no outcome/lesson."
+      3: "Clear situation, systematic actions, outcome."
+      4: "As 3, with reflective lesson and a change in how they work afterwards."
+    follow_up_hints:
+      - "Ask how they knew the fix was correct."
+      - "Ask when they decided to ask for help."
+
+  - id: beh_disagreement
+    type: behavioral
+    topic: teamwork
+    question: "Describe a time you disagreed with a teammate about how to do something. How did you handle it?"
+    expected_signals:
+      - "Specific example with the nature of the disagreement"
+      - "Listened to the other view; focused on the problem, not the person"
+      - "Used data/prototype/third opinion or compromise"
+      - "Outcome and relationship preserved; reflection"
+    red_flags:
+      - "Portrays self as always right"
+      - "Avoided conflict entirely or escalated immediately without trying to talk"
+    rubric:
+      1: "No example, or hostile/dismissive of the teammate."
+      2: "Example but only says 'we talked' with no substance or result."
+      3: "Clear conflict, respectful resolution, outcome."
+      4: "As 3, with evidence-based resolution and reflection on what they'd do differently."
+    follow_up_hints:
+      - "Ask what the other person's best argument was."
+      - "Ask what they would do differently."
+
+  - id: beh_mistake
+    type: behavioral
+    topic: accountability
+    avoid_as_opener: true
+    question: "Tell me about a mistake you made in a project or at school. What happened and what did you do about it?"
+    expected_signals:
+      - "Specific, real mistake with real consequence"
+      - "Takes ownership without excuses"
+      - "Fixed it and communicated to affected people"
+      - "Process change to prevent recurrence"
+    red_flags:
+      - "Claims no mistakes, or a fake-weakness answer ('I work too hard')"
+      - "Blames others or circumstances"
+    rubric:
+      1: "Refuses, deflects, or no real example."
+      2: "Real mistake but blames others or no learning."
+      3: "Owns the mistake, explains fix and lesson."
+      4: "As 3, plus proactive communication and a concrete preventive change."
+    follow_up_hints:
+      - "Ask who was affected and how they told them."
+      - "Ask what specific habit they changed."
+
+  - id: beh_learning
+    type: behavioral
+    topic: learning
+    question: "Tell me about a time you had to learn a new technology quickly. How did you approach it?"
+    expected_signals:
+      - "Specific technology and why it was needed with a deadline/context"
+      - "Learning strategy: docs, small project, asking, breaking down"
+      - "Applied it to deliver something"
+      - "Reflects on what worked and how they learn best"
+    red_flags:
+      - "Generic 'I read the docs' with no specifics"
+      - "No result delivered"
+    rubric:
+      1: "No example or no learning approach described."
+      2: "Example but vague approach or no applied result."
+      3: "Clear context, concrete approach, delivered result."
+      4: "As 3, with reflection on method effectiveness and reuse of the approach."
+    follow_up_hints:
+      - "Ask what they built first to test their understanding."
+      - "Ask what they would skip next time."

@@ -1,0 +1,168 @@
+{
+  "when": "2026-11-08T06:57:15",
+  "model": "claude-sonnet-4-6",
+  "runs": 1,
+  "items": 4,
+  "errors": 0,
+  "label_status": "draft labels (NOT human verified)",
+  "accuracy": {
+    "within_one": 1,
+    "exact": 0.5,
+    "mae": 0.5,
+    "qwk": 0.8571428571428572,
+    "confusion_rows_human_cols_model": [
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ]
+  },
+  "consistency": null,
+  "grounding": {
+    "ungrounded_quotes_per_eval": 0
+  },
+  "injection_flagged": 0,
+  "ops": {
+    "mean_latency_s": 9.698094074999972,
+    "total_cost_usd": 0.031251,
+    "wall_s": 9.845795299999736,
+    "cost_per_eval_usd": 0.00781275
+  },
+  "results": [
+    {
+      "id": "a01",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 9.592516000000614,
+      "cost_usd": 0.007044,
+      "model": "claude-sonnet-4-6",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correctly explains O(1) average vs O(n) with underlying mechanism (hash and bucket)",
+        "Mentions worst-case collision degradation to O(n)",
+        "Covers multiple trade-offs: memory, hashability, ordering, and worst-case performance"
+      ],
+      "gaps": []
+    },
+    {
+      "id": "a02",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 9.584318299999723,
+      "cost_usd": 0.007767,
+      "model": "claude-sonnet-4-6",
+      "signals_hit": [],
+      "strengths": [
+        "Correctly identifies that hash maps are better for search/lookup scenarios"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain O(1) average lookup for hash map vs O(n) for list"
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Mention keys must be hashable, memory overhead, and ordering differences"
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case like counting word frequencies, caching, or indexing by ID"
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention worst-case O(n) due to hash collisions or memory overhead of hash maps"
+        }
+      ]
+    },
+    {
+      "id": "a03",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 9.772675700001855,
+      "cost_usd": 0.008625,
+      "model": "claude-sonnet-4-6",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that hash maps provide average O(1) lookup by key via hashing, while list lookup by value is O(n)"
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Mention that keys must be hashable/unique and discuss memory and ordering trade-offs"
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Provide a concrete use case such as counting word frequencies, caching, or indexing records by ID"
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Discuss worst-case O(n) due to hash collisions and memory overhead compared to lists"
+        }
+      ]
+    },
+    {
+      "id": "a04",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 9.842866299997695,
+      "cost_usd": 0.007815,
+      "model": "claude-sonnet-4-6",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correctly identifies GET as safe/no side effects and POST as action-triggering",
+        "Gives a clear, accurate definition of idempotency with a concrete example (deleting same user twice)",
+        "Contrasts PUT and DELETE as idempotent vs POST as non-idempotent, covering double-submit risk"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Could explicitly mention caching or safe retry behavior as practical consequences of idempotency beyond duplicate record creation"
+        }
+      ]
+    }
+  ]
+}

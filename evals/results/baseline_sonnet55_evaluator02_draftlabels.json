@@ -1,0 +1,3230 @@
+{
+  "when": "2026-11-08T19:27:23",
+  "model": "claude-sonnet-5-5",
+  "runs": 3,
+  "items": 34,
+  "errors": 0,
+  "label_status": "draft labels (NOT human verified)",
+  "accuracy": {
+    "within_one": 1,
+    "exact": 0.9117647058823529,
+    "mae": 0.08823529411764706,
+    "qwk": 0.9624724061810155,
+    "confusion_rows_human_cols_model": [
+      [
+        8,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        9,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        7,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        7
+      ]
+    ]
+  },
+  "consistency": {
+    "identical": 1,
+    "within_one": 1
+  },
+  "grounding": {
+    "ungrounded_quotes_per_eval": 0
+  },
+  "injection_flagged": 10,
+  "ops": {
+    "mean_latency_s": 6.240416489215397,
+    "total_cost_usd": 0.93033,
+    "wall_s": 162.77575599998818,
+    "cost_per_eval_usd": 0.009120882352941177
+  },
+  "results": [
+    {
+      "id": "a01",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.767617400008021,
+      "cost_usd": 0.011389499999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Explains why lookup is O(1) on average (hashing to a bucket) versus an O(n) list scan",
+        "Gives concrete use cases: word frequency counting and caching by id",
+        "Names several trade-offs: hashability and uniqueness, memory overhead, collisions and worst-case O(n), and lack of sorted order"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Could clarify that mutable types such as lists cannot be keys, and note that insertion order is preserved in modern Python dicts even though keys are not sorted."
+        }
+      ]
+    },
+    {
+      "id": "a01",
+      "run": 1,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 7.102538200007984,
+      "cost_usd": 0.0121395,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Explains why lookup is O(1) on average (hash of key to bucket) versus an O(n) list scan",
+        "Gives concrete use cases: word frequency counting and caching by id",
+        "Names several trade-offs: hashability/uniqueness, memory, collisions with O(n) worst case, and no sorted order or range queries"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Mention that keys should be immutable, and note that Python dicts preserve insertion order though they are not sorted by key."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Briefly mention resizing/rehashing cost or amortized insertion, and when a small list might be faster in practice."
+        }
+      ]
+    },
+    {
+      "id": "a01",
+      "run": 2,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.9033384999929694,
+      "cost_usd": 0.011509499999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Explains why lookup is O(1) on average (hash to bucket) versus O(n) list scan",
+        "Gives concrete use cases: word frequency counting and caching by id",
+        "Names several trade-offs: hashability/uniqueness, memory, collisions with O(n) worst case, and lack of sorted order"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Could mention that insertion order handling varies by language (e.g. Python 3.7+ preserves insertion order) rather than just saying 'not sorted', and that mutable types like lists can't be keys."
+        }
+      ]
+    },
+    {
+      "id": "a02",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.837261799999396,
+      "cost_usd": 0.0108795,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Correctly says a hash map/dictionary is faster than a list for searching",
+        "Recognizes a list is suited to simply holding a collection of items"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain why: hashing the key gives average O(1) lookup/insert, whereas searching a list by value is O(n) because it scans elements."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Mention that keys must be hashable and unique, and discuss ordering and memory trade-offs versus a list."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting word frequencies, caching results, de-duplicating, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Note hash collisions can degrade to O(n) worst case and that hash maps have memory overhead."
+        }
+      ]
+    },
+    {
+      "id": "a02",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.145699299988337,
+      "cost_usd": 0.006900600000000001,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Correctly identifies that a dictionary is faster than a list for searching",
+        "Recognizes that a list suits a plain collection of items"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain why: hashing the key gives average O(1) lookup, whereas searching a list by value scans every element, which is O(n)."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Mention that keys must be hashable and unique, that a dict uses more memory, and how ordering differs from a list."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting word frequencies, caching results, de-duplicating items, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Note that hash collisions can degrade lookups to O(n) in the worst case and that hash tables carry memory overhead."
+        }
+      ]
+    },
+    {
+      "id": "a02",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.928064699997776,
+      "cost_usd": 0.0067056,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Correctly states that a hash map/dictionary is faster than a list for searching",
+        "Recognizes that lists are suited to simple collections of items"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain why: hashing the key gives average O(1) lookup, while searching a list by value is O(n) because it scans elements."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Note that keys must be unique and hashable, and discuss ordering and memory overhead compared to a list."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting word frequencies, caching results, de-duplicating, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention collisions and the O(n) worst case, or the extra memory a hash table uses."
+        }
+      ]
+    },
+    {
+      "id": "a03",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.062978000001749,
+      "cost_usd": 0.01151325,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that hash maps give average O(1) lookup by key via hashing, while searching a list by value is O(n)."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that keys must be hashable and unique, and that hash maps use extra memory and are not sorted by key."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting word frequencies, caching, de-duplication, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention collisions and O(n) worst case, plus memory overhead compared with a list."
+        }
+      ]
+    },
+    {
+      "id": "a03",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.260118000005605,
+      "cost_usd": 0.01166325,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that hash maps give average O(1) lookup/insert by key via hashing, while searching a list by value is O(n)."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that keys must be hashable and unique, and discuss ordering and memory trade-offs; hash maps are not sorted."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting word frequencies, caching, de-duplication, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention hash collisions, O(n) worst case, and memory overhead compared with a list."
+        }
+      ]
+    },
+    {
+      "id": "a03",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.336061699999846,
+      "cost_usd": 0.0075147,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that hash map lookup/insert by key is average O(1) via hashing, while searching a list by value is O(n)."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that keys must be hashable and unique, and that hash maps are not sorted and use more memory than lists."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting occurrences, caching, de-duplication, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention collisions and worst-case O(n) behavior, plus memory overhead."
+        }
+      ]
+    },
+    {
+      "id": "a04",
+      "run": 0,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.215692899990245,
+      "cost_usd": 0.0108045,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correct GET/POST semantics, including that GET should not change server state and POST creates or triggers an action",
+        "Defines idempotency correctly and gives a concrete example (deleting the same user twice)",
+        "Correctly classifies GET, PUT and DELETE as idempotent and POST as not, with a duplicate-record example"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain practical consequences: idempotent requests are safe to retry after timeouts or network failures, GET responses can be cached, and POST risks duplicate orders or double-submits unless an idempotency key is used."
+        }
+      ]
+    },
+    {
+      "id": "a04",
+      "run": 1,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.106865499998094,
+      "cost_usd": 0.0105945,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correct GET/POST semantics, including that GET should not change server state",
+        "Accurate definition of idempotency with a concrete DELETE example",
+        "Correctly classifies GET, PUT and DELETE as idempotent and POST as not, with a duplicate-record example"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain practical consequences: idempotent requests are safe to retry after timeouts, GET responses can be cached, and a non-idempotent POST risks duplicate orders or double-submits unless protected by an idempotency key."
+        }
+      ]
+    },
+    {
+      "id": "a04",
+      "run": 2,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.225679499999387,
+      "cost_usd": 0.006560999999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correct GET vs POST semantics, including URL parameters vs request body",
+        "Defines idempotency accurately and gives a concrete example (deleting the same user twice)",
+        "Correctly lists GET, PUT and DELETE as idempotent and POST as not, with the reason that posting twice might create two records"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain practical consequences: idempotent requests can be safely retried after timeouts or network failures, GET responses can be cached, and POST risks duplicate submissions or duplicate orders (mitigated by idempotency keys)."
+        }
+      ]
+    },
+    {
+      "id": "a05",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.046548500002245,
+      "cost_usd": 0.011712,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Correctly says GET retrieves data and POST sends data to the server",
+        "Notes that POST data goes in the body while GET data goes in the URL",
+        "Honestly admits not knowing what idempotent means"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Define idempotency: repeating the same request leaves the server in the same state (GET, PUT, DELETE are idempotent; POST is not), with an example."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain practical consequences such as safe retries for idempotent methods, caching of GET responses, and the risk of duplicate orders from re-submitting POST."
+        },
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that GET should be safe with no side effects, while POST creates resources or triggers actions."
+        }
+      ]
+    },
+    {
+      "id": "a05",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.13776460000372,
+      "cost_usd": 0.011487,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Correctly says GET retrieves data and POST sends data to the server",
+        "Notes that POST data goes in the body while GET data is in the URL",
+        "Honestly admits not knowing what idempotent means"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Define idempotency: repeating the same request leaves the server in the same state (GET, PUT, DELETE yes; POST no), with an example."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain practical consequences such as safe retries, caching of GET responses, and duplicate orders from double-submitted POSTs."
+        },
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that GET is safe with no side effects, while POST creates resources or triggers actions."
+        }
+      ]
+    },
+    {
+      "id": "a05",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.665804000003845,
+      "cost_usd": 0.013032000000000002,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Correctly states that GET retrieves data and POST sends data to the server",
+        "Knows that POST data goes in the request body rather than the URL",
+        "Honestly admits not knowing what idempotency means"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Define idempotency: repeating the same request leaves the server in the same state (GET, PUT, DELETE are idempotent; POST is not), with an example."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain practical consequences such as safe retries for idempotent methods, caching of GET responses, and the risk of duplicate orders from re-submitting a POST."
+        },
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that GET should be safe with no side effects, while POST creates resources or triggers actions."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Correct the security claim: a POST body is not inherently more secure, since it is not encrypted without HTTPS. Mention that GET parameters sit in the URL and so can end up in logs and history."
+        }
+      ]
+    },
+    {
+      "id": "a06",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.343606299997191,
+      "cost_usd": 0.01102575,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that GET retrieves data without side effects (safe), while POST creates a resource or triggers an action. The answer wrongly says both write to the database."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that GET passes parameters in the URL/query string, whereas POST sends data in the request body."
+        },
+        {
+          "signal_id": "s3",
+          "hit": false,
+          "what_a_stronger_answer_adds": "Define idempotency as repeating the same request leaving the server in the same state (GET, PUT, DELETE are idempotent; POST is not), not as encryption."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give practical consequences such as safe retries, caching of GET responses, and the risk of duplicate orders when retrying POST."
+        }
+      ]
+    },
+    {
+      "id": "a06",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.749576699992758,
+      "cost_usd": 0.006864299999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that GET retrieves data and should be safe with no side effects, while POST creates a resource or triggers an action."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that GET passes parameters in the URL query string while POST sends data in the request body."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Define idempotency as repeated identical requests leaving the server in the same state, and note that GET, PUT and DELETE are idempotent while POST is not."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Describe practical consequences such as safe retries for idempotent methods, caching of GET responses, and duplicate orders from double-submitted POSTs."
+        }
+      ]
+    },
+    {
+      "id": "a06",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.988464299996849,
+      "cost_usd": 0.0070743,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "GET retrieves data and should be safe with no side effects; POST creates a resource or triggers an action. The answer wrongly says both write to the database."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "GET sends parameters in the URL query string, while POST sends data in the request body."
+        },
+        {
+          "signal_id": "s3",
+          "hit": false,
+          "what_a_stronger_answer_adds": "Idempotent means repeating the same request leaves the server in the same state (GET, PUT, DELETE yes; POST no), not that the request is encrypted."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Practical consequences such as safe retries for idempotent methods, caching of GET responses, and the double-submit or duplicate-order risk with POST."
+        }
+      ]
+    },
+    {
+      "id": "a07",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.904891600002884,
+      "cost_usd": 0.010467,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct and precise definitions of both INNER and LEFT JOIN, including NULL fill behavior",
+        "Concrete users/orders example for both joins",
+        "Covers the anti-join pattern (LEFT JOIN ... IS NULL) and the WHERE-vs-ON pitfall that turns a LEFT JOIN into an inner join"
+      ],
+      "gaps": []
+    },
+    {
+      "id": "a07",
+      "run": 1,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.613900399999693,
+      "cost_usd": 0.010197,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct and precise definitions of both INNER and LEFT JOIN with NULL fill behavior",
+        "Concrete users/orders example for both join types",
+        "Covers the anti-join pattern (IS NULL) and the WHERE vs ON pitfall that turns LEFT into INNER"
+      ],
+      "gaps": []
+    },
+    {
+      "id": "a07",
+      "run": 2,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.860563000009279,
+      "cost_usd": 0.0060186,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct and precise definitions of both INNER and LEFT JOIN with NULL fill behavior",
+        "Concrete users/orders example for both joins, including the anti-join pattern with IS NULL",
+        "Identifies the WHERE-vs-ON pitfall that turns a LEFT JOIN into an inner join and states the fix"
+      ],
+      "gaps": []
+    },
+    {
+      "id": "a08",
+      "run": 0,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.322032900003251,
+      "cost_usd": 0.010354499999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correct and concise definitions of both INNER and LEFT JOIN",
+        "Mentions that unmatched rows get NULL in the right-table columns",
+        "Gives a concrete customers/orders example that contrasts the two joins"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain how to find unmatched rows (WHERE right.key IS NULL) and warn that filtering on right-table columns in WHERE turns a LEFT JOIN into an INNER JOIN, with the fix of moving the condition to the ON clause."
+        }
+      ]
+    },
+    {
+      "id": "a08",
+      "run": 1,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.215091799997026,
+      "cost_usd": 0.0102345,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correct and concise definitions of both INNER and LEFT JOIN",
+        "Mentions that unmatched rows get NULL in the right-table columns",
+        "Gives a concrete customers/orders example contrasting the two joins"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain how to find unmatched rows (WHERE right.key IS NULL) and the pitfall that filtering on right-table columns in WHERE turns a LEFT JOIN into an INNER JOIN (use ON instead)."
+        }
+      ]
+    },
+    {
+      "id": "a08",
+      "run": 2,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.314313300012145,
+      "cost_usd": 0.010474500000000001,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correctly defines INNER JOIN as returning only rows matching in both tables",
+        "Correctly explains LEFT JOIN keeps all left rows with NULLs on the right when there is no match",
+        "Gives a clear customers and orders example contrasting both joins"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain how to find unmatched rows using WHERE right_table.key IS NULL, and warn that filtering on a right-table column in WHERE can turn a LEFT JOIN into an INNER JOIN (the condition belongs in ON)."
+        }
+      ]
+    },
+    {
+      "id": "a09",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.644036400000914,
+      "cost_usd": 0.0111045,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Correctly states that joins combine two tables"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that INNER JOIN returns only rows that have matching keys in both tables, and drops non-matching rows."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that LEFT JOIN keeps every row from the left table and fills right-table columns with NULL where there is no match."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete example, such as users and orders: INNER JOIN for users who have orders, LEFT JOIN to include users with no orders."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain that unmatched rows show NULLs, and that filtering on right-table columns in WHERE can turn a LEFT JOIN into an INNER JOIN."
+        }
+      ]
+    },
+    {
+      "id": "a09",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.491189500011387,
+      "cost_usd": 0.0076524,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Correctly states that joins combine two tables"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that INNER JOIN returns only rows with a matching key in both tables, and drops non-matching rows."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that LEFT JOIN keeps every row from the left table and fills right-side columns with NULL when there is no match."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete example, e.g. users and orders: INNER JOIN for users who have placed orders, LEFT JOIN to list all users including those with no orders."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention NULLs for unmatched rows, finding unmatched rows with WHERE right.id IS NULL, and that filtering on right-table columns in WHERE can turn a LEFT JOIN into an INNER JOIN."
+        }
+      ]
+    },
+    {
+      "id": "a09",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.832085499991081,
+      "cost_usd": 0.0072174000000000006,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Correctly states that joins combine two tables"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that INNER JOIN returns only rows that have matching keys in both tables, and drops rows without a match."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that LEFT JOIN keeps every row from the left table and fills right-table columns with NULL where there is no match."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete example, such as users and orders: INNER JOIN for users who have orders, LEFT JOIN to find users with no orders."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention NULLs for unmatched rows, and that filtering on right-table columns in WHERE can turn a LEFT JOIN into an INNER JOIN."
+        }
+      ]
+    },
+    {
+      "id": "a10",
+      "run": 0,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 7.019857799998135,
+      "cost_usd": 0.01115325,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s4"
+      ],
+      "strengths": [
+        "Correctly explains that merge creates a merge commit and preserves the diverge-and-rejoin history",
+        "Explains that rebase replays commits on top of another branch to give a linear history",
+        "Gives a reasonable preference with reasoning: rebase a local feature branch before a PR, merge to keep exact history"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State explicitly that rebase rewrites commits (new SHAs), not just that it replays them into a straight line."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Mention the golden rule: do not rebase shared/public branches, because rewritten SHAs cause diverged history, conflicts for collaborators, and require force-pushing."
+        }
+      ]
+    },
+    {
+      "id": "a10",
+      "run": 1,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.275801399999182,
+      "cost_usd": 0.0074732999999999996,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s4"
+      ],
+      "strengths": [
+        "Correctly explains that merge uses a merge commit and preserves the diverge-and-rejoin history",
+        "Explains that rebase replays commits on top of another branch to give a linear history",
+        "Gives a reasonable preference: rebase a local feature branch onto main before a PR, merge to keep exact history"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that rebase rewrites commits, creating new SHAs, rather than only making the history linear. The candidate said 'replays' and 'straight line' but never mentioned rewriting."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "State the golden rule: do not rebase shared or public branches, because rewritten SHAs force collaborators to reconcile diverged history and may cause conflicts or require force-pushing."
+        }
+      ]
+    },
+    {
+      "id": "a10",
+      "run": 2,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.131770099993446,
+      "cost_usd": 0.0071733,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s4"
+      ],
+      "strengths": [
+        "Clearly explains that merge uses a merge commit and preserves the diverge-and-rejoin history",
+        "Explains that rebase replays commits on top of another branch to give a linear history",
+        "Gives a concrete, reasoned preference: rebase a local feature branch before a PR, merge to keep exact history"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Say explicitly that rebase rewrites commits, creating new SHAs, rather than only describing the linear result."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "State the golden rule of not rebasing shared/public branches, and explain the consequences: rewritten SHAs, diverged histories for collaborators, and conflicts or force-push problems."
+        }
+      ]
+    },
+    {
+      "id": "a11",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.046473199996399,
+      "cost_usd": 0.01092825,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Recognizes that both merge and rebase bring changes from one branch into another",
+        "Honest about following team conventions in practice"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that merge creates a merge commit that joins both histories and preserves the true branch history."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that rebase replays commits on top of another base, producing linear history and rewriting commits with new SHAs."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "State the golden rule: do not rebase shared/public branches, since rewritten SHAs cause diverged history and conflicts for collaborators."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give a reasoned preference, e.g. rebase a local feature branch before opening a PR, merge for shared branches."
+        }
+      ]
+    },
+    {
+      "id": "a11",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.508850899990648,
+      "cost_usd": 0.01074825,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Recognizes that both merge and rebase bring changes from one branch into another",
+        "Honest about following team conventions in practice"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that merge creates a merge commit joining both histories and preserves the true branching history."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that rebase replays commits on top of another base, producing linear history and new commit SHAs."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "State the golden rule: never rebase shared/public branches, since rewritten SHAs cause conflicts for collaborators."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give a reasoned preference, e.g. rebase a local feature branch before opening a PR, merge for shared branches."
+        }
+      ]
+    },
+    {
+      "id": "a11",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.488767000002554,
+      "cost_usd": 0.0066638999999999995,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Recognizes that both merge and rebase bring changes from one branch into another",
+        "Honest about following team conventions in practice"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that merge joins two histories with a merge commit and preserves the true branching history."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that rebase replays commits onto a new base, producing linear history and rewriting commits with new SHAs."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "State the golden rule: do not rebase shared or public branches, because rewritten SHAs cause conflicts for collaborators."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give a reasoned preference, e.g. rebase a local feature branch onto main before opening a PR, merge for shared branches."
+        }
+      ]
+    },
+    {
+      "id": "a12",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.9243755000061356,
+      "cost_usd": 0.0112845,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that merge joins two branch histories with a merge commit and preserves the true history of how work happened."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that rebase replays commits onto a new base, producing linear history and creating new commits with rewritten SHAs."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "State the golden rule: never rebase shared/public branches like main, since rewriting history breaks collaborators' copies."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give a reasoned preference, e.g. rebase a local feature branch before opening a PR, and merge when integrating shared branches."
+        }
+      ]
+    },
+    {
+      "id": "a12",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.694988899995224,
+      "cost_usd": 0.011044499999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that merge joins two branches with a merge commit and preserves the true, branching history."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that rebase replays commits onto a new base, producing linear history and new commit SHAs."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "State that shared or public branches like main should not be rebased, and that force-pushing them overwrites teammates' work."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give a preference with reasoning, e.g. rebase a local feature branch before a PR and merge to integrate shared work."
+        }
+      ]
+    },
+    {
+      "id": "a12",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.046154600000591,
+      "cost_usd": 0.0074513999999999995,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that merge joins two branch histories with a merge commit and preserves the actual history of both branches."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that rebase replays commits onto a new base, producing linear history and new commit SHAs."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "State that shared/public branches such as main should not be rebased, because rewriting history forces collaborators to reconcile diverged commits."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give a preference with reasoning, e.g. rebase a local feature branch before opening a PR, and merge when integrating shared work."
+        }
+      ]
+    },
+    {
+      "id": "a13",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.012029899997287,
+      "cost_usd": 0.010992,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct is-a/has-a definitions with concrete examples (Dog/Animal, Car/Engine)",
+        "Explains tight coupling, fragile base class effect, and deep hierarchy problems",
+        "Cites testing benefit via swapping in a fake, and states when inheritance is still appropriate (substitutability)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explicitly name the principle 'favor composition over inheritance' and note that composition lets behavior be changed at runtime or avoids multiple-inheritance issues."
+        }
+      ]
+    },
+    {
+      "id": "a13",
+      "run": 1,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.9712421000003815,
+      "cost_usd": 0.0063276,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct is-a/has-a definitions with concrete examples (Dog/Animal, Car/Engine)",
+        "Explains tight coupling and fragile base class effect, plus the difficulty of deep hierarchies",
+        "Cites testing/mocking benefit and states when inheritance is still appropriate (substitutability, shared behavior)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explicitly name the 'favor composition over inheritance' principle and state a clear overall preference."
+        }
+      ]
+    },
+    {
+      "id": "a13",
+      "run": 2,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.753683000002638,
+      "cost_usd": 0.0063276,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct is-a/has-a definitions with concrete examples (Dog/Animal, Car/Engine)",
+        "Explains tight coupling and fragile base class risk, plus the difficulty of deep hierarchies",
+        "Cites testing/mocking benefit and states when inheritance is still appropriate (substitutability, shared behavior)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explicitly name the 'favor composition over inheritance' principle and state a clear overall preference."
+        }
+      ]
+    },
+    {
+      "id": "a14",
+      "run": 0,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.4257406999968225,
+      "cost_usd": 0.01178325,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correct is-a / has-a definitions",
+        "Sensible Car/Engine example",
+        "States a clear preference for composition with a flexibility rationale"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Name the 'favor composition over inheritance' principle and mention testability, such as mocking or swapping in a fake Engine, or substitution via interfaces."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain tight subclass-to-parent coupling and the fragile base class problem, where a parent change breaks subclasses, instead of only saying 'more flexible'."
+        },
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Say when inheritance is still the right choice, such as a true is-a relationship with shared behavior and stable, shallow hierarchies."
+        }
+      ]
+    },
+    {
+      "id": "a14",
+      "run": 1,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.401988400000846,
+      "cost_usd": 0.0072597,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correct is-a / has-a definitions, not reversed",
+        "Sensible Car/Engine example",
+        "States a clear preference for composition with a flexibility rationale"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention the 'favor composition over inheritance' principle and testability, such as mocking or swapping a composed dependency."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain tight coupling to the parent and the fragile base class problem, where parent changes break subclasses."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State when inheritance is still the right choice, such as a true is-a relationship with shared behavior and substitutability."
+        }
+      ]
+    },
+    {
+      "id": "a14",
+      "run": 2,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.577497300007963,
+      "cost_usd": 0.0073347,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Correct is-a / has-a definitions",
+        "Sensible concrete example (Car has an Engine)",
+        "States a clear preference for composition with flexibility as the reason"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention the 'favor composition over inheritance' principle and testability benefits, such as mocking or swapping injected components."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain tight coupling to the parent and the fragile base class problem, where changes in the parent break subclasses."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State when inheritance is still the right choice, such as a true is-a relationship with stable shared behavior and substitutability."
+        }
+      ]
+    },
+    {
+      "id": "a15",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.520665599993663,
+      "cost_usd": 0.011247,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Mentions that inheritance is used for code reuse",
+        "States a preference for composition"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that inheritance models an 'is-a' relationship and composition models a 'has-a' relationship."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that inheritance tightly couples a subclass to its parent (e.g. fragile base class), while composition lets you swap parts more flexibly."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete example such as a Car that has an Engine, or a deep class hierarchy that becomes hard to change."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention 'favor composition over inheritance' and benefits like easier testing/mocking and substitution, and note when inheritance is still appropriate."
+        }
+      ]
+    },
+    {
+      "id": "a15",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.050244400001247,
+      "cost_usd": 0.0069305999999999994,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Names code reuse as a purpose of inheritance",
+        "States a preference for composition"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain inheritance as an 'is-a' relationship and composition as 'has-a'."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that inheritance tightly couples the subclass to the parent (fragile base class), while composition is more flexible."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete example such as a Car that has an Engine, versus a deep class hierarchy."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention 'favor composition over inheritance', and the testability and substitution benefits such as mocking injected dependencies."
+        }
+      ]
+    },
+    {
+      "id": "a15",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.933159199994407,
+      "cost_usd": 0.0069456,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Correctly associates inheritance with code reuse",
+        "States a preference for composition"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain inheritance as 'is-a' and composition as 'has-a' relationships."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that inheritance tightly couples subclass to parent (fragile base class) while composition is more flexible and can swap components."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete example such as a Car that has an Engine versus a deep class hierarchy."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention 'favor composition over inheritance', plus testability/mocking benefits and when inheritance is still appropriate."
+        }
+      ]
+    },
+    {
+      "id": "a16",
+      "run": 0,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 7.527462700003525,
+      "cost_usd": 0.0081309,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Names the core properties of a good unit test: fast, independent, one behavior, deterministic",
+        "Covers normal, zero, negative and boundary cases, with a concrete boundary example (99.99 vs 100)",
+        "Mentions naming tests so a failure explains what broke"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Describe the arrange/act/assert structure and give a concrete descriptive test name, e.g. 'returns_10_percent_discount_when_total_is_100'."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Say tests should assert on observable behavior rather than implementation details, and mock only external dependencies (e.g. a discount-rules service or database), not the pure calculation."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Add parametrized tests for the many input/output pairs, and a very large total or max value case."
+        }
+      ]
+    },
+    {
+      "id": "a16",
+      "run": 1,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.903173599988804,
+      "cost_usd": 0.01200825,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Names the core properties of a good unit test: fast, independent, deterministic, and testing one thing",
+        "Covers normal, zero, negative, and boundary cases for the discount",
+        "Gives a concrete boundary example (99.99 vs 100)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Describe the arrange/act/assert structure and give example descriptive test names, such as 'returns_no_discount_below_100'."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain that tests should check behavior rather than implementation details, and say what to mock (external dependencies like a pricing service) versus what not to mock (the pure calculation)."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Add parametrized tests to cover many inputs compactly, plus a maximum or very large total and rounding/precision cases."
+        }
+      ]
+    },
+    {
+      "id": "a16",
+      "run": 2,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.454115300002741,
+      "cost_usd": 0.0079959,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Names the core properties of a good unit test: fast, independent, deterministic, one behavior",
+        "Covers normal, zero, negative, and threshold boundary cases (99.99 vs 100)",
+        "Mentions naming tests so a failure explains what broke"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Describe the arrange/act/assert structure and give an example of a descriptive test name, e.g. 'returns_zero_discount_for_empty_cart'."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Say tests should check observable behavior rather than implementation details, and mock only external dependencies (e.g. a discount-rules service), not the function's own logic."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Mention parametrized tests to cover many inputs compactly, and a maximum or very large total case."
+        }
+      ]
+    },
+    {
+      "id": "a17",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.75507959999959,
+      "cost_usd": 0.011130749999999998,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Understands a unit test calls a function and checks its output",
+        "Gives a concrete example input for the discount function"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Name qualities of a good unit test: fast, isolated, deterministic, and focused on one behavior."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Test edge cases such as a zero total, negative total, very large total, and values at the discount threshold boundaries."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Structure tests as arrange/act/assert and use descriptive test names that state the expected behavior."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Assert on observable behavior rather than implementation details, and mock only external dependencies (e.g. a pricing service), not the logic under test."
+        }
+      ]
+    },
+    {
+      "id": "a17",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.662528500004555,
+      "cost_usd": 0.0073173000000000005,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Understands a unit test calls a function and checks its output",
+        "Gives a concrete example input for the discount function"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Name qualities of a good unit test: fast, isolated, deterministic, and focused on one behavior."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Test edge cases such as zero total, negative total, exact discount threshold boundaries, and very large totals, not just one normal value."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Structure tests as arrange/act/assert and use descriptive names that state the scenario and expected result."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Assert on observable behavior rather than implementation details, and mock only external dependencies such as a pricing service or database."
+        }
+      ]
+    },
+    {
+      "id": "a17",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.068394600006286,
+      "cost_usd": 0.0073923,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Understands a unit test calls a function and checks the returned result",
+        "Gives a concrete example input for the discount function"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Name qualities of a good unit test: fast, isolated, deterministic, and focused on one behavior."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Test edge cases such as zero total, negative total, exact discount threshold boundaries, and very large totals."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Structure tests as arrange/act/assert and use descriptive names that state the scenario and expected outcome."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Assert on observable behavior rather than implementation details, and mock only external dependencies (e.g. a pricing service), not the logic under test."
+        }
+      ]
+    },
+    {
+      "id": "a18",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.675525200000266,
+      "cost_usd": 0.010770749999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Define a unit test as a fast, isolated, deterministic check of one small unit of behavior, not manual end-to-end clicking through the app."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Test normal totals plus edge cases such as zero total, negative total, totals exactly at discount thresholds, and very large totals."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Structure tests as arrange/act/assert and give them descriptive names that state the expected behavior."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Assert on observable outputs rather than internal implementation, and mock only external dependencies such as a pricing service or database."
+        }
+      ]
+    },
+    {
+      "id": "a18",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.794799900002545,
+      "cost_usd": 0.0068522999999999995,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Define a unit test as a fast, isolated, deterministic check of one unit of behavior, not manual end-to-end clicking through the app."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Test normal totals plus edge cases such as zero, negative, exact threshold boundaries, and very large totals."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Structure tests as arrange/act/assert and give them descriptive names that state the expected behavior."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Assert on outputs rather than internal implementation, and mock only external dependencies such as a pricing service or database."
+        }
+      ]
+    },
+    {
+      "id": "a18",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.782725700002629,
+      "cost_usd": 0.0072123000000000005,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Define a unit test as a fast, isolated, deterministic check of one small unit of behavior, not manual end-to-end clicking through the app."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Test normal totals plus edge cases: zero total, negative total, totals exactly at the discount threshold, and very large totals."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Structure tests as arrange/act/assert with descriptive names such as 'applies 10% discount when total is over 100'."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Assert on outputs and behavior rather than internals, and mock only external dependencies (e.g. a pricing service), not the pure discount logic."
+        }
+      ]
+    },
+    {
+      "id": "a19",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.048221899996861,
+      "cost_usd": 0.0119445,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific, real situation with clear context (Flask API, 500 errors only under load)",
+        "Systematic debugging: structured logging with request ids and a concurrent load script to reproduce",
+        "Verified the fix with 500 requests and described a concrete change in working habits"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain which hypotheses were tried and ruled out before asking for help, and why the SQLite thread-safety issue matched the log evidence."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Describe what research was done independently (docs, searches) before asking the TA, and what was learned from the TA's hint."
+        }
+      ]
+    },
+    {
+      "id": "a19",
+      "run": 1,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.026063700002851,
+      "cost_usd": 0.0119745,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific, real situation with clear context (Flask API, 500 errors only under load)",
+        "Systematic debugging: structured logging with request ids, concurrent reproduction script, root cause identified",
+        "Asked for help at a sensible point, verified the fix with 500 requests, and described a concrete change in working habits"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Name specific hypotheses tried before asking for help and how each was ruled out."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention a broader takeaway such as understanding thread-safety limits of tools like SQLite, or writing a regression test for the fix."
+        }
+      ]
+    },
+    {
+      "id": "a19",
+      "run": 2,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.852825099995243,
+      "cost_usd": 0.0075546,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific, real situation with a clear symptom (500 errors only under load)",
+        "Systematic debugging: structured logging with request ids and a concurrent load script to reproduce and isolate",
+        "Asked for help at a sensible point, verified the fix with 500 requests, and described a concrete change in working habits"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Name the specific hypotheses tried before asking for help and why they were ruled out."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention the broader lesson about SQLite thread safety or when to choose a different database for concurrent workloads."
+        }
+      ]
+    },
+    {
+      "id": "a20",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.2153590000089025,
+      "cost_usd": 0.011048249999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Real, specific example from an internship",
+        "Used a sensible approach: checked the network tab, then added backend print statements",
+        "Identified a concrete root cause (field name mismatch with the serializer)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "A reflective lesson and a change in how they work afterwards, such as shared API contracts, validation, or tests that catch field mismatches."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Mention of researching or asking a teammate or mentor, or a note that they were truly stuck and how they got unstuck."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "More depth on the approach: how they reproduced the bug, what hypotheses they ruled out, and why they chose each debugging step."
+        }
+      ]
+    },
+    {
+      "id": "a20",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.976145199994789,
+      "cost_usd": 0.01086825,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Real, specific situation from an internship",
+        "Narrowed the problem from frontend (network tab) to backend (print statements)",
+        "Identified a concrete root cause: field name mismatch with the serializer"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "A reflective lesson and a change in working habits, e.g. adding validation or tests for field names, or checking the contract between frontend and backend earlier."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Mention of researching docs or asking a teammate or mentor, and how they decided when to ask."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explicit hypotheses, how they reproduced the bug, and why they chose each debugging step."
+        }
+      ]
+    },
+    {
+      "id": "a20",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.003294900001492,
+      "cost_usd": 0.01130325,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2"
+      ],
+      "strengths": [
+        "Real, specific situation from an internship",
+        "Narrowed the problem from frontend (network tab) to backend (print statements)",
+        "Identified a concrete root cause: field name mismatch with the serializer"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "A reflective lesson and a change in how they work afterwards, e.g. sharing a contract between frontend and backend field names, or adding validation or tests."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Mention of researching docs or asking a teammate, and when they decided to do so. The answer also doesn't show they were really stuck."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explicit hypotheses, how they reproduced the bug, and why they chose each step. Using a debugger or logs rather than only print statements would also help."
+        }
+      ]
+    },
+    {
+      "id": "a21",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.516586500001722,
+      "cost_usd": 0.010137,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s3"
+      ],
+      "strengths": [
+        "Mentions researching via Google and Stack Overflow",
+        "Acknowledges a real-sounding experience of being stuck"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe the specific project, the bug's symptoms, and the context in which it appeared."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain concrete steps taken: reproducing the bug, isolating the cause, using logs or a debugger, and testing hypotheses."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "State how the bug was resolved, what the root cause was, and what they learned or changed in how they work."
+        }
+      ]
+    },
+    {
+      "id": "a21",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.603043900002376,
+      "cost_usd": 0.0063048,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s3"
+      ],
+      "strengths": [
+        "Mentions researching the problem using Google and Stack Overflow",
+        "Acknowledges a real bug took a long time to solve"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe the specific project, the bug's symptoms, and the context in which it occurred."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain concrete steps such as reproducing the bug, isolating it, using logs or a debugger, and testing hypotheses."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "State how the bug was resolved and what lesson or change in working habits resulted."
+        }
+      ]
+    },
+    {
+      "id": "a21",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.611308999999892,
+      "cost_usd": 0.006409799999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s3"
+      ],
+      "strengths": [
+        "Mentions researching the problem via Google and Stack Overflow",
+        "Acknowledges a real bug experience, though without details"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe the specific project, the bug's symptoms, and the context in which it occurred."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain concrete steps such as reproducing the bug, isolating the cause, using logs or a debugger, and testing hypotheses."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "State how the bug was resolved, what the root cause was, and what they learned or changed afterwards."
+        }
+      ]
+    },
+    {
+      "id": "a22",
+      "run": 0,
+      "score": 3,
+      "confidence": "medium",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.67763420000847,
+      "cost_usd": 0.010991999999999998,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Specific, concrete technical disagreement (MongoDB vs relational) with the reasoning behind each side",
+        "Listened to the teammate's concern about flexible schemas and addressed it",
+        "Reached a compromise (PostgreSQL with a JSON column) and stated a positive outcome"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Comment on how the working relationship was affected and a reflection on what they learned or would do differently."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Evidence behind the decision, such as a small prototype, benchmarks, or a concrete example of the data relations, rather than discussion alone."
+        }
+      ]
+    },
+    {
+      "id": "a22",
+      "run": 1,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.093621699998039,
+      "cost_usd": 0.0079764,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Specific, concrete disagreement (MongoDB vs relational) with the reasoning behind each side",
+        "Listened to the teammate's concern about flexible schemas and engaged with it",
+        "Reached a compromise (PostgreSQL with a JSON column) and stated the outcome"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "A reflection on what they learned or would do differently, and a note on how the working relationship with the teammate fared afterward."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Evidence behind the decision, such as a small prototype, benchmark, or data-model sketch, rather than only discussion and compromise."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "More detail on how they stayed focused on the problem, for example the project requirements or query patterns they used to compare options."
+        }
+      ]
+    },
+    {
+      "id": "a22",
+      "run": 2,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.702413999999408,
+      "cost_usd": 0.007136399999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Specific, concrete disagreement (MongoDB vs relational) with the reasoning for each side",
+        "Listened to the teammate's concern about flexible schemas and addressed it",
+        "Reached a compromise (PostgreSQL with a JSON column) and stated a positive outcome"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Comment on the working relationship afterward and a reflection on what they would do differently or learned, e.g. testing both options with a quick prototype."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Evidence behind the decision, such as a prototype, benchmark, or data model comparison, rather than only discussion and compromise."
+        }
+      ]
+    },
+    {
+      "id": "a23",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.717616399997496,
+      "cost_usd": 0.010103250000000001,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Mentions a topic of disagreement (project structure)",
+        "Indicates the conflict was talked through and ended without hard feelings"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain what the actual disagreement about project structure was, each side's position, and why it mattered."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Show how they listened to the teammate's view and kept the discussion on the problem rather than the person."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Describe how it was resolved, such as with data, a prototype, a third opinion, or a compromise."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give a concrete outcome for the project and the relationship, plus a reflection on what they would do differently."
+        }
+      ]
+    },
+    {
+      "id": "a23",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.852666699996917,
+      "cost_usd": 0.01025325,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Mentions a topic of disagreement (project structure)",
+        "Indicates the disagreement was talked through rather than ignored or escalated"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe what the disagreement actually was: the two competing structures, why each was proposed, and what was at stake."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain how they listened to the teammate's reasoning and kept the discussion on the problem rather than the person."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Show how it was resolved with evidence, such as a prototype, data, a third opinion, or a concrete compromise."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "State the concrete outcome, how the working relationship fared, and what they would do differently."
+        }
+      ]
+    },
+    {
+      "id": "a23",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.838411499993526,
+      "cost_usd": 0.0063057,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Names a topic of disagreement (project structure)",
+        "Indicates the conflict was resolved without hostility"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe what the disagreement over project structure actually was, e.g. the two competing approaches and why each mattered."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain how they listened to the teammate's reasoning and kept the discussion on the problem rather than the person."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Say how it was resolved: data, a prototype, a third opinion, or a specific compromise."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "State the concrete outcome, how the working relationship fared, and what they would do differently."
+        }
+      ]
+    },
+    {
+      "id": "a24",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.096601900004316,
+      "cost_usd": 0.01092075,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "A specific, concrete example describing what the disagreement was about, rather than a general statement."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Show that they listened to the teammate's view and discussed the problem respectfully instead of dismissing the idea."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Resolve the disagreement with data, a prototype, a third opinion, or a compromise before acting, not after the fact."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Describe the outcome, how the working relationship was preserved, and what they would do differently."
+        }
+      ]
+    },
+    {
+      "id": "a24",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.075337999995099,
+      "cost_usd": 0.01096575,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe a specific disagreement, such as the technical approach, and what each person proposed."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Show that they listened to the teammate's view and focused on the problem rather than who was right."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Resolve it with data, a prototype, a third opinion, or a compromise instead of acting unilaterally."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Give the outcome, say how the working relationship was preserved, and reflect on what they would do differently."
+        }
+      ]
+    },
+    {
+      "id": "a24",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.094458299994585,
+      "cost_usd": 0.01110075,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "A specific, concrete disagreement describing what the project was and what each person proposed."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Show that they listened to the teammate's reasoning and discussed the problem rather than dismissing the other idea."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Resolve the disagreement with data, a prototype, a third opinion, or a compromise before acting, rather than going ahead alone."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Describe the outcome, how the working relationship was preserved, and what they would do differently."
+        }
+      ]
+    },
+    {
+      "id": "a25",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.726032999999006,
+      "cost_usd": 0.01120575,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific, real mistake with a clear consequence (a day of shared test data deleted)",
+        "Took ownership without excuses and told the lead right away",
+        "Fixed the problem quickly, informed affected testers, and added a concrete safeguard (host confirmation prompt)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explicitly reflect on the personal lesson, such as why skipping the environment check was risky, rather than only describing the actions taken."
+        }
+      ]
+    },
+    {
+      "id": "a25",
+      "run": 1,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.9390833000070415,
+      "cost_usd": 0.007052699999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific, real mistake with a clear consequence (deleted a day of shared test data)",
+        "Took ownership without excuses and disclosed immediately to lead",
+        "Fixed the issue, notified affected testers, and added a concrete safeguard (host confirmation prompt)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Quantify the impact further, such as how many testers were affected or how much work was lost, and state the explicit lesson learned."
+        }
+      ]
+    },
+    {
+      "id": "a25",
+      "run": 2,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.949527499993565,
+      "cost_usd": 0.007352699999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific mistake with a clear consequence (a day of shared test data deleted)",
+        "Took ownership with no blame or excuses and told the lead right away",
+        "Fixed the problem quickly and informed the affected testers"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Reflect explicitly on why the check was skipped and what the candidate learned about their own habits, such as verifying the environment before running destructive scripts."
+        }
+      ]
+    },
+    {
+      "id": "a26",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.094774500001222,
+      "cost_usd": 0.006945599999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1"
+      ],
+      "strengths": [
+        "Gives a real, specific example (missed deadline on a school assignment)",
+        "States a concrete consequence (lost marks)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Own the part they played (e.g., not confirming the instructions or checking in with the partner) without blaming others."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain what they did after the miss, such as talking to the teacher, submitting late work, or telling the partner."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Describe a concrete change to prevent recurrence, like confirming requirements up front or using a shared deadline tracker."
+        }
+      ]
+    },
+    {
+      "id": "a26",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.776943100005155,
+      "cost_usd": 0.006975599999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1"
+      ],
+      "strengths": [
+        "Names a real, specific situation (missed deadline on a school assignment)",
+        "States a concrete consequence (lost marks)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Own the part you played, such as not checking the instructions or confirming with your partner, without blaming others."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Describe what you did after the miss, such as talking to the instructor or partner and trying to fix or limit the damage."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain a concrete change you made, such as confirming requirements early or setting up regular check-ins with teammates."
+        }
+      ]
+    },
+    {
+      "id": "a26",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.205915999991703,
+      "cost_usd": 0.0070506,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1"
+      ],
+      "strengths": [
+        "Describes a real, concrete event (missed deadline)",
+        "States a real consequence (lost marks)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Own the candidate's part in the miss (e.g., not confirming the instructions or checking in with the partner) instead of attributing it to others."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain what they did to fix it and whom they informed, such as talking to the teacher or partner."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Describe a concrete change to prevent recurrence, such as confirming requirements early or keeping a shared deadline tracker."
+        }
+      ]
+    },
+    {
+      "id": "a27",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.942699799998081,
+      "cost_usd": 0.010797000000000001,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe a specific, real mistake (e.g., a bug shipped, missed deadline, or broken build) and its actual consequence."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Say plainly what they did wrong and own it without deflecting or reframing it as a strength."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain how they fixed the problem and told teammates, a mentor, or an instructor who were affected."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Name a concrete preventive change, such as adding tests, a checklist, or code review, to avoid repeating the mistake."
+        }
+      ]
+    },
+    {
+      "id": "a27",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.051671699999133,
+      "cost_usd": 0.0078576,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Answered briefly and directly without blaming others"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe a specific, real mistake (e.g., a bug shipped, missed deadline, wrong assumption) and its actual consequence."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Say plainly 'I made this mistake' and own the cause without deflecting into a fake weakness."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain how the mistake was fixed and how teammates, instructor, or stakeholders were told about it."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Name a concrete change to prevent recurrence, such as adding tests, a checklist, or earlier code review."
+        }
+      ]
+    },
+    {
+      "id": "a27",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 7.209978900005808,
+      "cost_usd": 0.007797599999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Responded directly without blaming anyone else"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe a specific, real mistake (e.g., a bug shipped, missed deadline, wrong assumption) and its actual consequence."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Say plainly 'I made this error' and own the cause without deflecting or using a humblebrag."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain how the mistake was fixed and how teammates, instructor, or stakeholders were informed."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Name a concrete change to prevent recurrence, such as adding tests, a checklist, or code review steps."
+        }
+      ]
+    },
+    {
+      "id": "a28",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 7.533766599997762,
+      "cost_usd": 0.0067548,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific technology, reason, and deadline (React migration in three weeks)",
+        "Concrete, staged learning approach: tutorial, small real widget, senior review that caught a useEffect mistake",
+        "Reflects on what worked and states how they will reuse the approach"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Clarify the candidate's own contribution to the migration and any measurable outcome beyond shipping on time."
+        }
+      ]
+    },
+    {
+      "id": "a28",
+      "run": 1,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.683261400001356,
+      "cost_usd": 0.010977,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific technology, reason and deadline (React migration in three weeks)",
+        "Concrete, staged learning strategy: tutorial, small real widget, senior review that caught a useEffect misuse",
+        "Reflects on what worked and states a reusable approach for future learning"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Describe their own contribution to the migration and a measurable outcome (e.g. how many components were migrated or the impact on the dashboard)."
+        }
+      ]
+    },
+    {
+      "id": "a28",
+      "run": 2,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.874056699991343,
+      "cost_usd": 0.0067848000000000006,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Specific technology, reason, and deadline (React migration in three weeks)",
+        "Concrete, staged learning approach: tutorial, small real widget, senior review",
+        "Clear reflection on what worked and a reusable method for future learning"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "More detail on the candidate's own contribution to the migration and a measurable outcome (e.g., how many components migrated, impact on the team or users)."
+        }
+      ]
+    },
+    {
+      "id": "a29",
+      "run": 0,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.176560799998697,
+      "cost_usd": 0.0096795,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Names a specific technology (Docker) with a clear deadline (one weekend) and context (hackathon)",
+        "Concrete learning steps: getting-started guide, Dockerfile for a Python app, docker-compose for app plus database",
+        "Delivered a working result, demoed with everything running in containers"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Reflect on which parts of the approach worked or didn't, what they would do differently, and how they would reuse the method for future new technologies."
+        }
+      ]
+    },
+    {
+      "id": "a29",
+      "run": 1,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.578811900006258,
+      "cost_usd": 0.0095745,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Names a specific technology (Docker) with a clear deadline (one weekend) and context (hackathon)",
+        "Concrete approach: getting-started guide, a Dockerfile for the Python app, and docker-compose for the app and database",
+        "Delivered a working result, demoed with everything running in containers"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Reflect on which parts of the approach worked or didn't, and how they would reuse it for learning future technologies"
+        }
+      ]
+    },
+    {
+      "id": "a29",
+      "run": 2,
+      "score": 3,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.49452909998945,
+      "cost_usd": 0.006999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "strengths": [
+        "Names a specific technology (Docker) with a clear deadline and context (hackathon, one weekend)",
+        "Describes a concrete, hands-on approach: getting-started guide, Dockerfile for the Python app, docker-compose for app and database",
+        "Delivered a working result, demoed with everything running in containers"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Reflect on what worked or didn't in the learning method, what they would do differently, and how they would reuse the approach for future technologies."
+        },
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain why Docker was needed for the project (e.g., consistent environments or easier demo setup) rather than only stating the deadline."
+        }
+      ]
+    },
+    {
+      "id": "a30",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.328958600002807,
+      "cost_usd": 0.01059825,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Mentions general resources (documentation and videos) as a way of learning"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Name a specific technology, why it was needed, and the deadline or project context."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Describe a concrete strategy such as building a small project, breaking the topic into parts, or asking teammates, with specifics."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain what was built or delivered using the new technology and the outcome."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Reflect on what worked, what didn't, and how they would reuse or adjust the approach."
+        }
+      ]
+    },
+    {
+      "id": "a30",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 7.858543999987887,
+      "cost_usd": 0.0078561,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Mentions general learning resources (documentation and videos)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Name a specific technology, why it was needed, and the deadline or project context."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Describe a concrete strategy, such as breaking the topic down, building a small practice project, or asking teammates for help."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain what was built or delivered using the new technology and the outcome."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Reflect on what worked or didn't and how they would reuse or adjust the approach."
+        }
+      ]
+    },
+    {
+      "id": "a30",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 7.5835589000053005,
+      "cost_usd": 0.007871099999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Mentions general learning resources (documentation and videos)"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Name a specific technology, why it was needed, and the deadline or project context."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Describe a concrete strategy such as building a small project, breaking the topic into parts, or asking teammates for help, with specifics."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain what was actually built or delivered using the new technology."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Reflect on what worked, what did not, and how this shapes how they learn in the future."
+        }
+      ]
+    },
+    {
+      "id": "x01",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 6.953255000000354,
+      "cost_usd": 0.0100095,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that hash map lookup/insert by key is average O(1) via hashing, while searching a list by value is O(n)."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that keys must be hashable and unique, and discuss ordering and memory trade-offs."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting word frequencies, caching, de-duplication, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention collisions and worst-case O(n) behavior, or the memory overhead of a hash table."
+        }
+      ]
+    },
+    {
+      "id": "x01",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 6.662014700006694,
+      "cost_usd": 0.011089499999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that a hash map gives average O(1) lookup and insert by key via hashing, whereas finding a value in a list is O(n) because it requires scanning."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that keys must be hashable and unique, and discuss ordering and memory trade-offs compared with a list."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting word frequencies, caching results, de-duplicating items, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention hash collisions and the O(n) worst case, or the extra memory overhead of a hash table."
+        }
+      ]
+    },
+    {
+      "id": "x01",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 6.887571100000059,
+      "cost_usd": 0.005971799999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Explain that hash map lookup/insert by key is average O(1) via hashing, while searching a list by value is O(n)."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "State that keys must be hashable and unique, and discuss ordering and memory trade-offs."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Give a concrete use case such as counting word frequency, caching results, de-duplication, or indexing records by id."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Mention collisions, O(n) worst-case lookup, or memory overhead compared with a list."
+        }
+      ]
+    },
+    {
+      "id": "x02",
+      "run": 0,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 7.245643700007349,
+      "cost_usd": 0.011577,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Gives a basic, correct statement that GET reads and POST sends data",
+        "Honestly admits not knowing what idempotent means"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that GET is safe with no side effects, while POST creates a resource or triggers an action"
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that GET parameters go in the URL/query string and POST data goes in the request body"
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Define idempotency as repeated identical requests leaving the same server state, with GET/PUT/DELETE idempotent and POST not"
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Describe consequences such as safe retries, caching of GET, and duplicate orders from double-submitted POSTs"
+        }
+      ]
+    },
+    {
+      "id": "x02",
+      "run": 1,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 7.1387504000013,
+      "cost_usd": 0.011547,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Gives a basic distinction: GET reads and POST sends data",
+        "Honestly states not knowing what idempotent means"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that GET is safe with no side effects, while POST creates a resource or triggers an action."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that GET parameters go in the URL/query string and POST data goes in the request body."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Define idempotency: repeating the same request leaves the server in the same state (GET, PUT, DELETE yes; POST no), with an example."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Explain consequences such as safe retries, caching of GET, and duplicate orders from double-submitting a POST."
+        }
+      ]
+    },
+    {
+      "id": "x02",
+      "run": 2,
+      "score": 2,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 6.320057699995232,
+      "cost_usd": 0.010407,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [
+        "Gives a basic, correct statement that GET reads and POST sends data"
+      ],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "State that GET is safe with no side effects, while POST creates resources or triggers actions"
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Explain that GET parameters go in the URL query string and POST data goes in the request body"
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Define idempotency: repeating the same request leaves the server in the same state (GET, PUT, DELETE yes; POST no), with an example"
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Describe practical consequences such as safe retries, caching of GET, and duplicate orders from POST double-submits"
+        }
+      ]
+    },
+    {
+      "id": "x03",
+      "run": 0,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 6.478866199991899,
+      "cost_usd": 0.010118249999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe a specific, real mistake from a project or school and its actual consequence."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Own the mistake plainly, without excuses or claiming to be infallible."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain how the mistake was fixed and who was told about it (teammates, instructor, or manager)."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Name a concrete process change, such as a checklist, test, or review step, to prevent it happening again."
+        }
+      ]
+    },
+    {
+      "id": "x03",
+      "run": 1,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 6.130141699992237,
+      "cost_usd": 0.006266699999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe a specific, real mistake from a project or school and its actual consequence."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Say plainly what they did wrong and take responsibility without excuses."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain how they fixed the problem and told the affected people (teammates, instructor, or users)."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Name a concrete process change to prevent recurrence, such as a checklist, tests, or code review."
+        }
+      ]
+    },
+    {
+      "id": "x03",
+      "run": 2,
+      "score": 1,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 7.247548800005461,
+      "cost_usd": 0.006221699999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [],
+      "strengths": [],
+      "gaps": [
+        {
+          "signal_id": "s1",
+          "what_a_stronger_answer_adds": "Describe a specific, real mistake from a project or school and its actual consequence."
+        },
+        {
+          "signal_id": "s2",
+          "what_a_stronger_answer_adds": "Own the mistake directly without excuses or deflection."
+        },
+        {
+          "signal_id": "s3",
+          "what_a_stronger_answer_adds": "Explain how the mistake was fixed and who was told (teammates, instructor, or manager)."
+        },
+        {
+          "signal_id": "s4",
+          "what_a_stronger_answer_adds": "Name a concrete change in process (for example tests, code review, or a checklist) to prevent it happening again."
+        }
+      ]
+    },
+    {
+      "id": "x04",
+      "run": 0,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 6.608655000003637,
+      "cost_usd": 0.011280749999999999,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct and concise definitions of INNER and LEFT JOIN",
+        "Concrete users/orders example including anti-join with IS NULL",
+        "Explains the WHERE-clause pitfall and the ON-clause fix"
+      ],
+      "gaps": []
+    },
+    {
+      "id": "x04",
+      "run": 1,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": true,
+      "latency_s": 5.216605499997968,
+      "cost_usd": 0.0056829,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct and concise definitions of INNER and LEFT JOIN",
+        "Concrete users/orders example, including the anti-join pattern with IS NULL",
+        "Explains the WHERE-clause pitfall and the ON-clause fix"
+      ],
+      "gaps": []
+    },
+    {
+      "id": "x04",
+      "run": 2,
+      "score": 4,
+      "confidence": "high",
+      "ungrounded": 0,
+      "injection": false,
+      "latency_s": 5.1942049999925075,
+      "cost_usd": 0.0057579,
+      "model": "claude-sonnet-5-5",
+      "signals_hit": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "strengths": [
+        "Correct and concise definitions of both INNER and LEFT JOIN",
+        "Uses a concrete users/orders example, including the anti-join pattern with IS NULL",
+        "Identifies the WHERE-clause pitfall and the ON-clause fix"
+      ],
+      "gaps": []
+    }
+  ]
+}

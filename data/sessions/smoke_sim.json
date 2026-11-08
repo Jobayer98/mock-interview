@@ -1,0 +1,795 @@
+{
+  "session": {
+    "versions": {
+      "rubric": "junior_swe/0.1",
+      "evaluator": "evaluator/0.1",
+      "model": "claude-sonnet-5-5"
+    },
+    "started_at": 1794099608.178358,
+    "duration_s": 90.7,
+    "ended_early": false,
+    "questions": [
+      {
+        "question_id": "beh_learning",
+        "type": "behavioral",
+        "topic": "learning",
+        "question": "Tell me about a time you had to learn a new technology quickly. How did you approach it?",
+        "answers": [
+          "I'm a fast learner. When I need to learn something new I read the documentation and watch some videos and then I understand it.",
+          "My team needed to switch our dashboard from plain JavaScript to React in three weeks and I had never used it. I did the official tutorial in two evenings, then rebuilt one small widget of our real dashboard as a test of my understanding before touching the main code. I asked a senior developer to review that widget, which caught my misuse of useEffect. We shipped the migration on time. What worked was building something real quickly rather than watching videos, so now I start any new tool with a tiny real task, and I'd skip the long video courses next time."
+        ],
+        "followups": [
+          "Can you walk me through one specific time you did that? What was the technology, and what was going on that made you need to learn it?"
+        ],
+        "fallback_followups": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 4,
+          "confidence": "high",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Specific technology and why it was needed with a deadline/context",
+              "hit": true,
+              "quote": "My team needed to switch our dashboard from plain JavaScript to React in three weeks and I had never used it."
+            },
+            {
+              "id": "s2",
+              "text": "Learning strategy: docs, small project, asking, breaking down",
+              "hit": true,
+              "quote": "I did the official tutorial in two evenings, then rebuilt one small widget of our real dashboard as a test of my understanding before touching the main code. I asked a senior developer to review that widget"
+            },
+            {
+              "id": "s3",
+              "text": "Applied it to deliver something",
+              "hit": true,
+              "quote": "We shipped the migration on time."
+            },
+            {
+              "id": "s4",
+              "text": "Reflects on what worked and how they learn best",
+              "hit": true,
+              "quote": "What worked was building something real quickly rather than watching videos, so now I start any new tool with a tiny real task, and I'd skip the long video courses next time."
+            }
+          ],
+          "red_flags_hit": [],
+          "strengths": [
+            "Specific technology (React), clear context and a three-week deadline",
+            "Concrete, staged learning approach: tutorial, small real widget, senior code review that caught a useEffect mistake",
+            "Reflects on what worked and states how they will reuse the approach"
+          ],
+          "gaps": [
+            {
+              "signal_id": "s3",
+              "what_a_stronger_answer_adds": "Describe their own contribution to the migration and a measurable outcome, such as how much of the dashboard was migrated or the impact on the team."
+            },
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Acknowledge what was harder than expected, or note a limit of the approach, rather than only what worked."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.1",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 7.640924399998767,
+          "cost_usd": 0.01164075
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_composition",
+        "type": "technical",
+        "topic": "oop",
+        "question": "What is the difference between inheritance and composition? When would you prefer composition?",
+        "answers": [
+          "Inheritance is for reusing code and composition is for combining classes. Composition is better because inheritance is bad in general and you should avoid it.",
+          "Inheritance is an is-a relationship, a Dog is an Animal, and composition is has-a, a Car has an Engine. Inheritance couples the subclass tightly to the parent so changes in the base class can break children, and deep hierarchies get hard to reason about. With composition I hold the collaborators as fields and can swap them, which also makes testing easier because I can pass a fake Engine. I'd still use inheritance when there's a real is-a relationship with shared behavior and the subtype can be substituted anywhere the parent is used, like different payment providers behind one interface."
+        ],
+        "followups": [
+          "You said composition is for combining classes. How would you describe the relationship between two classes in each approach, say with a car and an engine?"
+        ],
+        "fallback_followups": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 3,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Inheritance is an 'is-a' relationship; composition is 'has-a'",
+              "hit": true,
+              "quote": "Inheritance is an is-a relationship, a Dog is an Animal, and composition is has-a, a Car has an Engine."
+            },
+            {
+              "id": "s2",
+              "text": "Inheritance couples subclass tightly to parent; composition is more flexible",
+              "hit": true,
+              "quote": "Inheritance couples the subclass tightly to the parent so changes in the base class can break children"
+            },
+            {
+              "id": "s3",
+              "text": "Concrete example (e.g. Car has an Engine; avoid deep hierarchies)",
+              "hit": true,
+              "quote": "a Car has an Engine"
+            },
+            {
+              "id": "s4",
+              "text": "Mentions 'favor composition over inheritance' or testability/substitution",
+              "hit": true,
+              "quote": "which also makes testing easier because I can pass a fake Engine"
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Says inheritance is always bad",
+              "quote": "Composition is better because inheritance is bad in general and you should avoid it."
+            }
+          ],
+          "strengths": [
+            "Correct is-a / has-a definitions with concrete examples (Dog/Animal, Car/Engine)",
+            "Explains tight coupling, base-class changes breaking children, and deep hierarchies",
+            "Mentions testability via swapping in a fake collaborator and gives a valid case for inheritance (substitutability)"
+          ],
+          "gaps": [
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Explicitly name the 'favor composition over inheritance' principle and keep a consistent, nuanced stance rather than claiming inheritance is bad in general."
+            },
+            {
+              "signal_id": "s2",
+              "what_a_stronger_answer_adds": "Name the fragile base class problem explicitly and explain how composition lets behavior be swapped at runtime rather than fixed at compile time."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.1",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 5.499122600002011,
+          "cost_usd": 0.01249575
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_unit_tests",
+        "type": "technical",
+        "topic": "testing",
+        "question": "What makes a good unit test? How would you test a function that calculates a discount from a cart total?",
+        "answers": [
+          "A unit test checks that your function works. For the discount I'd call it with a total like 100 and check that I get the right discount back. If it passes then it works.",
+          "A good unit test is fast, independent, and checks one thing, and it gives the same result every time. For a discount function I'd test a normal total, a total of zero, a negative total to see if it throws or returns zero, and the boundary where the discount threshold starts, like 99.99 versus 100. I'd name the tests so a failure explains what broke.",
+          "A good unit test is fast, independent, and checks one thing, and it gives the same result every time. For a discount function I'd test a normal total, a total of zero, a negative total to see if it throws or returns zero, and the boundary where the discount threshold starts, like 99.99 versus 100. I'd name the tests so a failure explains what broke."
+        ],
+        "followups": [
+          "You mentioned testing with a total of 100. What other inputs would you try, and how would you decide what each test should be checking?",
+          "You mentioned naming tests so a failure explains what broke. How would you structure one of those discount tests, and what would you call it?"
+        ],
+        "fallback_followups": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 3,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Fast, isolated, deterministic, tests one behavior",
+              "hit": true,
+              "quote": "A good unit test is fast, independent, and checks one thing, and it gives the same result every time."
+            },
+            {
+              "id": "s2",
+              "text": "Covers normal cases and edge cases (zero, boundary, negative, max)",
+              "hit": true,
+              "quote": "I'd test a normal total, a total of zero, a negative total to see if it throws or returns zero, and the boundary where the discount threshold starts, like 99.99 versus 100."
+            },
+            {
+              "id": "s3",
+              "text": "Clear arrange/act/assert and descriptive names",
+              "hit": false,
+              "quote": ""
+            },
+            {
+              "id": "s4",
+              "text": "Avoids testing implementation details; mocks external dependencies only",
+              "hit": false,
+              "quote": ""
+            }
+          ],
+          "red_flags_hit": [],
+          "strengths": [
+            "Names the key properties of a good unit test: fast, independent, deterministic, one behavior",
+            "Covers normal, zero, negative, and boundary cases with concrete values (99.99 vs 100)",
+            "Mentions naming tests so a failure explains what broke"
+          ],
+          "gaps": [
+            {
+              "signal_id": "s3",
+              "what_a_stronger_answer_adds": "Describe the arrange/act/assert structure and give an example of a descriptive test name, e.g. returns_zero_discount_for_total_below_threshold."
+            },
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Explain testing behavior (inputs/outputs) rather than implementation details, and say what to mock (external dependencies like a pricing service) versus what not to mock."
+            },
+            {
+              "signal_id": "s2",
+              "what_a_stronger_answer_adds": "Add a maximum or very large total, and use parametrized tests to cover the cases compactly."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.1",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 5.576443300000392,
+          "cost_usd": 0.01235325
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_http_methods",
+        "type": "technical",
+        "topic": "http_rest",
+        "question": "What is the difference between GET and POST, and what does it mean for an HTTP method to be idempotent?",
+        "answers": [
+          "GET gets data from the server and POST sends data to the server. POST is more secure because the data is in the body and not visible in the URL. I'm not sure what idempotent means, I think it's something to do with APIs.",
+          "GET is used to fetch data and shouldn't change anything on the server, and the parameters go in the URL. POST sends data in the request body and is used to create something or trigger an action. Idempotent means doing the same request multiple times has the same effect as doing it once. GET and PUT and DELETE are idempotent, for example deleting the same user twice leaves the same state. POST isn't, because posting twice might create two records."
+        ],
+        "followups": [
+          "You mentioned POST sends data to the server. What do you think happens if the same POST request gets sent twice, say by a user double-clicking submit?"
+        ],
+        "fallback_followups": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 3,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "GET retrieves, should be safe/no side effects; POST creates or triggers an action",
+              "hit": true,
+              "quote": "GET is used to fetch data and shouldn't change anything on the server"
+            },
+            {
+              "id": "s2",
+              "text": "GET params in URL, POST data in body",
+              "hit": true,
+              "quote": "the parameters go in the URL. POST sends data in the request body"
+            },
+            {
+              "id": "s3",
+              "text": "Idempotent: repeating the request gives the same server state (GET, PUT, DELETE yes; POST no)",
+              "hit": true,
+              "quote": "Idempotent means doing the same request multiple times has the same effect as doing it once. GET and PUT and DELETE are idempotent"
+            },
+            {
+              "id": "s4",
+              "text": "Practical consequence: retries, caching, or double-submit risk",
+              "hit": false,
+              "quote": ""
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Claims POST is 'secure' and GET is not because of the body",
+              "quote": "POST is more secure because the data is in the body and not visible in the URL."
+            }
+          ],
+          "strengths": [
+            "Correctly defines idempotency: repeating a request has the same effect as doing it once",
+            "Gives a concrete DELETE example and correctly says POST is not idempotent",
+            "Correctly separates GET (read, params in URL) from POST (body, create or trigger an action)"
+          ],
+          "gaps": [
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Explain why idempotency matters in practice: idempotent requests can be retried safely after timeouts, GET responses can be cached, and double-submitting a POST can create duplicate orders or records, so it needs idempotency keys or similar protection."
+            },
+            {
+              "signal_id": "s1",
+              "what_a_stronger_answer_adds": "Correct the claim that POST is more secure. A body is not hidden or encrypted, so HTTPS is what protects data. The real difference is that URLs end up in logs, history, and bookmarks."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.1",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 10.792191000000457,
+          "cost_usd": 0.023952
+        },
+        "error": null
+      },
+      {
+        "question_id": "beh_stuck_bug",
+        "type": "behavioral",
+        "topic": "problem_solving",
+        "question": "Tell me about a time you were stuck on a difficult bug or problem. What did you do?",
+        "answers": [
+          "There was a bug once in my code that took a long time. I tried a lot of things and searched on Google and Stack Overflow. It was frustrating.",
+          "In my final-year project our Flask API returned random 500 errors only under load. I couldn't reproduce it locally, so first I added structured logging with request ids and wrote a small script to hit the endpoint concurrently, which reproduced it. The logs showed two requests writing to the same SQLite connection, which isn't thread safe. I spent about two days on it and asked my TA after the first day when my hypotheses ran out; she suggested checking connection sharing. I switched to a per-request connection and the errors disappeared, and I confirmed with the load script running 500 requests. Since then I write a reproduction script before changing any code, and I add logging early instead of guessing."
+        ],
+        "followups": [
+          "Can you walk me through that specific bug: what was the project, and what was the code doing wrong?"
+        ],
+        "fallback_followups": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 4,
+          "confidence": "high",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Specific situation (not hypothetical) with context",
+              "hit": true,
+              "quote": "In my final-year project our Flask API returned random 500 errors only under load."
+            },
+            {
+              "id": "s2",
+              "text": "Systematic approach: reproduce, isolate, logs/debugger, hypotheses",
+              "hit": true,
+              "quote": "I couldn't reproduce it locally, so first I added structured logging with request ids and wrote a small script to hit the endpoint concurrently, which reproduced it. The logs showed two requests writing to the same SQLite connection, which isn't thread safe."
+            },
+            {
+              "id": "s3",
+              "text": "Asked for help appropriately or researched",
+              "hit": true,
+              "quote": "asked my TA after the first day when my hypotheses ran out; she suggested checking connection sharing."
+            },
+            {
+              "id": "s4",
+              "text": "Clear outcome and what they learned",
+              "hit": true,
+              "quote": "I switched to a per-request connection and the errors disappeared, and I confirmed with the load script running 500 requests. Since then I write a reproduction script before changing any code, and I add logging early instead of guessing."
+            }
+          ],
+          "red_flags_hit": [],
+          "strengths": [
+            "Specific, real situation with context (Flask API, 500 errors only under load)",
+            "Systematic approach: structured logging, concurrent reproduction script, root cause identified",
+            "Asked for help at a sensible point, verified the fix, and described a concrete change in working habits"
+          ],
+          "gaps": [
+            {
+              "signal_id": "s3",
+              "what_a_stronger_answer_adds": "Mention what they researched on their own before asking the TA, and what specific hypotheses were ruled out."
+            },
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Reflect on broader lessons, such as concurrency pitfalls with shared resources or how to prevent this class of bug (e.g., using a proper DB for concurrent workloads, adding load tests)."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.1",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 8.018732000000455,
+          "cost_usd": 0.013871999999999999
+        },
+        "error": null
+      }
+    ],
+    "events": [
+      {
+        "t": 1794099608.178,
+        "type": "interviewer",
+        "text": "Hi, I'll be your interviewer today. This is a practice interview for a junior software engineer role. I'll ask 5 questions and may follow up. Answer as you would in a real interview; I can't give hints until the feedback at the end. Press Enter on an empty line to submit an answer, or type 'skip' to move on.",
+        "kind": "intro"
+      },
+      {
+        "t": 1794099608.178,
+        "type": "interviewer",
+        "text": "Tell me about a time you had to learn a new technology quickly. How did you approach it?",
+        "kind": "question",
+        "question_id": "beh_learning"
+      },
+      {
+        "t": 1794099608.178,
+        "type": "candidate",
+        "text": "I'm a fast learner. When I need to learn something new I read the documentation and watch some videos and then I understand it.",
+        "question_id": "beh_learning"
+      },
+      {
+        "t": 1794099617.401,
+        "type": "interviewer",
+        "text": "Can you walk me through one specific time you did that? What was the technology, and what was going on that made you need to learn it?",
+        "kind": "follow_up",
+        "question_id": "beh_learning",
+        "probe": "Specific technology and why it was needed with a deadline/context",
+        "fallback": false
+      },
+      {
+        "t": 1794099617.401,
+        "type": "candidate",
+        "text": "My team needed to switch our dashboard from plain JavaScript to React in three weeks and I had never used it. I did the official tutorial in two evenings, then rebuilt one small widget of our real dashboard as a test of my understanding before touching the main code. I asked a senior developer to review that widget, which caught my misuse of useEffect. We shipped the migration on time. What worked was building something real quickly rather than watching videos, so now I start any new tool with a tiny real task, and I'd skip the long video courses next time.",
+        "question_id": "beh_learning"
+      },
+      {
+        "t": 1794099625.042,
+        "type": "interviewer",
+        "text": "What is the difference between inheritance and composition? When would you prefer composition?",
+        "kind": "question",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794099625.042,
+        "type": "candidate",
+        "text": "Inheritance is for reusing code and composition is for combining classes. Composition is better because inheritance is bad in general and you should avoid it.",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794099633.728,
+        "type": "interviewer",
+        "text": "You said composition is for combining classes. How would you describe the relationship between two classes in each approach, say with a car and an engine?",
+        "kind": "follow_up",
+        "question_id": "tech_composition",
+        "probe": "Inheritance is an 'is-a' relationship; composition is 'has-a'",
+        "fallback": false
+      },
+      {
+        "t": 1794099633.728,
+        "type": "candidate",
+        "text": "Inheritance is an is-a relationship, a Dog is an Animal, and composition is has-a, a Car has an Engine. Inheritance couples the subclass tightly to the parent so changes in the base class can break children, and deep hierarchies get hard to reason about. With composition I hold the collaborators as fields and can swap them, which also makes testing easier because I can pass a fake Engine. I'd still use inheritance when there's a real is-a relationship with shared behavior and the subtype can be substituted anywhere the parent is used, like different payment providers behind one interface.",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794099639.227,
+        "type": "interviewer",
+        "text": "What makes a good unit test? How would you test a function that calculates a discount from a cart total?",
+        "kind": "question",
+        "question_id": "tech_unit_tests"
+      },
+      {
+        "t": 1794099639.227,
+        "type": "candidate",
+        "text": "A unit test checks that your function works. For the discount I'd call it with a total like 100 and check that I get the right discount back. If it passes then it works.",
+        "question_id": "tech_unit_tests"
+      },
+      {
+        "t": 1794099647.613,
+        "type": "interviewer",
+        "text": "You mentioned testing with a total of 100. What other inputs would you try, and how would you decide what each test should be checking?",
+        "kind": "follow_up",
+        "question_id": "tech_unit_tests",
+        "probe": "Fast, isolated, deterministic, tests one behavior",
+        "fallback": false
+      },
+      {
+        "t": 1794099647.613,
+        "type": "candidate",
+        "text": "A good unit test is fast, independent, and checks one thing, and it gives the same result every time. For a discount function I'd test a normal total, a total of zero, a negative total to see if it throws or returns zero, and the boundary where the discount threshold starts, like 99.99 versus 100. I'd name the tests so a failure explains what broke.",
+        "question_id": "tech_unit_tests"
+      },
+      {
+        "t": 1794099656.089,
+        "type": "interviewer",
+        "text": "You mentioned naming tests so a failure explains what broke. How would you structure one of those discount tests, and what would you call it?",
+        "kind": "follow_up",
+        "question_id": "tech_unit_tests",
+        "probe": "Clear arrange/act/assert and descriptive names",
+        "fallback": false
+      },
+      {
+        "t": 1794099656.089,
+        "type": "candidate",
+        "text": "A good unit test is fast, independent, and checks one thing, and it gives the same result every time. For a discount function I'd test a normal total, a total of zero, a negative total to see if it throws or returns zero, and the boundary where the discount threshold starts, like 99.99 versus 100. I'd name the tests so a failure explains what broke.",
+        "question_id": "tech_unit_tests"
+      },
+      {
+        "t": 1794099661.665,
+        "type": "interviewer",
+        "text": "What is the difference between GET and POST, and what does it mean for an HTTP method to be idempotent?",
+        "kind": "question",
+        "question_id": "tech_http_methods"
+      },
+      {
+        "t": 1794099661.665,
+        "type": "candidate",
+        "text": "GET gets data from the server and POST sends data to the server. POST is more secure because the data is in the body and not visible in the URL. I'm not sure what idempotent means, I think it's something to do with APIs.",
+        "question_id": "tech_http_methods"
+      },
+      {
+        "t": 1794099671.352,
+        "type": "interviewer",
+        "text": "You mentioned POST sends data to the server. What do you think happens if the same POST request gets sent twice, say by a user double-clicking submit?",
+        "kind": "follow_up",
+        "question_id": "tech_http_methods",
+        "probe": "Idempotent: repeating the request gives the same server state (GET, PUT, DELETE yes; POST no)",
+        "fallback": false
+      },
+      {
+        "t": 1794099671.352,
+        "type": "candidate",
+        "text": "GET is used to fetch data and shouldn't change anything on the server, and the parameters go in the URL. POST sends data in the request body and is used to create something or trigger an action. Idempotent means doing the same request multiple times has the same effect as doing it once. GET and PUT and DELETE are idempotent, for example deleting the same user twice leaves the same state. POST isn't, because posting twice might create two records.",
+        "question_id": "tech_http_methods"
+      },
+      {
+        "t": 1794099682.145,
+        "type": "interviewer",
+        "text": "Tell me about a time you were stuck on a difficult bug or problem. What did you do?",
+        "kind": "question",
+        "question_id": "beh_stuck_bug"
+      },
+      {
+        "t": 1794099682.145,
+        "type": "candidate",
+        "text": "There was a bug once in my code that took a long time. I tried a lot of things and searched on Google and Stack Overflow. It was frustrating.",
+        "question_id": "beh_stuck_bug"
+      },
+      {
+        "t": 1794099690.846,
+        "type": "interviewer",
+        "text": "Can you walk me through that specific bug: what was the project, and what was the code doing wrong?",
+        "kind": "follow_up",
+        "question_id": "beh_stuck_bug",
+        "probe": "Specific situation (not hypothetical) with context",
+        "fallback": false
+      },
+      {
+        "t": 1794099690.846,
+        "type": "candidate",
+        "text": "In my final-year project our Flask API returned random 500 errors only under load. I couldn't reproduce it locally, so first I added structured logging with request ids and wrote a small script to hit the endpoint concurrently, which reproduced it. The logs showed two requests writing to the same SQLite connection, which isn't thread safe. I spent about two days on it and asked my TA after the first day when my hypotheses ran out; she suggested checking connection sharing. I switched to a per-request connection and the errors disappeared, and I confirmed with the load script running 500 requests. Since then I write a reproduction script before changing any code, and I add logging early instead of guessing.",
+        "question_id": "beh_stuck_bug"
+      },
+      {
+        "t": 1794099698.866,
+        "type": "interviewer",
+        "text": "That's all my questions. Thank you, I'll prepare your feedback now.",
+        "kind": "outro"
+      }
+    ]
+  },
+  "scorecard": {
+    "overall": 3.4,
+    "by_type": {
+      "technical": 3,
+      "behavioral": 4
+    },
+    "questions": [
+      {
+        "question_id": "beh_learning",
+        "type": "behavioral",
+        "topic": "learning",
+        "question": "Tell me about a time you had to learn a new technology quickly. How did you approach it?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 126,
+        "followups": 1,
+        "score": 4,
+        "confidence": "high",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "Specific technology (React), clear context and a three-week deadline",
+          "Concrete, staged learning approach: tutorial, small real widget, senior code review that caught a useEffect mistake",
+          "Reflects on what worked and states how they will reuse the approach"
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s3",
+            "what_a_stronger_answer_adds": "Describe their own contribution to the migration and a measurable outcome, such as how much of the dashboard was migrated or the impact on the team."
+          },
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Acknowledge what was harder than expected, or note a limit of the approach, rather than only what worked."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Specific technology and why it was needed with a deadline/context",
+            "quote": "My team needed to switch our dashboard from plain JavaScript to React in three weeks and I had never used it."
+          },
+          {
+            "signal": "Learning strategy: docs, small project, asking, breaking down",
+            "quote": "I did the official tutorial in two evenings, then rebuilt one small widget of our real dashboard as a test of my understanding before touching the main code. I asked a senior developer to review that widget"
+          },
+          {
+            "signal": "Applied it to deliver something",
+            "quote": "We shipped the migration on time."
+          },
+          {
+            "signal": "Reflects on what worked and how they learn best",
+            "quote": "What worked was building something real quickly rather than watching videos, so now I start any new tool with a tiny real task, and I'd skip the long video courses next time."
+          }
+        ]
+      },
+      {
+        "question_id": "tech_composition",
+        "type": "technical",
+        "topic": "oop",
+        "question": "What is the difference between inheritance and composition? When would you prefer composition?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 124,
+        "followups": 1,
+        "score": 3,
+        "confidence": "medium",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "Correct is-a / has-a definitions with concrete examples (Dog/Animal, Car/Engine)",
+          "Explains tight coupling, base-class changes breaking children, and deep hierarchies",
+          "Mentions testability via swapping in a fake collaborator and gives a valid case for inheritance (substitutability)"
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Explicitly name the 'favor composition over inheritance' principle and keep a consistent, nuanced stance rather than claiming inheritance is bad in general."
+          },
+          {
+            "signal_id": "s2",
+            "what_a_stronger_answer_adds": "Name the fragile base class problem explicitly and explain how composition lets behavior be swapped at runtime rather than fixed at compile time."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Inheritance is an 'is-a' relationship; composition is 'has-a'",
+            "quote": "Inheritance is an is-a relationship, a Dog is an Animal, and composition is has-a, a Car has an Engine."
+          },
+          {
+            "signal": "Inheritance couples subclass tightly to parent; composition is more flexible",
+            "quote": "Inheritance couples the subclass tightly to the parent so changes in the base class can break children"
+          },
+          {
+            "signal": "Concrete example (e.g. Car has an Engine; avoid deep hierarchies)",
+            "quote": "a Car has an Engine"
+          },
+          {
+            "signal": "Mentions 'favor composition over inheritance' or testability/substitution",
+            "quote": "which also makes testing easier because I can pass a fake Engine"
+          }
+        ]
+      },
+      {
+        "question_id": "tech_unit_tests",
+        "type": "technical",
+        "topic": "testing",
+        "question": "What makes a good unit test? How would you test a function that calculates a discount from a cart total?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 164,
+        "followups": 2,
+        "score": 3,
+        "confidence": "medium",
+        "signals_hit": 2,
+        "signals_total": 4,
+        "strengths": [
+          "Names the key properties of a good unit test: fast, independent, deterministic, one behavior",
+          "Covers normal, zero, negative, and boundary cases with concrete values (99.99 vs 100)",
+          "Mentions naming tests so a failure explains what broke"
+        ],
+        "missed": [
+          "Clear arrange/act/assert and descriptive names",
+          "Avoids testing implementation details; mocks external dependencies only"
+        ],
+        "gaps": [
+          {
+            "signal_id": "s3",
+            "what_a_stronger_answer_adds": "Describe the arrange/act/assert structure and give an example of a descriptive test name, e.g. returns_zero_discount_for_total_below_threshold."
+          },
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Explain testing behavior (inputs/outputs) rather than implementation details, and say what to mock (external dependencies like a pricing service) versus what not to mock."
+          },
+          {
+            "signal_id": "s2",
+            "what_a_stronger_answer_adds": "Add a maximum or very large total, and use parametrized tests to cover the cases compactly."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Fast, isolated, deterministic, tests one behavior",
+            "quote": "A good unit test is fast, independent, and checks one thing, and it gives the same result every time."
+          },
+          {
+            "signal": "Covers normal cases and edge cases (zero, boundary, negative, max)",
+            "quote": "I'd test a normal total, a total of zero, a negative total to see if it throws or returns zero, and the boundary where the discount threshold starts, like 99.99 versus 100."
+          }
+        ]
+      },
+      {
+        "question_id": "tech_http_methods",
+        "type": "technical",
+        "topic": "http_rest",
+        "question": "What is the difference between GET and POST, and what does it mean for an HTTP method to be idempotent?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 124,
+        "followups": 1,
+        "score": 3,
+        "confidence": "medium",
+        "signals_hit": 3,
+        "signals_total": 4,
+        "strengths": [
+          "Correctly defines idempotency: repeating a request has the same effect as doing it once",
+          "Gives a concrete DELETE example and correctly says POST is not idempotent",
+          "Correctly separates GET (read, params in URL) from POST (body, create or trigger an action)"
+        ],
+        "missed": [
+          "Practical consequence: retries, caching, or double-submit risk"
+        ],
+        "gaps": [
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Explain why idempotency matters in practice: idempotent requests can be retried safely after timeouts, GET responses can be cached, and double-submitting a POST can create duplicate orders or records, so it needs idempotency keys or similar protection."
+          },
+          {
+            "signal_id": "s1",
+            "what_a_stronger_answer_adds": "Correct the claim that POST is more secure. A body is not hidden or encrypted, so HTTPS is what protects data. The real difference is that URLs end up in logs, history, and bookmarks."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "GET retrieves, should be safe/no side effects; POST creates or triggers an action",
+            "quote": "GET is used to fetch data and shouldn't change anything on the server"
+          },
+          {
+            "signal": "GET params in URL, POST data in body",
+            "quote": "the parameters go in the URL. POST sends data in the request body"
+          },
+          {
+            "signal": "Idempotent: repeating the request gives the same server state (GET, PUT, DELETE yes; POST no)",
+            "quote": "Idempotent means doing the same request multiple times has the same effect as doing it once. GET and PUT and DELETE are idempotent"
+          }
+        ]
+      },
+      {
+        "question_id": "beh_stuck_bug",
+        "type": "behavioral",
+        "topic": "problem_solving",
+        "question": "Tell me about a time you were stuck on a difficult bug or problem. What did you do?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 149,
+        "followups": 1,
+        "score": 4,
+        "confidence": "high",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "Specific, real situation with context (Flask API, 500 errors only under load)",
+          "Systematic approach: structured logging, concurrent reproduction script, root cause identified",
+          "Asked for help at a sensible point, verified the fix, and described a concrete change in working habits"
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s3",
+            "what_a_stronger_answer_adds": "Mention what they researched on their own before asking the TA, and what specific hypotheses were ruled out."
+          },
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Reflect on broader lessons, such as concurrency pitfalls with shared resources or how to prevent this class of bug (e.g., using a proper DB for concurrent workloads, adding load tests)."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Specific situation (not hypothetical) with context",
+            "quote": "In my final-year project our Flask API returned random 500 errors only under load."
+          },
+          {
+            "signal": "Systematic approach: reproduce, isolate, logs/debugger, hypotheses",
+            "quote": "I couldn't reproduce it locally, so first I added structured logging with request ids and wrote a small script to hit the endpoint concurrently, which reproduced it. The logs showed two requests writing to the same SQLite connection, which isn't thread safe."
+          },
+          {
+            "signal": "Asked for help appropriately or researched",
+            "quote": "asked my TA after the first day when my hypotheses ran out; she suggested checking connection sharing."
+          },
+          {
+            "signal": "Clear outcome and what they learned",
+            "quote": "I switched to a per-request connection and the errors disappeared, and I confirmed with the load script running 500 requests. Since then I write a reproduction script before changing any code, and I add logging early instead of guessing."
+          }
+        ]
+      }
+    ],
+    "focus_next": [],
+    "skipped": 0,
+    "ended_early": false,
+    "unscored": 0,
+    "disclaimer": "Practice feedback only. This is not a hiring assessment or a prediction of interview outcomes."
+  }
+}

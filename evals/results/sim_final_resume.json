@@ -1,0 +1,1289 @@
+{
+  "summary": {
+    "turn_wait_s": {
+      "n": 10,
+      "median": 8.120000000000001,
+      "min": 5.78,
+      "max": 12.99,
+      "all": [
+        9.56,
+        8.22,
+        11.42,
+        11.06,
+        12.99,
+        6.96,
+        5.78,
+        6.54,
+        5.79,
+        8.02
+      ]
+    },
+    "feedback_wait_s": 11.1,
+    "duration_s": 97.4,
+    "cost": {
+      "calls": 21,
+      "cost_usd": 0.300996,
+      "by_purpose": {
+        "resume": {
+          "calls": 4,
+          "errors": 0,
+          "cost_usd": 0.030877,
+          "latency_s": 21.675
+        },
+        "turn": {
+          "calls": 12,
+          "errors": 0,
+          "cost_usd": 0.144626,
+          "latency_s": 86.32
+        },
+        "grade": {
+          "calls": 5,
+          "errors": 0,
+          "cost_usd": 0.125494,
+          "latency_s": 65.694
+        }
+      }
+    },
+    "with_resume": true
+  },
+  "session": {
+    "versions": {
+      "rubric": "junior_swe/0.1",
+      "evaluator": "evaluator/0.3",
+      "interviewer": "interviewer/0.5",
+      "voice": "voice/0.3",
+      "model": "claude-sonnet-5-5",
+      "turn_model": "claude-haiku-5-5"
+    },
+    "started_at": 1794145162.053619,
+    "duration_s": 97.4,
+    "feedback_wait_s": 11.1,
+    "ended_early": false,
+    "ended_reason": null,
+    "warmup": {
+      "question": "To start us off, tell me a little about yourself.",
+      "answer": "I recently finished a computer science degree and did an internship building backend services in Python. I'm looking for my first full-time engineering role."
+    },
+    "questions": [
+      {
+        "question_id": "beh_disagreement",
+        "type": "behavioral",
+        "topic": "teamwork",
+        "question": "Describe a time you disagreed with a teammate about how to do something. How did you handle it?",
+        "answers": [
+          "I don't really disagree with people because usually I'm right. When a teammate had a different idea I just did it my way and showed them later that mine was better.",
+          "In a university group project my teammate wanted to use MongoDB and I thought a relational database fit our data better because we had a lot of relations. We each explained our reasons in a meeting and I listened to his concern about flexible schemas. We agreed to use PostgreSQL with a JSON column for the flexible parts, and it worked well for the project."
+        ],
+        "followups": [
+          "You said you're usually right. Walk me through how you knew that in that situation.",
+          "Looking back, when you said you're usually right, what did your teammate see that you might have missed?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 0,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 3,
+          "model_score": 3,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Specific example with the nature of the disagreement",
+              "hit": true,
+              "quote": "teammate wanted to use MongoDB and I thought a relational database fit our data better"
+            },
+            {
+              "id": "s2",
+              "text": "Listened to the other view; focused on the problem, not the person",
+              "hit": true,
+              "quote": "I listened to his concern about flexible schemas"
+            },
+            {
+              "id": "s3",
+              "text": "Used data/prototype/third opinion or compromise",
+              "hit": true,
+              "quote": "We agreed to use PostgreSQL with a JSON column for the flexible parts"
+            },
+            {
+              "id": "s4",
+              "text": "Outcome and relationship preserved; reflection",
+              "hit": false,
+              "quote": ""
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Portrays self as always right",
+              "quote": "I don't really disagree with people because usually I'm right."
+            }
+          ],
+          "strengths": [
+            "You gave a concrete technical disagreement (MongoDB vs relational) with reasons on both sides.",
+            "You listened to your teammate's schema-flexibility concern.",
+            "You reached a compromise (PostgreSQL with a JSON column) that worked."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Say what you learned or would do differently, and that the working relationship stayed good."
+            },
+            {
+              "signal_id": "s3",
+              "what_a_stronger_answer_adds": "Back the decision with evidence, such as a quick prototype or a data-model comparison."
+            },
+            {
+              "signal_id": "s2",
+              "what_a_stronger_answer_adds": "Drop the 'I'm usually right' framing and the 'did it my way' habit, which undercut your collaboration."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 16.91764269999112,
+          "cost_usd": 0.025410750000000003
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_git_merge_rebase+p",
+        "type": "technical",
+        "topic": "git",
+        "question": "You led a team of 4 using Git feature branches and pull request reviews on GitHub. What's the difference between git merge and git rebase, and when would you prefer one over the other when integrating those branches?",
+        "answers": [
+          "They are basically the same thing with different names. If rebase gives an error I just force push to main and it fixes everything.",
+          "Merge takes two branches and combines them with a merge commit, so the history shows that they diverged and came back together. Rebase takes my commits and replays them on top of the other branch so the history is a straight line. I like to rebase my feature branch onto main before opening a pull request to keep history clean, and I use merge when I want to keep the exact history."
+        ],
+        "followups": [
+          "When you say they're basically the same, how would you explain to a teammate what happens differently between them?",
+          "Could you explain in your own words what a force push to main does to your teammates' copies of that branch?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 0,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 3,
+          "model_score": 3,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Merge combines histories with a merge commit; preserves true history",
+              "hit": true,
+              "quote": "combines them with a merge commit, so the history shows that they diverged"
+            },
+            {
+              "id": "s2",
+              "text": "Rebase replays commits on top of another base, giving linear history and rewriting commits",
+              "hit": true,
+              "quote": "replays them on top of the other branch so the history is a straight line"
+            },
+            {
+              "id": "s3",
+              "text": "Do not rebase shared/public branches",
+              "hit": false,
+              "quote": ""
+            },
+            {
+              "id": "s4",
+              "text": "Stated preference with reasoning (e.g. rebase local feature branch before PR)",
+              "hit": true,
+              "quote": "I like to rebase my feature branch onto main before opening a pull request"
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Says rebase and merge are the same",
+              "quote": "They are basically the same thing with different names."
+            },
+            {
+              "flag": "Recommends force-pushing rebased shared branches without caution",
+              "quote": "I just force push to main and it fixes everything."
+            }
+          ],
+          "strengths": [
+            "You correctly explained that merge creates a merge commit and keeps the diverge-and-rejoin history.",
+            "You correctly described rebase as replaying commits onto another base, giving linear history.",
+            "You gave a sensible preference: rebase a feature branch before a PR, merge to keep exact history."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s3",
+              "what_a_stronger_answer_adds": "State the golden rule: never rebase shared branches, since rewritten SHAs cause conflicts for teammates."
+            },
+            {
+              "signal_id": "s2",
+              "what_a_stronger_answer_adds": "Say that rebase rewrites commits into new SHAs, which is why force-pushing is risky."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 13.806446099988534,
+          "cost_usd": 0.0272895
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_hashmap+p",
+        "type": "technical",
+        "topic": "data_structures",
+        "question": "You mentioned adding a Redis cache to bring the orders API response time from 800 ms to 350 ms. Redis stores data as key-value pairs, so when would you choose a hash map over a list, and what are the trade-offs?",
+        "answers": [
+          "A hash map keeps everything sorted so searching is O(log n) like binary search. You should always use it instead of a list because it is better in every way.",
+          "I'd use a dictionary when I need to look things up by a key. A hash map computes a hash of the key and jumps to a bucket, so lookup and insert are O(1) on average, whereas finding a value in a list means scanning it, O(n). A typical case is counting word frequencies or caching results by id. The trade-offs are that keys have to be hashable and unique, it uses more memory than a list, and in the worst case with lots of collisions it degrades toward O(n). Also it's not sorted by key, so if I need ordered range queries I'd use a sorted structure instead."
+        ],
+        "followups": [
+          "Could you walk me through that in a bit more detail, ideally with a concrete example?",
+          "Earlier you said it is better in every way. What makes you say that?"
+        ],
+        "fallback_followups": 1,
+        "depth_followups": 0,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 3,
+          "model_score": 3,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Hash map gives average O(1) lookup/insert by key; list lookup by value is O(n)",
+              "hit": true,
+              "quote": "lookup and insert are O(1) on average"
+            },
+            {
+              "id": "s2",
+              "text": "Keys must be hashable/unique; order and memory trade-offs",
+              "hit": true,
+              "quote": "keys have to be hashable and unique, it uses more memory than a list"
+            },
+            {
+              "id": "s3",
+              "text": "Gives a concrete use case (counting, caching, de-duplication, index by id)",
+              "hit": true,
+              "quote": "counting word frequencies or caching results by id"
+            },
+            {
+              "id": "s4",
+              "text": "Mentions worst case or collisions, or memory overhead",
+              "hit": true,
+              "quote": "in the worst case with lots of collisions it degrades toward O(n)"
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Confuses hash map with sorted structure or says lookup is O(log n) by default",
+              "quote": "keeps everything sorted so searching is O(log n)"
+            },
+            {
+              "flag": "Says hash maps are always faster",
+              "quote": "always use it instead of a list"
+            }
+          ],
+          "strengths": [
+            "You explained hashing to a bucket, with O(1) average lookup versus O(n) list scan.",
+            "You gave concrete uses: word counts and caching by id.",
+            "You named trade-offs: hashability, memory, collision worst case, and no key ordering."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s1",
+              "what_a_stronger_answer_adds": "State the correct model from the start. Your first claims (sorted, O(log n), always better) contradicted your later answer."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 12.95005859999219,
+          "cost_usd": 0.027330750000000004
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_composition",
+        "type": "technical",
+        "topic": "oop",
+        "question": "What is the difference between inheritance and composition? When would you prefer composition?",
+        "answers": [
+          "Inheritance is for reusing code and composition is for combining classes. Composition is better because inheritance is bad in general and you should avoid it.",
+          "Inheritance is an is-a relationship, a Dog is an Animal, and composition is has-a, a Car has an Engine. Inheritance couples the subclass tightly to the parent so changes in the base class can break children, and deep hierarchies get hard to reason about. With composition I hold the collaborators as fields and can swap them, which also makes testing easier because I can pass a fake Engine. I'd still use inheritance when there's a real is-a relationship with shared behavior and the subtype can be substituted anywhere the parent is used, like different payment providers behind one interface."
+        ],
+        "followups": [
+          "When you say inheritance is bad in general, what's your reasoning behind that?",
+          "What's a downside of composition compared with inheritance that you'd have to manage?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 1,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 4,
+          "model_score": 4,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Inheritance is an 'is-a' relationship; composition is 'has-a'",
+              "hit": true,
+              "quote": "composition is has-a, a Car has an Engine"
+            },
+            {
+              "id": "s2",
+              "text": "Inheritance couples subclass tightly to parent; composition is more flexible",
+              "hit": true,
+              "quote": "Inheritance couples the subclass tightly to the parent"
+            },
+            {
+              "id": "s3",
+              "text": "Concrete example (e.g. Car has an Engine; avoid deep hierarchies)",
+              "hit": true,
+              "quote": "a Car has an Engine"
+            },
+            {
+              "id": "s4",
+              "text": "Mentions 'favor composition over inheritance' or testability/substitution",
+              "hit": true,
+              "quote": "which also makes testing easier because I can pass a fake Engine"
+            }
+          ],
+          "red_flags_hit": [],
+          "strengths": [
+            "You correctly defined is-a vs has-a with the Dog/Animal and Car/Engine examples.",
+            "You explained tight coupling, base-class changes breaking children, and the testing benefit of swapping fakes.",
+            "You said when inheritance still fits: true substitutability, like payment providers behind an interface."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Name the principle 'favor composition over inheritance' explicitly, and avoid the blanket first claim that inheritance is bad."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 10.945989700005157,
+          "cost_usd": 0.022699500000000004
+        },
+        "error": null
+      },
+      {
+        "question_id": "beh_mistake+p",
+        "type": "behavioral",
+        "topic": "accountability",
+        "question": "You mention fixing a production bug where duplicate orders were created when users double-clicked submit. Tell me about a mistake you made in a project or at school, perhaps like this one. What happened, and what did you do about it?",
+        "answers": [
+          "I can't think of any big mistake. If I have to say a weakness, I work too hard and care too much about perfection.",
+          "During my internship I ran a migration script against the staging database without checking the environment variable and it was actually pointing at the shared QA database, so I deleted a day of test data other testers were using. I told my lead right away instead of hoping nobody would notice, restored the data from the nightly backup within an hour, and messaged the testers about what happened. Afterwards I added a confirmation prompt that prints the target host before any destructive script runs, and proposed that we color-code the QA prompt differently."
+        ],
+        "followups": [
+          "You said you can't think of any big mistake. What makes you feel that way? Tell me in your own words.",
+          "Looking back, what habit did you change in how you run scripts against shared environments, beyond the prompt you added?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 1,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 4,
+          "model_score": 4,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Specific, real mistake with real consequence",
+              "hit": true,
+              "quote": "deleted a day of test data other testers were using"
+            },
+            {
+              "id": "s2",
+              "text": "Takes ownership without excuses",
+              "hit": true,
+              "quote": "ran a migration script against the staging database without checking the environment variable"
+            },
+            {
+              "id": "s3",
+              "text": "Fixed it and communicated to affected people",
+              "hit": true,
+              "quote": "restored the data from the nightly backup within an hour, and messaged the testers"
+            },
+            {
+              "id": "s4",
+              "text": "Process change to prevent recurrence",
+              "hit": true,
+              "quote": "added a confirmation prompt that prints the target host before any destructive script runs"
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Claims no mistakes, or a fake-weakness answer ('I work too hard')",
+              "quote": "I work too hard and care too much about perfection"
+            }
+          ],
+          "strengths": [
+            "You told your lead right away instead of hiding the mistake.",
+            "You restored the data and told the affected testers what happened.",
+            "You added a concrete safeguard: a confirmation prompt showing the target host."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Say whether the team adopted the color-coding proposal and how the safeguard was checked."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 11.073773399999482,
+          "cost_usd": 0.022763250000000002
+        },
+        "error": null
+      }
+    ],
+    "events": [
+      {
+        "t": 1794145162.054,
+        "type": "interviewer",
+        "text": "Hi, I'm Alex, an AI interviewer, and I'll be running your practice interview today for a junior software engineer role. We'll start with a little about your background, then go through 5 questions, and I may ask a few follow-ups along the way. Answer as you would in a real interview. I'll save all my feedback for the end, so I won't be able to give hints as we go.",
+        "kind": "intro"
+      },
+      {
+        "t": 1794145162.054,
+        "type": "interviewer",
+        "text": "To start us off, tell me a little about yourself.",
+        "kind": "warmup",
+        "question_id": "warmup"
+      },
+      {
+        "t": 1794145162.055,
+        "type": "candidate",
+        "text": "I recently finished a computer science degree and did an internship building backend services in Python. I'm looking for my first full-time engineering role.",
+        "question_id": "warmup",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145162.055,
+        "type": "interviewer",
+        "text": "Okay, thanks.",
+        "kind": "ack",
+        "question_id": "warmup"
+      },
+      {
+        "t": 1794145162.055,
+        "type": "interviewer",
+        "text": "Let's begin with a question about your experience. Describe a time you disagreed with a teammate about how to do something. How did you handle it?",
+        "kind": "question",
+        "question_id": "beh_disagreement",
+        "transition": "Let's begin with a question about your experience."
+      },
+      {
+        "t": 1794145162.055,
+        "type": "candidate",
+        "text": "I don't really disagree with people because usually I'm right. When a teammate had a different idea I just did it my way and showed them later that mine was better.",
+        "question_id": "beh_disagreement",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145162.055,
+        "type": "interviewer",
+        "text": "Got it.",
+        "kind": "ack",
+        "question_id": "beh_disagreement"
+      },
+      {
+        "t": 1794145171.611,
+        "type": "interviewer",
+        "text": "You said you're usually right. Walk me through how you knew that in that situation.",
+        "kind": "follow_up",
+        "question_id": "beh_disagreement",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145171.611,
+        "type": "candidate",
+        "text": "In a university group project my teammate wanted to use MongoDB and I thought a relational database fit our data better because we had a lot of relations. We each explained our reasons in a meeting and I listened to his concern about flexible schemas. We agreed to use PostgreSQL with a JSON column for the flexible parts, and it worked well for the project.",
+        "question_id": "beh_disagreement",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145171.611,
+        "type": "interviewer",
+        "text": "Okay.",
+        "kind": "ack",
+        "question_id": "beh_disagreement"
+      },
+      {
+        "t": 1794145179.832,
+        "type": "interviewer",
+        "text": "Looking back, when you said you're usually right, what did your teammate see that you might have missed?",
+        "kind": "follow_up",
+        "question_id": "beh_disagreement",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145179.833,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "beh_disagreement",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145179.833,
+        "type": "interviewer",
+        "text": "No problem.",
+        "kind": "ack",
+        "question_id": "beh_disagreement"
+      },
+      {
+        "t": 1794145179.834,
+        "type": "interviewer",
+        "text": "I'd like to move on to a technical topic now. You led a team of 4 using Git feature branches and pull request reviews on GitHub. What's the difference between git merge and git rebase, and when would you prefer one over the other when integrating those branches?",
+        "kind": "question",
+        "question_id": "tech_git_merge_rebase+p",
+        "transition": "I'd like to move on to a technical topic now."
+      },
+      {
+        "t": 1794145179.834,
+        "type": "candidate",
+        "text": "They are basically the same thing with different names. If rebase gives an error I just force push to main and it fixes everything.",
+        "question_id": "tech_git_merge_rebase+p",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145179.834,
+        "type": "interviewer",
+        "text": "Alright, thank you.",
+        "kind": "ack",
+        "question_id": "tech_git_merge_rebase+p"
+      },
+      {
+        "t": 1794145191.251,
+        "type": "interviewer",
+        "text": "When you say they're basically the same, how would you explain to a teammate what happens differently between them?",
+        "kind": "follow_up",
+        "question_id": "tech_git_merge_rebase+p",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145191.252,
+        "type": "candidate",
+        "text": "Merge takes two branches and combines them with a merge commit, so the history shows that they diverged and came back together. Rebase takes my commits and replays them on top of the other branch so the history is a straight line. I like to rebase my feature branch onto main before opening a pull request to keep history clean, and I use merge when I want to keep the exact history.",
+        "question_id": "tech_git_merge_rebase+p",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145191.252,
+        "type": "interviewer",
+        "text": "I see, thanks.",
+        "kind": "ack",
+        "question_id": "tech_git_merge_rebase+p"
+      },
+      {
+        "t": 1794145202.308,
+        "type": "interviewer",
+        "text": "Could you explain in your own words what a force push to main does to your teammates' copies of that branch?",
+        "kind": "follow_up",
+        "question_id": "tech_git_merge_rebase+p",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145202.309,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "tech_git_merge_rebase+p",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145202.309,
+        "type": "interviewer",
+        "text": "No problem.",
+        "kind": "ack",
+        "question_id": "tech_git_merge_rebase+p"
+      },
+      {
+        "t": 1794145202.309,
+        "type": "interviewer",
+        "text": "Here's another one. You mentioned adding a Redis cache to bring the orders API response time from 800 ms to 350 ms. Redis stores data as key-value pairs, so when would you choose a hash map over a list, and what are the trade-offs?",
+        "kind": "question",
+        "question_id": "tech_hashmap+p",
+        "transition": "Here's another one."
+      },
+      {
+        "t": 1794145202.309,
+        "type": "candidate",
+        "text": "A hash map keeps everything sorted so searching is O(log n) like binary search. You should always use it instead of a list because it is better in every way.",
+        "question_id": "tech_hashmap+p",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145202.309,
+        "type": "interviewer",
+        "text": "Okay, thanks.",
+        "kind": "ack",
+        "question_id": "tech_hashmap+p"
+      },
+      {
+        "t": 1794145215.302,
+        "type": "interviewer",
+        "text": "Could you walk me through that in a bit more detail, ideally with a concrete example?",
+        "kind": "follow_up",
+        "question_id": "tech_hashmap+p",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": true,
+        "rejected": "asks more than one question"
+      },
+      {
+        "t": 1794145215.303,
+        "type": "candidate",
+        "text": "I'd use a dictionary when I need to look things up by a key. A hash map computes a hash of the key and jumps to a bucket, so lookup and insert are O(1) on average, whereas finding a value in a list means scanning it, O(n). A typical case is counting word frequencies or caching results by id. The trade-offs are that keys have to be hashable and unique, it uses more memory than a list, and in the worst case with lots of collisions it degrades toward O(n). Also it's not sorted by key, so if I need ordered range queries I'd use a sorted structure instead.",
+        "question_id": "tech_hashmap+p",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145215.303,
+        "type": "interviewer",
+        "text": "I see, thanks.",
+        "kind": "ack",
+        "question_id": "tech_hashmap+p"
+      },
+      {
+        "t": 1794145222.262,
+        "type": "interviewer",
+        "text": "Earlier you said it is better in every way. What makes you say that?",
+        "kind": "follow_up",
+        "question_id": "tech_hashmap+p",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145222.262,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "tech_hashmap+p",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145222.262,
+        "type": "interviewer",
+        "text": "Okay, no problem.",
+        "kind": "ack",
+        "question_id": "tech_hashmap+p"
+      },
+      {
+        "t": 1794145222.262,
+        "type": "interviewer",
+        "text": "Let's look at a different topic. What is the difference between inheritance and composition? When would you prefer composition?",
+        "kind": "question",
+        "question_id": "tech_composition",
+        "transition": "Let's look at a different topic."
+      },
+      {
+        "t": 1794145222.262,
+        "type": "candidate",
+        "text": "Inheritance is for reusing code and composition is for combining classes. Composition is better because inheritance is bad in general and you should avoid it.",
+        "question_id": "tech_composition",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145222.263,
+        "type": "interviewer",
+        "text": "Okay.",
+        "kind": "ack",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794145228.042,
+        "type": "interviewer",
+        "text": "When you say inheritance is bad in general, what's your reasoning behind that?",
+        "kind": "follow_up",
+        "question_id": "tech_composition",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145228.043,
+        "type": "candidate",
+        "text": "Inheritance is an is-a relationship, a Dog is an Animal, and composition is has-a, a Car has an Engine. Inheritance couples the subclass tightly to the parent so changes in the base class can break children, and deep hierarchies get hard to reason about. With composition I hold the collaborators as fields and can swap them, which also makes testing easier because I can pass a fake Engine. I'd still use inheritance when there's a real is-a relationship with shared behavior and the subtype can be substituted anywhere the parent is used, like different payment providers behind one interface.",
+        "question_id": "tech_composition",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145228.043,
+        "type": "interviewer",
+        "text": "Understood.",
+        "kind": "ack",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794145234.582,
+        "type": "interviewer",
+        "text": "What's a downside of composition compared with inheritance that you'd have to manage?",
+        "kind": "follow_up",
+        "question_id": "tech_composition",
+        "move": "probe",
+        "target": "depth",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145234.582,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "tech_composition",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145234.582,
+        "type": "interviewer",
+        "text": "That's fine.",
+        "kind": "ack",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794145234.583,
+        "type": "interviewer",
+        "text": "I'd like to hear about your experience now. This is my last question. You mention fixing a production bug where duplicate orders were created when users double-clicked submit. Tell me about a mistake you made in a project or at school, perhaps like this one. What happened, and what did you do about it?",
+        "kind": "question",
+        "question_id": "beh_mistake+p",
+        "transition": "I'd like to hear about your experience now. This is my last question."
+      },
+      {
+        "t": 1794145234.583,
+        "type": "candidate",
+        "text": "I can't think of any big mistake. If I have to say a weakness, I work too hard and care too much about perfection.",
+        "question_id": "beh_mistake+p",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145234.583,
+        "type": "interviewer",
+        "text": "Thanks for explaining that.",
+        "kind": "ack",
+        "question_id": "beh_mistake+p"
+      },
+      {
+        "t": 1794145240.369,
+        "type": "interviewer",
+        "text": "You said you can't think of any big mistake. What makes you feel that way? Tell me in your own words.",
+        "kind": "follow_up",
+        "question_id": "beh_mistake+p",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145240.37,
+        "type": "candidate",
+        "text": "During my internship I ran a migration script against the staging database without checking the environment variable and it was actually pointing at the shared QA database, so I deleted a day of test data other testers were using. I told my lead right away instead of hoping nobody would notice, restored the data from the nightly backup within an hour, and messaged the testers about what happened. Afterwards I added a confirmation prompt that prints the target host before any destructive script runs, and proposed that we color-code the QA prompt differently.",
+        "question_id": "beh_mistake+p",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145240.37,
+        "type": "interviewer",
+        "text": "Okay.",
+        "kind": "ack",
+        "question_id": "beh_mistake+p"
+      },
+      {
+        "t": 1794145248.394,
+        "type": "interviewer",
+        "text": "Looking back, what habit did you change in how you run scripts against shared environments, beyond the prompt you added?",
+        "kind": "follow_up",
+        "question_id": "beh_mistake+p",
+        "move": "probe",
+        "target": "depth",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145248.394,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "beh_mistake+p",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145248.394,
+        "type": "interviewer",
+        "text": "Okay, no problem.",
+        "kind": "ack",
+        "question_id": "beh_mistake+p"
+      },
+      {
+        "t": 1794145248.394,
+        "type": "interviewer",
+        "text": "That's all my questions. Before we wrap up, do you have any questions for me?",
+        "kind": "closing"
+      },
+      {
+        "t": 1794145248.394,
+        "type": "candidate",
+        "text": "No, that's all from me, thank you.",
+        "question_id": "closing",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145248.394,
+        "type": "interviewer",
+        "text": "No problem. Thanks for your time today. I'll put your feedback together now.",
+        "kind": "outro"
+      }
+    ],
+    "llm_calls": [
+      {
+        "purpose": "resume",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 8.452,
+        "cost_usd": 0.01934325,
+        "error": false
+      },
+      {
+        "purpose": "resume",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 4.42,
+        "cost_usd": 0.0036344999999999997,
+        "error": false
+      },
+      {
+        "purpose": "resume",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 4.535,
+        "cost_usd": 0.004174499999999999,
+        "error": false
+      },
+      {
+        "purpose": "resume",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 4.268,
+        "cost_usd": 0.0037245000000000004,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 4.855,
+        "cost_usd": 0.00658275,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 4.698,
+        "cost_usd": 0.006999,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 8.221,
+        "cost_usd": 0.019059000000000006,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 11.416,
+        "cost_usd": 0.01057275,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 16.918,
+        "cost_usd": 0.025410750000000003,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 11.056,
+        "cost_usd": 0.014371499999999999,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 7.293,
+        "cost_usd": 0.01287525,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.7,
+        "cost_usd": 0.0104565,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 13.806,
+        "cost_usd": 0.0272895,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 6.957,
+        "cost_usd": 0.01638525,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.778,
+        "cost_usd": 0.0078315,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 6.539,
+        "cost_usd": 0.01373775,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 12.95,
+        "cost_usd": 0.027330750000000004,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.785,
+        "cost_usd": 0.01015275,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 10.946,
+        "cost_usd": 0.022699500000000004,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 8.022,
+        "cost_usd": 0.0156015,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 11.074,
+        "cost_usd": 0.022763250000000002,
+        "error": false
+      }
+    ],
+    "cost": {
+      "calls": 21,
+      "cost_usd": 0.300996,
+      "by_purpose": {
+        "resume": {
+          "calls": 4,
+          "errors": 0,
+          "cost_usd": 0.030877,
+          "latency_s": 21.675
+        },
+        "turn": {
+          "calls": 12,
+          "errors": 0,
+          "cost_usd": 0.144626,
+          "latency_s": 86.32
+        },
+        "grade": {
+          "calls": 5,
+          "errors": 0,
+          "cost_usd": 0.125494,
+          "latency_s": 65.694
+        }
+      }
+    }
+  },
+  "scorecard": {
+    "overall": 3.4,
+    "by_type": {
+      "behavioral": 3.5,
+      "technical": 3.33
+    },
+    "questions": [
+      {
+        "question_id": "beh_disagreement",
+        "type": "behavioral",
+        "topic": "teamwork",
+        "question": "Describe a time you disagreed with a teammate about how to do something. How did you handle it?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 96,
+        "followups": 2,
+        "score": 3,
+        "confidence": "medium",
+        "signals_hit": 3,
+        "signals_total": 4,
+        "strengths": [
+          "You gave a concrete technical disagreement (MongoDB vs relational) with reasons on both sides.",
+          "You listened to your teammate's schema-flexibility concern.",
+          "You reached a compromise (PostgreSQL with a JSON column) that worked."
+        ],
+        "missed": [
+          "Outcome and relationship preserved; reflection"
+        ],
+        "gaps": [
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Say what you learned or would do differently, and that the working relationship stayed good."
+          },
+          {
+            "signal_id": "s3",
+            "what_a_stronger_answer_adds": "Back the decision with evidence, such as a quick prototype or a data-model comparison."
+          },
+          {
+            "signal_id": "s2",
+            "what_a_stronger_answer_adds": "Drop the 'I'm usually right' framing and the 'did it my way' habit, which undercut your collaboration."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Specific example with the nature of the disagreement",
+            "quote": "teammate wanted to use MongoDB and I thought a relational database fit our data better"
+          },
+          {
+            "signal": "Listened to the other view; focused on the problem, not the person",
+            "quote": "I listened to his concern about flexible schemas"
+          },
+          {
+            "signal": "Used data/prototype/third opinion or compromise",
+            "quote": "We agreed to use PostgreSQL with a JSON column for the flexible parts"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      },
+      {
+        "question_id": "tech_git_merge_rebase+p",
+        "type": "technical",
+        "topic": "git",
+        "question": "You led a team of 4 using Git feature branches and pull request reviews on GitHub. What's the difference between git merge and git rebase, and when would you prefer one over the other when integrating those branches?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 96,
+        "followups": 2,
+        "score": 3,
+        "confidence": "medium",
+        "signals_hit": 3,
+        "signals_total": 4,
+        "strengths": [
+          "You correctly explained that merge creates a merge commit and keeps the diverge-and-rejoin history.",
+          "You correctly described rebase as replaying commits onto another base, giving linear history.",
+          "You gave a sensible preference: rebase a feature branch before a PR, merge to keep exact history."
+        ],
+        "missed": [
+          "Do not rebase shared/public branches"
+        ],
+        "gaps": [
+          {
+            "signal_id": "s3",
+            "what_a_stronger_answer_adds": "State the golden rule: never rebase shared branches, since rewritten SHAs cause conflicts for teammates."
+          },
+          {
+            "signal_id": "s2",
+            "what_a_stronger_answer_adds": "Say that rebase rewrites commits into new SHAs, which is why force-pushing is risky."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Merge combines histories with a merge commit; preserves true history",
+            "quote": "combines them with a merge commit, so the history shows that they diverged"
+          },
+          {
+            "signal": "Rebase replays commits on top of another base, giving linear history and rewriting commits",
+            "quote": "replays them on top of the other branch so the history is a straight line"
+          },
+          {
+            "signal": "Stated preference with reasoning (e.g. rebase local feature branch before PR)",
+            "quote": "I like to rebase my feature branch onto main before opening a pull request"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      },
+      {
+        "question_id": "tech_hashmap+p",
+        "type": "technical",
+        "topic": "data_structures",
+        "question": "You mentioned adding a Redis cache to bring the orders API response time from 800 ms to 350 ms. Redis stores data as key-value pairs, so when would you choose a hash map over a list, and what are the trade-offs?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 139,
+        "followups": 2,
+        "score": 3,
+        "confidence": "medium",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "You explained hashing to a bucket, with O(1) average lookup versus O(n) list scan.",
+          "You gave concrete uses: word counts and caching by id.",
+          "You named trade-offs: hashability, memory, collision worst case, and no key ordering."
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s1",
+            "what_a_stronger_answer_adds": "State the correct model from the start. Your first claims (sorted, O(log n), always better) contradicted your later answer."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Hash map gives average O(1) lookup/insert by key; list lookup by value is O(n)",
+            "quote": "lookup and insert are O(1) on average"
+          },
+          {
+            "signal": "Keys must be hashable/unique; order and memory trade-offs",
+            "quote": "keys have to be hashable and unique, it uses more memory than a list"
+          },
+          {
+            "signal": "Gives a concrete use case (counting, caching, de-duplication, index by id)",
+            "quote": "counting word frequencies or caching results by id"
+          },
+          {
+            "signal": "Mentions worst case or collisions, or memory overhead",
+            "quote": "in the worst case with lots of collisions it degrades toward O(n)"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      },
+      {
+        "question_id": "tech_composition",
+        "type": "technical",
+        "topic": "oop",
+        "question": "What is the difference between inheritance and composition? When would you prefer composition?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 124,
+        "followups": 2,
+        "score": 4,
+        "confidence": "medium",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "You correctly defined is-a vs has-a with the Dog/Animal and Car/Engine examples.",
+          "You explained tight coupling, base-class changes breaking children, and the testing benefit of swapping fakes.",
+          "You said when inheritance still fits: true substitutability, like payment providers behind an interface."
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Name the principle 'favor composition over inheritance' explicitly, and avoid the blanket first claim that inheritance is bad."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Inheritance is an 'is-a' relationship; composition is 'has-a'",
+            "quote": "composition is has-a, a Car has an Engine"
+          },
+          {
+            "signal": "Inheritance couples subclass tightly to parent; composition is more flexible",
+            "quote": "Inheritance couples the subclass tightly to the parent"
+          },
+          {
+            "signal": "Concrete example (e.g. Car has an Engine; avoid deep hierarchies)",
+            "quote": "a Car has an Engine"
+          },
+          {
+            "signal": "Mentions 'favor composition over inheritance' or testability/substitution",
+            "quote": "which also makes testing easier because I can pass a fake Engine"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      },
+      {
+        "question_id": "beh_mistake+p",
+        "type": "behavioral",
+        "topic": "accountability",
+        "question": "You mention fixing a production bug where duplicate orders were created when users double-clicked submit. Tell me about a mistake you made in a project or at school, perhaps like this one. What happened, and what did you do about it?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 117,
+        "followups": 2,
+        "score": 4,
+        "confidence": "medium",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "You told your lead right away instead of hiding the mistake.",
+          "You restored the data and told the affected testers what happened.",
+          "You added a concrete safeguard: a confirmation prompt showing the target host."
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Say whether the team adopted the color-coding proposal and how the safeguard was checked."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Specific, real mistake with real consequence",
+            "quote": "deleted a day of test data other testers were using"
+          },
+          {
+            "signal": "Takes ownership without excuses",
+            "quote": "ran a migration script against the staging database without checking the environment variable"
+          },
+          {
+            "signal": "Fixed it and communicated to affected people",
+            "quote": "restored the data from the nightly backup within an hour, and messaged the testers"
+          },
+          {
+            "signal": "Process change to prevent recurrence",
+            "quote": "added a confirmation prompt that prints the target host before any destructive script runs"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      }
+    ],
+    "focus_next": [],
+    "skipped": 0,
+    "ended_early": false,
+    "unscored": 0,
+    "scored": 5,
+    "disclaimer": "Practice feedback only. This is not a hiring assessment or a prediction of interview outcomes."
+  }
+}

@@ -1,0 +1,1236 @@
+{
+  "summary": {
+    "turn_wait_s": {
+      "n": 10,
+      "median": 6.135,
+      "min": 5.25,
+      "max": 10.94,
+      "all": [
+        5.9,
+        5.72,
+        5.25,
+        7.24,
+        5.57,
+        7.4,
+        5.57,
+        10.94,
+        10.16,
+        6.37
+      ]
+    },
+    "feedback_wait_s": 5.9,
+    "duration_s": 76.1,
+    "cost": {
+      "calls": 17,
+      "cost_usd": 0.218361,
+      "by_purpose": {
+        "turn": {
+          "calls": 12,
+          "errors": 0,
+          "cost_usd": 0.134299,
+          "latency_s": 70.107
+        },
+        "grade": {
+          "calls": 5,
+          "errors": 0,
+          "cost_usd": 0.08406,
+          "latency_s": 43.094
+        }
+      }
+    },
+    "with_resume": false
+  },
+  "session": {
+    "versions": {
+      "rubric": "junior_swe/0.1",
+      "evaluator": "evaluator/0.3",
+      "interviewer": "interviewer/0.5",
+      "voice": "voice/0.3",
+      "model": "claude-sonnet-5-5",
+      "turn_model": "claude-haiku-5-5"
+    },
+    "started_at": 1794145063.2712617,
+    "duration_s": 76.1,
+    "feedback_wait_s": 5.9,
+    "ended_early": false,
+    "ended_reason": null,
+    "warmup": {
+      "question": "To start us off, tell me a little about yourself.",
+      "answer": "I recently finished a computer science degree and did an internship building backend services in Python. I'm looking for my first full-time engineering role."
+    },
+    "questions": [
+      {
+        "question_id": "beh_learning",
+        "type": "behavioral",
+        "topic": "learning",
+        "question": "Tell me about a time you had to learn a new technology quickly. How did you approach it?",
+        "answers": [
+          "I'm a fast learner. When I need to learn something new I read the documentation and watch some videos and then I understand it.",
+          "My team needed to switch our dashboard from plain JavaScript to React in three weeks and I had never used it. I did the official tutorial in two evenings, then rebuilt one small widget of our real dashboard as a test of my understanding before touching the main code. I asked a senior developer to review that widget, which caught my misuse of useEffect. We shipped the migration on time. What worked was building something real quickly rather than watching videos, so now I start any new tool with a tiny real task, and I'd skip the long video courses next time."
+        ],
+        "followups": [
+          "When you say you read the documentation and watch videos, then understand it, what does that look like in practice for you?",
+          "What made the useEffect misuse easy to miss before the senior developer's review?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 1,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 4,
+          "model_score": 4,
+          "confidence": "high",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Specific technology and why it was needed with a deadline/context",
+              "hit": true,
+              "quote": "My team needed to switch our dashboard from plain JavaScript to React in three weeks"
+            },
+            {
+              "id": "s2",
+              "text": "Learning strategy: docs, small project, asking, breaking down",
+              "hit": true,
+              "quote": "rebuilt one small widget of our real dashboard as a test of my understanding"
+            },
+            {
+              "id": "s3",
+              "text": "Applied it to deliver something",
+              "hit": true,
+              "quote": "We shipped the migration on time."
+            },
+            {
+              "id": "s4",
+              "text": "Reflects on what worked and how they learn best",
+              "hit": true,
+              "quote": "now I start any new tool with a tiny real task, and I'd skip the long video courses"
+            }
+          ],
+          "red_flags_hit": [],
+          "strengths": [
+            "You named React, the three-week deadline, and why the team needed it.",
+            "You used a concrete method: official tutorial, small real widget, senior review.",
+            "You reflected on what worked and stated how you will reuse the approach."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s3",
+              "what_a_stronger_answer_adds": "Describe your own contribution to the migration and its measurable outcome beyond shipping on time."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 5.369891900001676,
+          "cost_usd": 0.010260749999999999
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_composition",
+        "type": "technical",
+        "topic": "oop",
+        "question": "What is the difference between inheritance and composition? When would you prefer composition?",
+        "answers": [
+          "Inheritance is for reusing code and composition is for combining classes. Composition is better because inheritance is bad in general and you should avoid it.",
+          "Inheritance is an is-a relationship, a Dog is an Animal, and composition is has-a, a Car has an Engine. Inheritance couples the subclass tightly to the parent so changes in the base class can break children, and deep hierarchies get hard to reason about. With composition I hold the collaborators as fields and can swap them, which also makes testing easier because I can pass a fake Engine. I'd still use inheritance when there's a real is-a relationship with shared behavior and the subtype can be substituted anywhere the parent is used, like different payment providers behind one interface."
+        ],
+        "followups": [
+          "Can you explain, in your own words, why you'd say inheritance should be avoided?",
+          "How would you check that a subclass really honours the parent's behaviour when you swap it in?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 1,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 4,
+          "model_score": 4,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Inheritance is an 'is-a' relationship; composition is 'has-a'",
+              "hit": true,
+              "quote": "Inheritance is an is-a relationship, a Dog is an Animal"
+            },
+            {
+              "id": "s2",
+              "text": "Inheritance couples subclass tightly to parent; composition is more flexible",
+              "hit": true,
+              "quote": "Inheritance couples the subclass tightly to the parent"
+            },
+            {
+              "id": "s3",
+              "text": "Concrete example (e.g. Car has an Engine; avoid deep hierarchies)",
+              "hit": true,
+              "quote": "composition is has-a, a Car has an Engine"
+            },
+            {
+              "id": "s4",
+              "text": "Mentions 'favor composition over inheritance' or testability/substitution",
+              "hit": true,
+              "quote": "makes testing easier because I can pass a fake Engine"
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Says inheritance is always bad",
+              "quote": "inheritance is bad in general and you should avoid it"
+            }
+          ],
+          "strengths": [
+            "You explained coupling, fragile base class risk, and deep hierarchies clearly.",
+            "You tied composition to testability by swapping in a fake collaborator.",
+            "You said when inheritance is still right: real is-a, substitutability, shared interface."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Name the 'favor composition over inheritance' principle, and give your nuanced view in the first answer rather than only after the follow-up."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 13.942413099997793,
+          "cost_usd": 0.028182000000000002
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_unit_tests",
+        "type": "technical",
+        "topic": "testing",
+        "question": "What makes a good unit test? How would you test a function that calculates a discount from a cart total?",
+        "answers": [
+          "Unit tests are when you run the whole app and click around to see if it works. For a small function like discount I wouldn't bother testing, it's too simple.",
+          "A good unit test is fast, independent, and checks one thing, and it gives the same result every time. For a discount function I'd test a normal total, a total of zero, a negative total to see if it throws or returns zero, and the boundary where the discount threshold starts, like 99.99 versus 100. I'd name the tests so a failure explains what broke."
+        ],
+        "followups": [
+          "Help me understand your reasoning: why would you skip testing a small function like the discount calculation?",
+          "Tell me more about the part where you wouldn't bother testing the discount function. What would skipping those tests cost you?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 0,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 3,
+          "model_score": 3,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Fast, isolated, deterministic, tests one behavior",
+              "hit": true,
+              "quote": "A good unit test is fast, independent, and checks one thing, and it gives the same result every time."
+            },
+            {
+              "id": "s2",
+              "text": "Covers normal cases and edge cases (zero, boundary, negative, max)",
+              "hit": true,
+              "quote": "a total of zero, a negative total to see if it throws or returns zero"
+            },
+            {
+              "id": "s3",
+              "text": "Clear arrange/act/assert and descriptive names",
+              "hit": true,
+              "quote": "I'd name the tests so a failure explains what broke."
+            },
+            {
+              "id": "s4",
+              "text": "Avoids testing implementation details; mocks external dependencies only",
+              "hit": false,
+              "quote": ""
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Says tests are a waste for small functions",
+              "quote": "For a small function like discount I wouldn't bother testing, it's too simple."
+            }
+          ],
+          "strengths": [
+            "You listed fast, independent, single-purpose, deterministic as qualities of a good unit test.",
+            "You covered zero, negative, and the 99.99 vs 100 boundary for the discount.",
+            "You named tests so failures explain what broke."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Test behavior rather than implementation, and mock only external dependencies like a pricing service or database."
+            },
+            {
+              "signal_id": "s3",
+              "what_a_stronger_answer_adds": "Describe arrange/act/assert structure explicitly, not just descriptive names."
+            },
+            {
+              "signal_id": "s1",
+              "what_a_stronger_answer_adds": "Define unit tests correctly at first; your opening described manual end-to-end clicking, and you initially dismissed testing small functions."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 6.8781594000029145,
+          "cost_usd": 0.012597
+        },
+        "error": null
+      },
+      {
+        "question_id": "tech_http_methods",
+        "type": "technical",
+        "topic": "http_rest",
+        "question": "What is the difference between GET and POST, and what does it mean for an HTTP method to be idempotent?",
+        "answers": [
+          "GET and POST are two ways of writing to the database. Idempotent means the request is encrypted. POST is idempotent since it always works.",
+          "GET is used to fetch data and shouldn't change anything on the server, and the parameters go in the URL. POST sends data in the request body and is used to create something or trigger an action. Idempotent means doing the same request multiple times has the same effect as doing it once. GET and PUT and DELETE are idempotent, for example deleting the same user twice leaves the same state. POST isn't, because posting twice might create two records."
+        ],
+        "followups": [
+          "You said POST is idempotent since it always works. What do you mean by that, in your own words?",
+          "You mentioned posting twice might create two records. If a payment request times out, would you retry it?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 0,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 3,
+          "model_score": 3,
+          "confidence": "medium",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "GET retrieves, should be safe/no side effects; POST creates or triggers an action",
+              "hit": true,
+              "quote": "GET is used to fetch data and shouldn't change anything on the server"
+            },
+            {
+              "id": "s2",
+              "text": "GET params in URL, POST data in body",
+              "hit": true,
+              "quote": "the parameters go in the URL. POST sends data in the request body"
+            },
+            {
+              "id": "s3",
+              "text": "Idempotent: repeating the request gives the same server state (GET, PUT, DELETE yes; POST no)",
+              "hit": true,
+              "quote": "doing the same request multiple times has the same effect as doing it once"
+            },
+            {
+              "id": "s4",
+              "text": "Practical consequence: retries, caching, or double-submit risk",
+              "hit": false,
+              "quote": ""
+            }
+          ],
+          "red_flags_hit": [
+            {
+              "flag": "Claims POST is idempotent",
+              "quote": "POST is idempotent since it always works."
+            }
+          ],
+          "strengths": [
+            "You correctly separate GET (safe fetch, params in URL) from POST (body, creates or triggers an action).",
+            "You define idempotency correctly and give a delete-twice example.",
+            "You contrast GET, PUT and DELETE with POST, and explain that posting twice might create two records."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s4",
+              "what_a_stronger_answer_adds": "Tie idempotency to safe retries after timeouts, caching of GET, and preventing duplicate orders with idempotency keys."
+            },
+            {
+              "signal_id": "s3",
+              "what_a_stronger_answer_adds": "Give a consistent definition from the start. Your first claim that POST is idempotent and that idempotent means encrypted was wrong."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 10.974399899991113,
+          "cost_usd": 0.02239575
+        },
+        "error": null
+      },
+      {
+        "question_id": "beh_stuck_bug",
+        "type": "behavioral",
+        "topic": "problem_solving",
+        "question": "Tell me about a time you were stuck on a difficult bug or problem. What did you do?",
+        "answers": [
+          "There was a bug once in my code that took a long time. I tried a lot of things and searched on Google and Stack Overflow. It was frustrating.",
+          "In my final-year project our Flask API returned random 500 errors only under load. I couldn't reproduce it locally, so first I added structured logging with request ids and wrote a small script to hit the endpoint concurrently, which reproduced it. The logs showed two requests writing to the same SQLite connection, which isn't thread safe. I spent about two days on it and asked my TA after the first day when my hypotheses ran out; she suggested checking connection sharing. I switched to a per-request connection and the errors disappeared, and I confirmed with the load script running 500 requests. Since then I write a reproduction script before changing any code, and I add logging early instead of guessing."
+        ],
+        "followups": [
+          "What project were you working on when that bug came up?",
+          "Looking back, what made you settle on a per-request connection as the fix?"
+        ],
+        "fallback_followups": 0,
+        "depth_followups": 1,
+        "turn_errors": 0,
+        "skipped": false,
+        "evaluation": {
+          "score": 4,
+          "model_score": 4,
+          "confidence": "high",
+          "injection_attempt": false,
+          "signals": [
+            {
+              "id": "s1",
+              "text": "Specific situation (not hypothetical) with context",
+              "hit": true,
+              "quote": "our Flask API returned random 500 errors only under load"
+            },
+            {
+              "id": "s2",
+              "text": "Systematic approach: reproduce, isolate, logs/debugger, hypotheses",
+              "hit": true,
+              "quote": "I added structured logging with request ids and wrote a small script to hit the endpoint concurrently"
+            },
+            {
+              "id": "s3",
+              "text": "Asked for help appropriately or researched",
+              "hit": true,
+              "quote": "asked my TA after the first day when my hypotheses ran out"
+            },
+            {
+              "id": "s4",
+              "text": "Clear outcome and what they learned",
+              "hit": true,
+              "quote": "Since then I write a reproduction script before changing any code"
+            }
+          ],
+          "red_flags_hit": [],
+          "strengths": [
+            "Specific project with a clear symptom: 500 errors only under load.",
+            "Systematic approach: structured logging, concurrent load script to reproduce, and root cause found in the logs.",
+            "Verified the fix and named concrete changes to your workflow afterwards."
+          ],
+          "gaps": [
+            {
+              "signal_id": "s1",
+              "what_a_stronger_answer_adds": "Your first answer was vague; lead with the specific project and context instead of waiting for a follow-up."
+            }
+          ],
+          "ungrounded_quotes": 0,
+          "rubric_version": "junior_swe/0.1",
+          "evaluator_version": "evaluator/0.3",
+          "model": "claude-sonnet-5-5",
+          "latency_s": 5.930169200000819,
+          "cost_usd": 0.010624499999999999
+        },
+        "error": null
+      }
+    ],
+    "events": [
+      {
+        "t": 1794145063.271,
+        "type": "interviewer",
+        "text": "Hi, I'm Alex, an AI interviewer, and I'll be running your practice interview today for a junior software engineer role. We'll start with a little about your background, then go through 5 questions, and I may ask a few follow-ups along the way. Answer as you would in a real interview. I'll save all my feedback for the end, so I won't be able to give hints as we go.",
+        "kind": "intro"
+      },
+      {
+        "t": 1794145063.272,
+        "type": "interviewer",
+        "text": "To start us off, tell me a little about yourself.",
+        "kind": "warmup",
+        "question_id": "warmup"
+      },
+      {
+        "t": 1794145063.272,
+        "type": "candidate",
+        "text": "I recently finished a computer science degree and did an internship building backend services in Python. I'm looking for my first full-time engineering role.",
+        "question_id": "warmup",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145063.272,
+        "type": "interviewer",
+        "text": "Alright, thank you.",
+        "kind": "ack",
+        "question_id": "warmup"
+      },
+      {
+        "t": 1794145063.272,
+        "type": "interviewer",
+        "text": "Let's begin with a question about your experience. Tell me about a time you had to learn a new technology quickly. How did you approach it?",
+        "kind": "question",
+        "question_id": "beh_learning",
+        "transition": "Let's begin with a question about your experience."
+      },
+      {
+        "t": 1794145063.272,
+        "type": "candidate",
+        "text": "I'm a fast learner. When I need to learn something new I read the documentation and watch some videos and then I understand it.",
+        "question_id": "beh_learning",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145063.272,
+        "type": "interviewer",
+        "text": "Okay.",
+        "kind": "ack",
+        "question_id": "beh_learning"
+      },
+      {
+        "t": 1794145069.173,
+        "type": "interviewer",
+        "text": "When you say you read the documentation and watch videos, then understand it, what does that look like in practice for you?",
+        "kind": "follow_up",
+        "question_id": "beh_learning",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145069.174,
+        "type": "candidate",
+        "text": "My team needed to switch our dashboard from plain JavaScript to React in three weeks and I had never used it. I did the official tutorial in two evenings, then rebuilt one small widget of our real dashboard as a test of my understanding before touching the main code. I asked a senior developer to review that widget, which caught my misuse of useEffect. We shipped the migration on time. What worked was building something real quickly rather than watching videos, so now I start any new tool with a tiny real task, and I'd skip the long video courses next time.",
+        "question_id": "beh_learning",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145069.174,
+        "type": "interviewer",
+        "text": "Okay, thanks.",
+        "kind": "ack",
+        "question_id": "beh_learning"
+      },
+      {
+        "t": 1794145074.891,
+        "type": "interviewer",
+        "text": "What made the useEffect misuse easy to miss before the senior developer's review?",
+        "kind": "follow_up",
+        "question_id": "beh_learning",
+        "move": "probe",
+        "target": "depth",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145074.891,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "beh_learning",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145074.891,
+        "type": "interviewer",
+        "text": "That's fine.",
+        "kind": "ack",
+        "question_id": "beh_learning"
+      },
+      {
+        "t": 1794145074.892,
+        "type": "interviewer",
+        "text": "I'd like to move on to a technical topic now. What is the difference between inheritance and composition? When would you prefer composition?",
+        "kind": "question",
+        "question_id": "tech_composition",
+        "transition": "I'd like to move on to a technical topic now."
+      },
+      {
+        "t": 1794145074.893,
+        "type": "candidate",
+        "text": "Inheritance is for reusing code and composition is for combining classes. Composition is better because inheritance is bad in general and you should avoid it.",
+        "question_id": "tech_composition",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145074.893,
+        "type": "interviewer",
+        "text": "Thanks for explaining that.",
+        "kind": "ack",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794145080.14,
+        "type": "interviewer",
+        "text": "Can you explain, in your own words, why you'd say inheritance should be avoided?",
+        "kind": "follow_up",
+        "question_id": "tech_composition",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145080.141,
+        "type": "candidate",
+        "text": "Inheritance is an is-a relationship, a Dog is an Animal, and composition is has-a, a Car has an Engine. Inheritance couples the subclass tightly to the parent so changes in the base class can break children, and deep hierarchies get hard to reason about. With composition I hold the collaborators as fields and can swap them, which also makes testing easier because I can pass a fake Engine. I'd still use inheritance when there's a real is-a relationship with shared behavior and the subtype can be substituted anywhere the parent is used, like different payment providers behind one interface.",
+        "question_id": "tech_composition",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145080.141,
+        "type": "interviewer",
+        "text": "Understood.",
+        "kind": "ack",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794145087.381,
+        "type": "interviewer",
+        "text": "How would you check that a subclass really honours the parent's behaviour when you swap it in?",
+        "kind": "follow_up",
+        "question_id": "tech_composition",
+        "move": "probe",
+        "target": "depth",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145087.381,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "tech_composition",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145087.381,
+        "type": "interviewer",
+        "text": "That's fine.",
+        "kind": "ack",
+        "question_id": "tech_composition"
+      },
+      {
+        "t": 1794145087.381,
+        "type": "interviewer",
+        "text": "Let's look at a different topic. What makes a good unit test? How would you test a function that calculates a discount from a cart total?",
+        "kind": "question",
+        "question_id": "tech_unit_tests",
+        "transition": "Let's look at a different topic."
+      },
+      {
+        "t": 1794145087.382,
+        "type": "candidate",
+        "text": "Unit tests are when you run the whole app and click around to see if it works. For a small function like discount I wouldn't bother testing, it's too simple.",
+        "question_id": "tech_unit_tests",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145087.382,
+        "type": "interviewer",
+        "text": "Okay, thanks.",
+        "kind": "ack",
+        "question_id": "tech_unit_tests"
+      },
+      {
+        "t": 1794145092.956,
+        "type": "interviewer",
+        "text": "Help me understand your reasoning: why would you skip testing a small function like the discount calculation?",
+        "kind": "follow_up",
+        "question_id": "tech_unit_tests",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145092.956,
+        "type": "candidate",
+        "text": "A good unit test is fast, independent, and checks one thing, and it gives the same result every time. For a discount function I'd test a normal total, a total of zero, a negative total to see if it throws or returns zero, and the boundary where the discount threshold starts, like 99.99 versus 100. I'd name the tests so a failure explains what broke.",
+        "question_id": "tech_unit_tests",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145092.956,
+        "type": "interviewer",
+        "text": "Thanks for explaining that.",
+        "kind": "ack",
+        "question_id": "tech_unit_tests"
+      },
+      {
+        "t": 1794145100.358,
+        "type": "interviewer",
+        "text": "Tell me more about the part where you wouldn't bother testing the discount function. What would skipping those tests cost you?",
+        "kind": "follow_up",
+        "question_id": "tech_unit_tests",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145100.358,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "tech_unit_tests",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145100.358,
+        "type": "interviewer",
+        "text": "No problem.",
+        "kind": "ack",
+        "question_id": "tech_unit_tests"
+      },
+      {
+        "t": 1794145100.359,
+        "type": "interviewer",
+        "text": "Here's another one. What is the difference between GET and POST, and what does it mean for an HTTP method to be idempotent?",
+        "kind": "question",
+        "question_id": "tech_http_methods",
+        "transition": "Here's another one."
+      },
+      {
+        "t": 1794145100.36,
+        "type": "candidate",
+        "text": "GET and POST are two ways of writing to the database. Idempotent means the request is encrypted. POST is idempotent since it always works.",
+        "question_id": "tech_http_methods",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145100.36,
+        "type": "interviewer",
+        "text": "Okay.",
+        "kind": "ack",
+        "question_id": "tech_http_methods"
+      },
+      {
+        "t": 1794145105.925,
+        "type": "interviewer",
+        "text": "You said POST is idempotent since it always works. What do you mean by that, in your own words?",
+        "kind": "follow_up",
+        "question_id": "tech_http_methods",
+        "move": "probe",
+        "target": "red_flag",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145105.926,
+        "type": "candidate",
+        "text": "GET is used to fetch data and shouldn't change anything on the server, and the parameters go in the URL. POST sends data in the request body and is used to create something or trigger an action. Idempotent means doing the same request multiple times has the same effect as doing it once. GET and PUT and DELETE are idempotent, for example deleting the same user twice leaves the same state. POST isn't, because posting twice might create two records.",
+        "question_id": "tech_http_methods",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145105.926,
+        "type": "interviewer",
+        "text": "I see, thanks.",
+        "kind": "ack",
+        "question_id": "tech_http_methods"
+      },
+      {
+        "t": 1794145116.867,
+        "type": "interviewer",
+        "text": "You mentioned posting twice might create two records. If a payment request times out, would you retry it?",
+        "kind": "follow_up",
+        "question_id": "tech_http_methods",
+        "move": "probe",
+        "target": "s4",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145116.868,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "tech_http_methods",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145116.868,
+        "type": "interviewer",
+        "text": "No problem.",
+        "kind": "ack",
+        "question_id": "tech_http_methods"
+      },
+      {
+        "t": 1794145116.868,
+        "type": "interviewer",
+        "text": "I'd like to hear about your experience now. This is my last question. Tell me about a time you were stuck on a difficult bug or problem. What did you do?",
+        "kind": "question",
+        "question_id": "beh_stuck_bug",
+        "transition": "I'd like to hear about your experience now. This is my last question."
+      },
+      {
+        "t": 1794145116.868,
+        "type": "candidate",
+        "text": "There was a bug once in my code that took a long time. I tried a lot of things and searched on Google and Stack Overflow. It was frustrating.",
+        "question_id": "beh_stuck_bug",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145116.868,
+        "type": "interviewer",
+        "text": "Alright, thank you.",
+        "kind": "ack",
+        "question_id": "beh_stuck_bug"
+      },
+      {
+        "t": 1794145127.029,
+        "type": "interviewer",
+        "text": "What project were you working on when that bug came up?",
+        "kind": "follow_up",
+        "question_id": "beh_stuck_bug",
+        "move": "probe",
+        "target": "s1",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145127.03,
+        "type": "candidate",
+        "text": "In my final-year project our Flask API returned random 500 errors only under load. I couldn't reproduce it locally, so first I added structured logging with request ids and wrote a small script to hit the endpoint concurrently, which reproduced it. The logs showed two requests writing to the same SQLite connection, which isn't thread safe. I spent about two days on it and asked my TA after the first day when my hypotheses ran out; she suggested checking connection sharing. I switched to a per-request connection and the errors disappeared, and I confirmed with the load script running 500 requests. Since then I write a reproduction script before changing any code, and I add logging early instead of guessing.",
+        "question_id": "beh_stuck_bug",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145127.03,
+        "type": "interviewer",
+        "text": "Understood.",
+        "kind": "ack",
+        "question_id": "beh_stuck_bug"
+      },
+      {
+        "t": 1794145133.399,
+        "type": "interviewer",
+        "text": "Looking back, what made you settle on a per-request connection as the fix?",
+        "kind": "follow_up",
+        "question_id": "beh_stuck_bug",
+        "move": "probe",
+        "target": "depth",
+        "fallback": false,
+        "rejected": null
+      },
+      {
+        "t": 1794145133.399,
+        "type": "candidate",
+        "text": "Not sure, sorry.",
+        "question_id": "beh_stuck_bug",
+        "reply_kind": "dont_know"
+      },
+      {
+        "t": 1794145133.399,
+        "type": "interviewer",
+        "text": "No problem.",
+        "kind": "ack",
+        "question_id": "beh_stuck_bug"
+      },
+      {
+        "t": 1794145133.399,
+        "type": "interviewer",
+        "text": "That's all my questions. Before we wrap up, do you have any questions for me?",
+        "kind": "closing"
+      },
+      {
+        "t": 1794145133.4,
+        "type": "candidate",
+        "text": "No, that's all from me, thank you.",
+        "question_id": "closing",
+        "reply_kind": "answer"
+      },
+      {
+        "t": 1794145133.4,
+        "type": "interviewer",
+        "text": "No problem. Thanks for your time today. I'll put your feedback together now.",
+        "kind": "outro"
+      }
+    ],
+    "llm_calls": [
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.898,
+        "cost_usd": 0.01188825,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.716,
+        "cost_usd": 0.011120249999999998,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.248,
+        "cost_usd": 0.0076177499999999995,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 5.37,
+        "cost_usd": 0.010260749999999999,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 7.238,
+        "cost_usd": 0.013651499999999999,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.574,
+        "cost_usd": 0.0095715,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 7.399,
+        "cost_usd": 0.016493999999999998,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 13.942,
+        "cost_usd": 0.028182000000000002,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.565,
+        "cost_usd": 0.010310250000000002,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 6.878,
+        "cost_usd": 0.012597,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.139,
+        "cost_usd": 0.010719,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.802,
+        "cost_usd": 0.012181500000000001,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 5.371,
+        "cost_usd": 0.00950025,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 4.79,
+        "cost_usd": 0.00731775,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 10.974,
+        "cost_usd": 0.02239575,
+        "error": false
+      },
+      {
+        "purpose": "turn",
+        "model": "claude-haiku-5-5",
+        "latency_s": 6.367,
+        "cost_usd": 0.013929,
+        "error": false
+      },
+      {
+        "purpose": "grade",
+        "model": "claude-sonnet-5-5",
+        "latency_s": 5.93,
+        "cost_usd": 0.010624499999999999,
+        "error": false
+      }
+    ],
+    "cost": {
+      "calls": 17,
+      "cost_usd": 0.218361,
+      "by_purpose": {
+        "turn": {
+          "calls": 12,
+          "errors": 0,
+          "cost_usd": 0.134299,
+          "latency_s": 70.107
+        },
+        "grade": {
+          "calls": 5,
+          "errors": 0,
+          "cost_usd": 0.08406,
+          "latency_s": 43.094
+        }
+      }
+    }
+  },
+  "scorecard": {
+    "overall": 3.6,
+    "by_type": {
+      "behavioral": 4,
+      "technical": 3.33
+    },
+    "questions": [
+      {
+        "question_id": "beh_learning",
+        "type": "behavioral",
+        "topic": "learning",
+        "question": "Tell me about a time you had to learn a new technology quickly. How did you approach it?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 126,
+        "followups": 2,
+        "score": 4,
+        "confidence": "high",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "You named React, the three-week deadline, and why the team needed it.",
+          "You used a concrete method: official tutorial, small real widget, senior review.",
+          "You reflected on what worked and stated how you will reuse the approach."
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s3",
+            "what_a_stronger_answer_adds": "Describe your own contribution to the migration and its measurable outcome beyond shipping on time."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Specific technology and why it was needed with a deadline/context",
+            "quote": "My team needed to switch our dashboard from plain JavaScript to React in three weeks"
+          },
+          {
+            "signal": "Learning strategy: docs, small project, asking, breaking down",
+            "quote": "rebuilt one small widget of our real dashboard as a test of my understanding"
+          },
+          {
+            "signal": "Applied it to deliver something",
+            "quote": "We shipped the migration on time."
+          },
+          {
+            "signal": "Reflects on what worked and how they learn best",
+            "quote": "now I start any new tool with a tiny real task, and I'd skip the long video courses"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      },
+      {
+        "question_id": "tech_composition",
+        "type": "technical",
+        "topic": "oop",
+        "question": "What is the difference between inheritance and composition? When would you prefer composition?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 124,
+        "followups": 2,
+        "score": 4,
+        "confidence": "medium",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "You explained coupling, fragile base class risk, and deep hierarchies clearly.",
+          "You tied composition to testability by swapping in a fake collaborator.",
+          "You said when inheritance is still right: real is-a, substitutability, shared interface."
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Name the 'favor composition over inheritance' principle, and give your nuanced view in the first answer rather than only after the follow-up."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Inheritance is an 'is-a' relationship; composition is 'has-a'",
+            "quote": "Inheritance is an is-a relationship, a Dog is an Animal"
+          },
+          {
+            "signal": "Inheritance couples subclass tightly to parent; composition is more flexible",
+            "quote": "Inheritance couples the subclass tightly to the parent"
+          },
+          {
+            "signal": "Concrete example (e.g. Car has an Engine; avoid deep hierarchies)",
+            "quote": "composition is has-a, a Car has an Engine"
+          },
+          {
+            "signal": "Mentions 'favor composition over inheritance' or testability/substitution",
+            "quote": "makes testing easier because I can pass a fake Engine"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      },
+      {
+        "question_id": "tech_unit_tests",
+        "type": "technical",
+        "topic": "testing",
+        "question": "What makes a good unit test? How would you test a function that calculates a discount from a cart total?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 95,
+        "followups": 2,
+        "score": 3,
+        "confidence": "medium",
+        "signals_hit": 3,
+        "signals_total": 4,
+        "strengths": [
+          "You listed fast, independent, single-purpose, deterministic as qualities of a good unit test.",
+          "You covered zero, negative, and the 99.99 vs 100 boundary for the discount.",
+          "You named tests so failures explain what broke."
+        ],
+        "missed": [
+          "Avoids testing implementation details; mocks external dependencies only"
+        ],
+        "gaps": [
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Test behavior rather than implementation, and mock only external dependencies like a pricing service or database."
+          },
+          {
+            "signal_id": "s3",
+            "what_a_stronger_answer_adds": "Describe arrange/act/assert structure explicitly, not just descriptive names."
+          },
+          {
+            "signal_id": "s1",
+            "what_a_stronger_answer_adds": "Define unit tests correctly at first; your opening described manual end-to-end clicking, and you initially dismissed testing small functions."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Fast, isolated, deterministic, tests one behavior",
+            "quote": "A good unit test is fast, independent, and checks one thing, and it gives the same result every time."
+          },
+          {
+            "signal": "Covers normal cases and edge cases (zero, boundary, negative, max)",
+            "quote": "a total of zero, a negative total to see if it throws or returns zero"
+          },
+          {
+            "signal": "Clear arrange/act/assert and descriptive names",
+            "quote": "I'd name the tests so a failure explains what broke."
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      },
+      {
+        "question_id": "tech_http_methods",
+        "type": "technical",
+        "topic": "http_rest",
+        "question": "What is the difference between GET and POST, and what does it mean for an HTTP method to be idempotent?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 104,
+        "followups": 2,
+        "score": 3,
+        "confidence": "medium",
+        "signals_hit": 3,
+        "signals_total": 4,
+        "strengths": [
+          "You correctly separate GET (safe fetch, params in URL) from POST (body, creates or triggers an action).",
+          "You define idempotency correctly and give a delete-twice example.",
+          "You contrast GET, PUT and DELETE with POST, and explain that posting twice might create two records."
+        ],
+        "missed": [
+          "Practical consequence: retries, caching, or double-submit risk"
+        ],
+        "gaps": [
+          {
+            "signal_id": "s4",
+            "what_a_stronger_answer_adds": "Tie idempotency to safe retries after timeouts, caching of GET, and preventing duplicate orders with idempotency keys."
+          },
+          {
+            "signal_id": "s3",
+            "what_a_stronger_answer_adds": "Give a consistent definition from the start. Your first claim that POST is idempotent and that idempotent means encrypted was wrong."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "GET retrieves, should be safe/no side effects; POST creates or triggers an action",
+            "quote": "GET is used to fetch data and shouldn't change anything on the server"
+          },
+          {
+            "signal": "GET params in URL, POST data in body",
+            "quote": "the parameters go in the URL. POST sends data in the request body"
+          },
+          {
+            "signal": "Idempotent: repeating the request gives the same server state (GET, PUT, DELETE yes; POST no)",
+            "quote": "doing the same request multiple times has the same effect as doing it once"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      },
+      {
+        "question_id": "beh_stuck_bug",
+        "type": "behavioral",
+        "topic": "problem_solving",
+        "question": "Tell me about a time you were stuck on a difficult bug or problem. What did you do?",
+        "skipped": false,
+        "error": null,
+        "answer_words": 149,
+        "followups": 2,
+        "score": 4,
+        "confidence": "high",
+        "signals_hit": 4,
+        "signals_total": 4,
+        "strengths": [
+          "Specific project with a clear symptom: 500 errors only under load.",
+          "Systematic approach: structured logging, concurrent load script to reproduce, and root cause found in the logs.",
+          "Verified the fix and named concrete changes to your workflow afterwards."
+        ],
+        "missed": [],
+        "gaps": [
+          {
+            "signal_id": "s1",
+            "what_a_stronger_answer_adds": "Your first answer was vague; lead with the specific project and context instead of waiting for a follow-up."
+          }
+        ],
+        "evidence": [
+          {
+            "signal": "Specific situation (not hypothetical) with context",
+            "quote": "our Flask API returned random 500 errors only under load"
+          },
+          {
+            "signal": "Systematic approach: reproduce, isolate, logs/debugger, hypotheses",
+            "quote": "I added structured logging with request ids and wrote a small script to hit the endpoint concurrently"
+          },
+          {
+            "signal": "Asked for help appropriately or researched",
+            "quote": "asked my TA after the first day when my hypotheses ran out"
+          },
+          {
+            "signal": "Clear outcome and what they learned",
+            "quote": "Since then I write a reproduction script before changing any code"
+          }
+        ],
+        "practice_next": null,
+        "injection_attempt": false
+      }
+    ],
+    "focus_next": [],
+    "skipped": 0,
+    "ended_early": false,
+    "unscored": 0,
+    "scored": 5,
+    "disclaimer": "Practice feedback only. This is not a hiring assessment or a prediction of interview outcomes."
+  }
+}
