@@ -37,6 +37,7 @@ NON_ANSWER_LINES = {
     "thinking": (voice.TAKE_YOUR_TIME, "clarify"),
     "filler": (voice.STILL_HERE, "clarify"),
     "distress": (voice.SUPPORT, "support"),
+    "identity": (voice.IDENTITY, "clarify"),
 }
 
 
@@ -232,6 +233,10 @@ class InterviewEngine:
             yield self._end_for(kind, "warmup")
             yield from self._finish()
             return
+        if kind == "identity":
+            yield self._say(voice.IDENTITY.format(question=voice.WARMUP), "clarify", question_id="warmup")
+            yield Wait()
+            return
         if kind == "answer":
             s.memory.append(["warmup", " ".join(reply.split()[:WARMUP_MEMORY_WORDS])])
             yield self._acknowledge("warmup")
@@ -347,8 +352,13 @@ class InterviewEngine:
         yield Wait()
 
     def _on_closing(self, reply: str | None) -> Iterator[Action]:
-        if reply is not None and self._classify_and_log(reply, "closing") == "crisis":
+        kind = None if reply is None else self._classify_and_log(reply, "closing")
+        if kind == "crisis":
             yield self._end_for("crisis", "closing")
+            yield from self._finish()
+            return
+        if kind == "identity":
+            yield self._say(voice.IDENTITY.format(question=voice.GOODBYE), "outro")
             yield from self._finish()
             return
         asked = reply is not None and not voice.has_no_questions(reply)

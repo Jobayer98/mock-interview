@@ -96,6 +96,9 @@ def test_plan_shape_and_determinism():
     ("I want to stop the interview now.", "stop"), ("stop", "stop"), ("Can we stop here?", "stop"), ("I'd like to stop", "stop"),
     ("I feel like giving up, I can't do this anymore.", "distress"), ("I'm so stressed right now", "distress"),
     ("I want to kill myself", "crisis"),
+    ("Are you a real person?", "identity"), ("Am I talking to a bot?", "identity"), ("Is this a mock interview?", "identity"), ("Are you AI?", "identity"),
+    ("Let's stop here", "stop"),
+    ("A bot is a program that runs tasks automatically for users on chat platforms and handles lots of requests every day.", "answer"),
     ("A dictionary uses hashing for O(1) lookup, and I'd use it for counting words.", "answer"),
     # Real answers that contain the phrases above.
     ("I would stop the server and restart it to check the logs.", "answer"),
@@ -182,10 +185,10 @@ def test_fixed_lines_never_judge_the_candidate():
     assert lines and not [line for line in lines if EVALUATIVE.search(line)]
 
 
-def test_opening_discloses_ai_and_has_no_interface_instructions():
+def test_opening_stays_in_character_with_no_interface_instructions():
     io = ScriptedIO(["I studied CSE.", "A dictionary gives O(1) lookup on average.", "no thanks"])
     InterviewSession(Router([4]), io, one_question(), phrasing_seed=1).run()
-    assert "AI interviewer" in io.said[0]
+    assert "interviewing you for" in io.said[0] and "AI" not in io.said[0]
     assert not [line for line in io.said if re.search(r"press enter|blank line|empty line|type '", line, re.I)]
 
 
@@ -496,3 +499,36 @@ def test_depth_follow_up_is_limited_to_one_per_question():
     io = ScriptedIO(["Strong answer with many words here.", "Deeper answer with many words here.", "unused"])
     rec = session(llm, io, one_question()).run()["questions"][0]
     assert rec["followups"] == ["What would change at ten times the traffic?"] and rec["depth_followups"] == 1 and io.replies == ["unused"]
+
+
+def test_the_interviewer_never_breaks_character_unprompted():
+    lines = [voice.opening(5), voice.WARMUP, voice.CANDIDATE_QUESTIONS, voice.OUTRO_NO_QUESTIONS, voice.OUTRO_WITH_QUESTION, voice.REPEAT, voice.CLARIFY,
+             voice.TAKE_YOUR_TIME, voice.STILL_HERE, voice.SUPPORT, voice.OUT_OF_TIME, voice.STOPPING, voice.MOVE_ON, META_REPLY, *voice.NO_PROBLEM,
+             *voice.ACKNOWLEDGEMENTS, *[t for options in voice.TRANSITIONS.values() for t in options]]
+    breaking = re.compile(r"\b(mock|practice|simulation|AI|bot|feedback|say skip|say stop)\b")
+    assert not [line for line in lines if breaking.search(line)]
+
+
+def test_the_interviewer_admits_being_an_ai_when_asked():
+    llm = Router([4])
+    io = ScriptedIO(["Are you a real person?", "A dictionary gives O(1) lookup on average."])
+    result = session(llm, io, one_question()).run()
+    question = one_question()[0]["question"]
+    assert f"I'm an AI interviewer, and this is a practice session. {question}" in io.said
+    assert llm.calls["grade"] == 1 and len(result["questions"][0]["answers"]) == 1
+
+
+def test_being_asked_during_the_warmup_is_answered_and_the_warmup_repeated():
+    io = ScriptedIO(["Is this a mock interview?", "I studied computer science.", "skip", "no"])
+    InterviewSession(Router([4]), io, one_question(), phrasing_seed=1, grade_in_background=False).run()
+    assert f"I'm an AI interviewer, and this is a practice session. {voice.WARMUP}" in io.said
+
+
+def test_being_asked_at_the_close_is_answered_truthfully():
+    io = ScriptedIO(["skip", "Are you a bot?"])
+    session(Router([4]), io, one_question(), ask_candidate_questions=True).run()
+    assert io.said[-1] == f"I'm an AI interviewer, and this is a practice session. {voice.GOODBYE}"
+
+
+def test_a_crisis_still_breaks_character_with_the_truth():
+    assert "AI" in voice.CRISIS

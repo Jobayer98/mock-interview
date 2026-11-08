@@ -70,7 +70,7 @@ def test_the_pipeline_speaks_the_engines_words_not_a_built_in_llm():
 
     agent, text = asyncio.run(run())
     assert "Why does that matter here?" in text and any(ack in text for ack in voice.ACKNOWLEDGEMENTS)
-    assert "AI interviewer" in agent.opening_lines[0]
+    assert "interviewing you for" in agent.opening_lines[0]
 
 
 def test_the_candidates_words_reach_the_engine():

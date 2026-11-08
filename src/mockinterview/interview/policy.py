@@ -38,7 +38,14 @@ _EXIT = re.compile(
     r"^(please )?(stop|quit|exit)( please)?$"
     r"|\b(stop|end|quit|finish|leave) (the|this|our) (interview|session|practice)( now| here| please)?$"
     r"|\b(can|could|may|shall) we (please )?(stop|end|finish)( here| now| please| for today| this| the interview)?$"
-    r"|\bi( want| need| would like|'d like) to (stop|quit|leave)( now| here| please)?$",
+    r"|\bi( want| need| would like|'d like) to (stop|quit|leave)( now| here| please)?$"
+    r"|\b(let's|lets) (stop|end|finish)( here| now| please| for today| the interview)?$",
+    re.IGNORECASE,
+)
+_IDENTITY = re.compile(
+    r"\b(are|r) you (a |an )?(real|human|person|ai|bot|robot|machine|computer)\b"
+    r"|\bam i (talking|speaking) (to|with) (a |an )?(real|human|person|ai|bot|robot|machine)\b"
+    r"|\bis this (a |an )?(real|mock|practice|fake|ai)\b",
     re.IGNORECASE,
 )
 _CRISIS = re.compile(
@@ -70,15 +77,15 @@ FOLLOWUP_CUTOFF_FRACTION = 0.85
 MAX_META_REPLIES = 2
 MAX_NON_ANSWERS = 4
 META_REPLY = (
-    "I can't give answers or hints during the interview, but you'll get detailed feedback at the end. "
-    "Take a moment and give it your best attempt, or say 'skip' to move on."
+    "I can't give answers or hints during the interview. "
+    "Take a moment and give it your best attempt, or we can move on."
 )
 
 
 def classify_reply(text: str) -> str:
     """Classify what the candidate wrote (never how they sound; I2). Only 'answer' goes on to an LLM.
 
-    Returns one of: crisis, distress, stop, skip, dont_know, repeat, clarify, thinking, filler, meta, answer.
+    Returns one of: crisis, distress, stop, skip, dont_know, identity, repeat, clarify, thinking, filler, meta, answer.
     Length caps keep a real answer that happens to contain one of these phrases from being misread.
     """
     normal = " ".join(text.translate(_TYPOGRAPHIC).split())
@@ -94,6 +101,8 @@ def classify_reply(text: str) -> str:
         return "skip"
     if _DONT_KNOW.match(core):
         return "dont_know"
+    if words <= 16 and _IDENTITY.search(core):
+        return "identity"
     if words <= 16 and _REPEAT.search(core):
         return "repeat"
     if words <= 20 and _CLARIFY.search(core):
