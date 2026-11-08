@@ -85,6 +85,8 @@ Evaluator/0.3 on draft labels: ±1 100%, exact 88%, QWK 0.95, consistency 100% (
 
 **Step engine (2026-11-08)**: `interview/engine.py` replaces the blocking loop. `start()` and `step(reply)` yield `Say`, `Wait` and `Finished` actions as they become ready, so an acknowledgement goes out before any slow call. `SessionState` is plain JSON-safe data, including wording draws, session clock start and the list of grading jobs, so a web request or voice turn can save and resume an interview. `InterviewSession` remains as the blocking adapter for the CLI, tests and simulations.
 
+**Golden resume eval (P0-16)**: 13 fictional resumes in `evals/resumes/`, scored by `evals/run_resume_eval.py` through the production path, with injection resumes run again with the loader bypassed. On **draft** gold, two runs: skills F1 1.00 (103/103), bullets F1 1.00 (84/84), seniority 100%, 0 fabricated bullets, 3 of 3 injections flagged and none obeyed. Not a pass yet: Claude wrote both the resumes and the answers, and these are clean text files with no layout-heavy PDFs, so treat it as an optimistic upper bound until a person reviews the gold and real resumes are tried.
+
 **Resume loaders (P0-15)**: `resume/loaders.py`, `load_resume(path) -> (text, warnings)` for PDF, Word and text. A resume is untrusted, so text a reader could not see is removed before any model call. In a PDF that means invisible, tiny, off the page, or white with nothing dark behind it; white text on a banner or image is kept because designer templates use it. In Word it means hidden, tiny or white runs, including through styles, unless shaded. Sentences addressed to an AI are removed from every format. Known limits: scanned files are rejected rather than read (OCR is later), and hidden text inside PDF form XObjects is not examined.
 
 **Human labeling how-to (P0-10)**: `evals/label_tools.py`. Run commands from the project root with `./.venv/Scripts/python`.
@@ -123,3 +125,6 @@ system design -> API + web UI + voice -> other roles.
   NOT yet human-verified; metric 1 is only meaningful once labels are `reviewed`. A reviewed item also has
   `labelers` (who scored it) and `draft_score` (the score before review). Its `score` is the human consensus, while
   `reason` still holds the draft's justification unless a person has edited it.
+- `evals/resumes/gold.yaml`: expected extraction per resume: `skills` (a nested list means interchangeable names), `bullets`,
+  `seniority` (acceptable levels), and for injection resumes what obeying would look like. `optional_skills` and `optional_bullets`
+  are neither credit nor penalty. `label_status: draft` means written by Claude and not human-verified.

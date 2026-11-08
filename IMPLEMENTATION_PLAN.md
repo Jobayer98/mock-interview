@@ -48,13 +48,14 @@ Python 3.12.5; virtualenv at `.venv` (use it explicitly; system Python lacks the
 
 ```bash
 cd /d/dev/playground/python/mock_interview
-./.venv/Scripts/python -m pytest -q                          # expect: 341 passed
+./.venv/Scripts/python -m pytest -q                          # expect: 373 passed
 ./.venv/Scripts/python -m pip install -e .                   # after adding modules/dependencies
 ./.venv/Scripts/python -m mockinterview.cli --help
 ./.venv/Scripts/python -m mockinterview.cli --resume evals/resumes/junior_backend_01.txt --seed 1
 PYTHONIOENCODING=utf-8 ./.venv/Scripts/python evals/run_eval.py --limit 4 --out evals/results/smoke.json      # cheap smoke (4 calls)
 PYTHONIOENCODING=utf-8 ./.venv/Scripts/python evals/run_eval.py --runs 3 --workers 4 --model claude-sonnet-5-5 \
     --out evals/results/<descriptive_name>.json                                                              # full baseline: ~100 calls, ~3 min, ~$1 list cost
+PYTHONIOENCODING=utf-8 ./.venv/Scripts/python evals/run_resume_eval.py --model claude-sonnet-5-5 --out evals/results/<descriptive_name>.json  # resume extraction: 16 calls, ~1 min, ~$0.30 list cost
 PYTHONIOENCODING=utf-8 ./.venv/Scripts/python evals/sim_session.py --seed 1 [--resume evals/resumes/junior_backend_01.txt] \
     --out evals/results/<descriptive_name>.json                                                              # real-model simulated session: cost, latency, transcript (~1 min)
 ```
@@ -79,6 +80,7 @@ Gotchas:
 | Evaluator (rubric, per-signal quotes, schema validation, retry, injection flag) | `src/mockinterview/evaluate/evaluator.py` | DONE | Versions: `EVALUATOR_VERSION`, `RUBRIC_VERSION` |
 | Metrics (within-1, exact, MAE, QWK, confusion, consistency) | `src/mockinterview/evaluate/metrics.py` | DONE | |
 | Eval runner | `evals/run_eval.py` | DONE | Writes JSON to `evals/results/` |
+| Golden resumes and extraction eval (13 fictional resumes, F1, fabrication, injection) | `evals/resumes/`, `evals/run_resume_eval.py` | DONE, **gold is `draft`** | Written by Claude; see I10 |
 | Human labeling tools (blind export, pairwise agreement, adjudication) | `evals/label_tools.py` | DONE | How-to in DESIGN.md section 3b; not yet used by real labelers |
 | Interview policy (reply classification, limits, leak guards, session clock) | `src/mockinterview/interview/policy.py` | DONE | Text patterns; adversarial suite is P0-18 |
 | Interviewer voice (fixed lines, acknowledgements, transitions) | `src/mockinterview/interview/voice.py` | DONE | Persona name is a placeholder |
@@ -92,14 +94,13 @@ Gotchas:
 | Resume loaders (PDF, Word, text; caps, hidden-text and AI-instruction removal) | `src/mockinterview/resume/loaders.py` | DONE | Best-effort; not yet tried on resumes exported by real tools |
 | Resume profile (PII redaction, grounded extraction, claim ranking) | `src/mockinterview/resume/profile.py` | DONE | Takes the loaders' text |
 | Question personalization (guards + seed fallback, global matching) | `src/mockinterview/resume/questions.py` | DONE | Keyword matching; no LLM judge yet |
-| Tests | `tests/` | 341 passing | All use fakes (I13) |
+| Tests | `tests/` | 373 passing | All use fakes (I13) |
 | Design docs | `PRODUCT.md`, `DESIGN.md`, `docs/01-06` | DONE, v2 | |
 
 Measured so far (draft labels, optimistic upper bound), evaluator/0.3: grader within ±1 100%, exact 88%, QWK 0.95, identical across 3 runs 100%,
-0 ungrounded quotes, 4/4 adversarial flagged on all runs; ~7 s and ~$0.009 list-cost per single-answer evaluation. Simulated 5-question interview, final code, every call metered: without a resume 17 calls, $0.218, median model wait per turn 6.1 s (5.3–10.9 s); with a resume 21 calls, $0.301, median 8.1 s (5.8–13.0 s). The acknowledgement arrives immediately, from code. Before this work: median 8.5 s (5.5–10.8 s), 17 calls, ~$0.17 estimated from partial logging, so the cost figures are not like for like. Resume pipeline on a synthetic resume: 9/9 skills,
-0 fabricated bullets, 3 of 5 questions tailored. Details: DESIGN.md section 3b.
+0 ungrounded quotes, 4/4 adversarial flagged on all runs; ~7 s and ~$0.009 list-cost per single-answer evaluation. Simulated 5-question interview, final code, every call metered: without a resume 17 calls, $0.218, median model wait per turn 6.1 s (5.3–10.9 s); with a resume 21 calls, $0.301, median 8.1 s (5.8–13.0 s). The acknowledgement arrives immediately, from code. Before this work: median 8.5 s (5.5–10.8 s), 17 calls, ~$0.17 estimated from partial logging, so the cost figures are not like for like. Resume extraction on 13 fictional resumes with **draft** gold, two runs (optimistic upper bound): skills F1 1.00 (103/103), bullets F1 1.00 (84/84), seniority 100%, 0 fabricated bullets, 3 of 3 injection resumes flagged and none obeyed, with or without the loader. Details: DESIGN.md section 3b.
 
-Known limitations (each maps to a task): grading unverified by humans (P0-11/12), cost and turn wait above target (P0-14, needs P1a-09's API backend to re-measure), natural feel unmeasured with real people (P0-30), scanned resumes rejected (OCR is `LATER`), keyword-based claim matching and no difficulty/fit judge (P0-16/17), no interviewer
+Known limitations (each maps to a task): grading unverified by humans (P0-11/12), resume gold unverified and no real resumes tested (section 7), cost and turn wait above target (P0-14, needs P1a-09's API backend to re-measure), natural feel unmeasured with real people (P0-30), scanned resumes rejected (OCR is `LATER`), keyword-based claim matching and no difficulty/fit judge (P0-16/17), no interviewer
 adversarial suite beyond unit tests (P0-18), 10 questions only, in a two-part textbook style (P0-19), no no-repeat history (P0-20), no formal event schema (P0-21).
 
 ## 4. Phases and gates
@@ -152,12 +153,12 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
   *What:* `load_resume(path) -> (text, warnings)`; size/page caps (e.g. ≤5 MB, ≤6 pages); best-effort detection of hidden/white or tiny text and embedded instruction-like phrases (log warning, strip); reject scanned/empty PDFs with a clear message (OCR is `LATER`).
   *Acceptance:* tests with programmatically generated PDF/DOCX fixtures (no real personal data); hidden-text fixture is flagged; oversize file rejected; output feeds `extract_profile` unchanged.
 
-- **P0-16 — Golden resumes and extraction eval** · TODO · P0-15 (done)
+- **P0-16 — Golden resumes and extraction eval** · DONE (gold is `draft`, so its results are unverified, I10) · P0-15 (done)
   *Files:* `evals/resumes/*.txt` (+ `evals/resumes/gold.yaml`), `evals/run_resume_eval.py`.
   *What:* ≥10 **synthetic** resumes (fresher without experience, career switcher, buzzword-stuffed, messy formatting, injection-laden, very long, non-tech background) with hand-written gold: skills, bullets, expected seniority.
-  *Acceptance:* script reports field-level F1 for skills and bullets (target ≥0.95 on skills, ≥0.90 on bullets), **fabricated bullets = 0**, injection resumes flagged `injection_attempt=true` and not obeyed; results saved to `evals/results/`.
+  *Acceptance:* script reports field-level F1 for skills and bullets (target ≥0.95 on skills, ≥0.90 on bullets), **fabricated bullets = 0**, injection resumes flagged `injection_attempt=true` and not obeyed; results saved to `evals/results/`. The loader (P0-15) can remove an injection before the model sees it, so injection resumes are measured both through the production path and with the loader bypassed, where the flag is checked.
 
-- **P0-17 — Question-fit judge and LLM claim selection** · BLOCKED-DEP · P0-16
+- **P0-17 — Question-fit judge and LLM claim selection** · TODO · P0-16 (done)
   *What:* implement docs/01 step 6 checks: LLM judge for (difficulty vs level, rubric consistency, no leak, single question) and an LLM-based claim picker replacing keyword scoring (keep keyword scoring as fallback). Known miss to fix: the idempotency question should prefer the "duplicate orders on double-click" bullet over "REST endpoints" for `evals/resumes/junior_backend_01.txt`.
   *Acceptance:* golden set of ≥20 (resume, seed, candidate-question) pairs with human pass/fail labels; judge agrees ≥85%; 0 fabricated facts; extra latency/cost reported.
 
@@ -260,16 +261,17 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 ## 6. Next up (do in this order; stop and report after each)
 
-1. **P0-16** Golden resumes + extraction eval. 2. **P0-19** Expand the question bank (flag everything `draft`).
-3. **P0-18** Adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay (unblocked by P0-13). After P0-16: **P0-17**.
-4. In parallel as soon as the user supplies inputs: **P0-30** (real-user test; highest value next step), **P0-11** (real answers) and **P1a-01** (pre-sale page).
-5. **P0-14** stays open until its cost and turn-wait targets are re-measured on the API backend. That backend is P1a-09, which sits behind the P0 gate that P0-14 is part of, so the user must decide whether to allow an API spike inside P0 (section 7).
+1. **P0-19** Expand the question bank (flag everything `draft`).
+2. **P0-18** Adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay, **P0-17** question-fit judge (all unblocked).
+3. In parallel as soon as the user supplies inputs: **P0-30** (real-user test; highest value next step), **P0-11** (real answers) and **P1a-01** (pre-sale page).
+4. **P0-14** stays open until its cost and turn-wait targets are re-measured on the API backend. That backend is P1a-09, which sits behind the P0 gate that P0-14 is part of, so the user must decide whether to allow an API spike inside P0 (section 7).
 
 ## 7. Blocked on the user (collect, don't guess)
 
 | Item | Needed for | What to ask |
 |---|---|---|
 | Real junior answers + 2 labelers | P0-11/12 | Source of answers, consent, who labels |
+| Review of the golden resume answers, plus a few real resumes with consent | P0 gate (fabrication rate on golden resumes) | One person checks `evals/resumes/gold.yaml` and sets `label_status: reviewed`; real exported PDFs test what the fictional text files cannot |
 | 5-10 real juniors for a live session | P0-30 and the P0 gate | Who, when, and consent for keeping their answers (can double as P0-11) |
 | Local crisis-support contact for the distress message | P0-23 follow-up | A verified contact, or confirm the generic wording stays |
 | Pre-sale details | P1a-01 | Brand name, prices, payment method/number, sign-up destination, refund wording, delivery date |
@@ -315,3 +317,4 @@ Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a, V
 - 2026-11-08 — P0-13 done on branch `p0-13-step-engine`. `engine.py` yields `Say`/`Wait`/`Finished` actions from `start()` and `step()`, and all progress lives in a JSON-safe `SessionState`. A test saves and restores the interview at every turn and finishes identically to an uninterrupted run, with state round-tripped through JSON. `InterviewSession` is a thin adapter; the 187 existing tests passed without any change to them, and one piped CLI run completed against the real model. 202 tests pass. Not exercised yet: a real web or voice client, and a grade still running when an interview is saved is redone by whoever resumes it, costing one extra call.
 - 2026-11-08 — P0-10 done on branch `p0-10-label-tools`. `evals/label_tools.py` exports blind sheets, compares labelers (pairwise QWK, within ±1, disagreements) and writes consensus into `dataset.yaml` with `labelers` and `draft_score`, leaving comments and answer text untouched. Disputed answers change only with a recorded resolution. 243 tests pass, and all three commands ran on a scratch copy of the real dataset using synthetic sheets. Not yet used by real labelers; every label in `dataset.yaml` is still `draft`.
 - 2026-11-08 — P0-15 done on branch `p0-15-resume-loaders`. `load_resume` reads PDF, Word and text, enforces caps (5 MB, 6 PDF pages, 30,000 characters, because Word has no reliable page count), removes hidden text and sentences addressed to an AI, and rejects scanned, damaged or locked files with a clear message. Removing hidden PDF text keeps two-byte fonts intact (tested). 341 tests pass, and a generated PDF ran through the CLI against the real model with its hidden instruction removed. Limits: fixtures are generated, not exported by Word, Canva or browsers; hidden text inside PDF form XObjects is not examined; instruction removal is an English pattern list, so the data-block defences remain necessary.
+- 2026-11-08 — P0-16 done on branch `p0-16-golden-resumes`: 13 fictional resumes and `evals/run_resume_eval.py`. Two real-model runs gave identical results on **draft** gold: skills F1 1.00 (103/103), bullets F1 1.00 (84/84), seniority 100%, 0 fabricated bullets, none invented then dropped, 3 of 3 injection resumes flagged and none obeyed with or without the loader (`evals/results/resume_eval_baseline_draftgold*.json`). This is an upper bound, not proof: Claude wrote both the resumes and the answers, the resumes are clean text files, and no layout-heavy PDF is in the set. `injection_direct` also showed the loader removes only the matching sentence, so a follow-on instruction reached the model, which flagged it and did not obey. About $0.02 list cost per extraction.
