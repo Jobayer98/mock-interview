@@ -8,16 +8,23 @@ from __future__ import annotations
 import logging
 import math
 import re
+import zipfile
 from collections.abc import Callable
 from dataclasses import dataclass, replace
+from itertools import chain
 from pathlib import Path
 
+from docx import Document
+from docx.oxml.ns import qn
+from docx.text.paragraph import Paragraph
+from docx.text.run import Run
 from pypdf import PasswordType, PdfReader
 from pypdf.generic import NameObject
 
 logger = logging.getLogger(__name__)
 
 MAX_BYTES = 5 * 1024 * 1024
+MAX_UNZIPPED_BYTES = 50 * 1024 * 1024
 MAX_PAGES = 6
 MAX_CHARS = 30_000
 MIN_CHARS = 50
@@ -31,6 +38,8 @@ _TEXT_SHOW = {b"Tj", b"TJ", b"'", b'"'}
 _PATH_BUILDERS = {b"m", b"l", b"c", b"v", b"y", b"re"}
 _PATH_PAINTERS = {b"f", b"F", b"f*", b"B", b"B*", b"b", b"b*"}
 _PATH_ENDERS = _PATH_PAINTERS | {b"S", b"s", b"n"}
+_W_P, _W_R, _W_TEXT_BOX = qn("w:p"), qn("w:r"), qn("w:txbxContent")
+_MC_FALLBACK = "{http://schemas.openxmlformats.org/markup-compatibility/2006}Fallback"
 
 _ZERO_WIDTH = re.compile("[­​-‏‪-‮⁠-⁤﻿]")
 _CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
@@ -216,12 +225,89 @@ def _read_pdf(path: Path) -> tuple[str, list[str]]:
     except ResumeError:
         raise
     except Exception as error:  # a damaged or hostile file can fail anywhere inside the parser
+        logger.warning("resume: PDF parsing failed with %s", type(error).__name__)
         raise ResumeError("Could not read this PDF. It may be damaged. Please try exporting it again.") from error
     warnings = [f"Removed about {hidden_characters} characters of hidden text (invisible, white, tiny or off the page)."] if hidden_characters else []
     return "\n".join(pages), warnings
 
 
-_READERS: dict[str, Callable[[Path], tuple[str, list[str]]]] = {".txt": _read_plain_text, ".pdf": _read_pdf}
+def _font_chain(run: Run, paragraph: Paragraph):
+    """Where a run's formatting can come from, nearest first."""
+    yield run.font
+    if run.style is not None:
+        yield run.style.font
+    style = paragraph.style
+    while style is not None:
+        yield style.font
+        style = style.base_style
+
+
+def _on_coloured_surface(run_element) -> bool:
+    """White text is fine on shading, a highlight, or inside a text box, whose fill we cannot see."""
+    for element in chain([run_element], run_element.iterancestors()):
+        if element.tag == _W_TEXT_BOX:
+            return True
+        properties = [element.find(tag) for tag in (qn("w:rPr"), qn("w:pPr"), qn("w:tcPr"))]
+        for found in filter(lambda p: p is not None, properties):
+            shading = found.find(qn("w:shd"))
+            if found.find(qn("w:highlight")) is not None or (shading is not None and shading.get(qn("w:fill"), "auto").upper() not in ("AUTO", "FFFFFF")):
+                return True
+    return False
+
+
+def _run_is_hidden(run: Run, paragraph: Paragraph) -> bool:
+    size = colour = None
+    for font in _font_chain(run, paragraph):
+        if font.hidden:
+            return True
+        size = size if size is not None else font.size
+        colour = colour if colour is not None else font.color.rgb
+    if size is not None and size.pt < MIN_VISIBLE_FONT_PT:
+        return True
+    return colour is not None and all(channel >= _WHITE * 255 for channel in colour) and not _on_coloured_surface(run._element)
+
+
+def _docx_paragraph_text(element, parent) -> tuple[str, int]:
+    """The visible text of one paragraph, and how many characters were hidden. Nested text-box paragraphs are read on their own turn."""
+    paragraph = Paragraph(element, parent)
+    visible, hidden = [], 0
+    for run_element in element.iter(_W_R):
+        if next(run_element.iterancestors(_W_P)) is not element:
+            continue
+        run = Run(run_element, paragraph)
+        if _run_is_hidden(run, paragraph):
+            hidden += len(run.text)
+        else:
+            visible.append(run.text)
+    return "".join(visible), hidden
+
+
+def _read_docx(path: Path) -> tuple[str, list[str]]:
+    try:
+        with zipfile.ZipFile(path) as archive:
+            if sum(entry.file_size for entry in archive.infolist()) > MAX_UNZIPPED_BYTES:
+                raise ResumeError("This file is too large once opened. Please upload a simpler copy.")
+        document = Document(str(path))
+        # Headers come first: the candidate's name is often there, and redaction looks for it on the first line.
+        parts = [part._element for section in document.sections for part in (section.header, section.footer) if not part.is_linked_to_previous]
+        lines, hidden_characters = [], 0
+        for root in [*parts, document.element.body]:
+            for element in root.iter(_W_P):
+                if any(ancestor.tag == _MC_FALLBACK for ancestor in element.iterancestors()):  # the same text box, saved again for old readers
+                    continue
+                text, hidden = _docx_paragraph_text(element, document)
+                lines.append(text)
+                hidden_characters += hidden
+    except ResumeError:
+        raise
+    except Exception as error:  # a damaged or hostile file can fail anywhere inside the parser
+        logger.warning("resume: Word parsing failed with %s", type(error).__name__)
+        raise ResumeError("Could not read this Word file. It may be damaged. Please try saving it again.") from error
+    warnings = [f"Removed about {hidden_characters} characters of hidden text (hidden, white or tiny)."] if hidden_characters else []
+    return "\n".join(lines), warnings
+
+
+_READERS: dict[str, Callable[[Path], tuple[str, list[str]]]] = {".txt": _read_plain_text, ".pdf": _read_pdf, ".docx": _read_docx}
 
 
 def _finish(text: str, warnings: list[str]) -> tuple[str, list[str]]:
