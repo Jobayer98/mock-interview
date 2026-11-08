@@ -11,7 +11,7 @@ You are continuing work that earlier sessions started. **Do not improvise the ro
 ## Commands (Windows; use the project venv)
 ```bash
 cd /d/dev/playground/python/mock_interview
-./.venv/Scripts/python -m pytest -q          # must stay green (397 tests at last update)
+./.venv/Scripts/python -m pytest -q          # must stay green (400 tests at last update)
 PYTHONIOENCODING=utf-8 ./.venv/Scripts/python evals/run_eval.py --limit 4 --out evals/results/smoke.json   # cheap real-LLM smoke
 ```
 

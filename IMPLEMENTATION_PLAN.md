@@ -48,7 +48,7 @@ Python 3.12.5; virtualenv at `.venv` (use it explicitly; system Python lacks the
 
 ```bash
 cd /d/dev/playground/python/mock_interview
-./.venv/Scripts/python -m pytest -q                          # expect: 397 passed
+./.venv/Scripts/python -m pytest -q                          # expect: 400 passed
 ./.venv/Scripts/python -m pip install -e .                   # after adding modules/dependencies
 ./.venv/Scripts/python -m mockinterview.cli --help
 ./.venv/Scripts/python -m mockinterview.cli --resume evals/resumes/junior_backend_01.txt --seed 1
@@ -95,7 +95,7 @@ Gotchas:
 | Resume profile (PII redaction, grounded extraction, claim ranking) | `src/mockinterview/resume/profile.py` | DONE | Takes the loaders' text |
 | Question personalization (guards + seed fallback, global matching) | `src/mockinterview/resume/questions.py` | DONE | Keyword matching; no LLM judge yet |
 | Live voice agent (LiveKit, developer smoke test) | `src/mockinterview/live/` | Built, **not yet run with real voice** | Uses `claude -p`, so developer-only (I9) |
-| Tests | `tests/` | 397 passing | All use fakes (I13) |
+| Tests | `tests/` | 400 passing | All use fakes (I13) |
 | Design docs | `PRODUCT.md`, `DESIGN.md`, `docs/01-06` | DONE, v2 | |
 
 Measured so far (draft labels, optimistic upper bound), evaluator/0.3: grader within ±1 100%, exact 88%, QWK 0.95, identical across 3 runs 100%,
@@ -336,3 +336,4 @@ Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a + 
 - 2026-11-08 — P0-16 done on branch `p0-16-golden-resumes`: 13 fictional resumes and `evals/run_resume_eval.py`. Two real-model runs gave identical results on **draft** gold: skills F1 1.00 (103/103), bullets F1 1.00 (84/84), seniority 100%, 0 fabricated bullets, none invented then dropped, 3 of 3 injection resumes flagged and none obeyed with or without the loader (`evals/results/resume_eval_baseline_draftgold*.json`). This is an upper bound, not proof: Claude wrote both the resumes and the answers, the resumes are clean text files, and no layout-heavy PDF is in the set. `injection_direct` also showed the loader removes only the matching sentence, so a follow-on instruction reached the model, which flagged it and did not obey. About $0.02 list cost per extraction.
 - 2026-11-08 — User decisions recorded: V1 includes live voice, real juniors test the finished V1 live, `claude -p` through LiveKit comes before the API key, and the pre-sale waits until the app is complete. Added the V1 gate and task P1b-01, and reordered "Next up". The human checks moved from the P0 gate to the V1 gate with their thresholds unchanged.
 - 2026-11-08 — P1b-01 built on branch `p1b-01-livekit-smoke`, not finished. The engine runs inside a LiveKit agent by overriding `llm_node`, each step runs to completion on a worker thread so interruptions cannot corrupt it, and speculative generation is off because each step changes the interview. LiveKit requires an LLM object even when `llm_node` replaces it, so a placeholder is passed. 397 tests pass, including turns through LiveKit's real pipeline in text mode. Not done: any run with real audio, so speech recognition, voices, interruptions and turn timing are all unmeasured.
+- 2026-11-08 — First real voice run of P1b-01 by the user: the worker connected and the agent spoke, but it felt scripted and too fast. The session log showed why: one spoken sentence was cut into two turns after a 0.5 s pause, so a fragment was accepted as the warm-up and the rest as the answer to the first question. Fixes: the turn now ends after 2 s of silence (6 s maximum), slower voice, shorter opening (`voice/0.4`). A second voice run is needed to confirm them. A fixed pause still cuts anyone who stops for longer than 2 s and makes every turn at least 2 s; the semantic turn detector comparison belongs to spike S2.
