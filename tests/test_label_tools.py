@@ -1,5 +1,6 @@
 """Human labeling tools (P0-10). All sheets here are synthetic."""
 import csv
+import json
 import sys
 from pathlib import Path
 
@@ -11,6 +12,7 @@ sys.path.insert(0, str(ROOT / "evals"))
 import label_tools  # noqa: E402
 
 from mockinterview.bank.loader import DATASET_FILE, load_dataset, load_questions, validate_dataset  # noqa: E402
+from mockinterview.evaluate import metrics  # noqa: E402
 
 DATASET = """# Header comment that must survive.
 answers:
@@ -122,3 +124,105 @@ def test_export_command_reports_where_it_wrote(tmp_path, dataset, capsys):
     out = tmp_path / "nested" / "sheet.csv"
     assert label_tools.main(["export", "--out", str(out), "--dataset", str(dataset)]) == 0
     assert out.exists() and "wrote 3 answers" in capsys.readouterr().out
+
+
+# --- import: comparing labelers ---
+
+def sheet(folder, name, scores, encoding="utf-8-sig"):
+    path = folder / f"{name}.csv"
+    lines = ["id,question,rubric_summary,answer,score"] + [f'{item},q,r,"an answer",{score}' for item, score in scores.items()]
+    path.write_bytes(("\r\n".join(lines) + "\r\n").encode(encoding))
+    return path
+
+
+def test_compare_reports_pairwise_agreement(tmp_path, dataset):
+    paths = [sheet(tmp_path, "ana", {"a01": 3, "a02": 2, "a03": 4}), sheet(tmp_path, "rafi", {"a01": 3, "a02": 1, "a03": 2})]
+    report = label_tools.compare_labels(label_tools.read_sheets(paths, dataset), dataset)
+    pair = report["pairs"][0]
+    assert pair["labelers"] == ["ana", "rafi"] and pair["n"] == 3
+    assert pair["within_one"] == pytest.approx(2 / 3) and pair["exact"] == pytest.approx(1 / 3)
+    assert pair["qwk"] == pytest.approx(metrics.quadratic_weighted_kappa([3, 2, 4], [3, 1, 2]))
+
+
+def test_perfect_agreement_has_a_kappa_of_one(tmp_path, dataset):
+    scores = {"a01": 1, "a02": 2, "a03": 4}
+    paths = [sheet(tmp_path, "ana", scores), sheet(tmp_path, "rafi", scores)]
+    report = label_tools.compare_labels(label_tools.read_sheets(paths, dataset), dataset)
+    assert report["pairs"][0]["qwk"] == pytest.approx(1.0) and report["disagreements"] == []
+
+
+def test_every_pair_is_compared(tmp_path, dataset):
+    paths = [sheet(tmp_path, name, {"a01": 3}) for name in ("ana", "rafi", "sumi")]
+    report = label_tools.compare_labels(label_tools.read_sheets(paths, dataset), dataset)
+    assert [p["labelers"] for p in report["pairs"]] == [["ana", "rafi"], ["ana", "sumi"], ["rafi", "sumi"]]
+
+
+def test_disagreements_are_listed_largest_first(tmp_path, dataset):
+    paths = [sheet(tmp_path, "ana", {"a01": 3, "a02": 2, "a03": 4}), sheet(tmp_path, "rafi", {"a01": 2, "a02": 2, "a03": 1})]
+    report = label_tools.compare_labels(label_tools.read_sheets(paths, dataset), dataset)
+    assert [(d["id"], d["spread"]) for d in report["disagreements"]] == [("a03", 3), ("a01", 1)]
+    assert report["disagreements"][0]["scores"] == {"ana": 4, "rafi": 1}
+
+
+def test_a_blank_score_is_reported_and_left_out_of_the_comparison(tmp_path, dataset):
+    paths = [sheet(tmp_path, "ana", {"a01": 3, "a02": 2}), sheet(tmp_path, "rafi", {"a01": 3, "a02": ""})]
+    report = label_tools.compare_labels(label_tools.read_sheets(paths, dataset), dataset)
+    assert report["pairs"][0]["n"] == 1 and report["missing"] == {"rafi": ["a02"]}
+
+
+def test_labelers_with_nothing_in_common_do_not_crash(tmp_path, dataset):
+    paths = [sheet(tmp_path, "ana", {"a01": 3}), sheet(tmp_path, "rafi", {"a02": 2})]
+    assert label_tools.compare_labels(label_tools.read_sheets(paths, dataset), dataset)["pairs"][0] == {
+        "labelers": ["ana", "rafi"], "n": 0, "qwk": None, "within_one": None, "exact": None}
+
+
+def test_excel_style_whole_numbers_are_accepted(tmp_path, dataset):
+    paths = [sheet(tmp_path, "ana", {"a01": "3.0"}), sheet(tmp_path, "rafi", {"a01": 3})]
+    assert label_tools.read_sheets(paths, dataset)["ana"] == {"a01": 3}
+
+
+@pytest.mark.parametrize("encoding", ["utf-8", "utf-8-sig", "cp1252"])
+def test_sheets_saved_by_common_spreadsheet_tools_can_be_read(tmp_path, dataset, encoding):
+    path = tmp_path / "ana.csv"
+    path.write_bytes(f"id,answer,score\r\na01,café answer,3\r\n".encode(encoding))
+    assert label_tools.read_sheets([path, sheet(tmp_path, "rafi", {"a01": 3})], dataset)["ana"] == {"a01": 3}
+
+
+@pytest.mark.parametrize("bad", ["5", "0", "2.5", "good"])
+def test_invalid_scores_name_the_sheet_and_answer(tmp_path, dataset, bad):
+    paths = [sheet(tmp_path, "ana", {"a01": bad}), sheet(tmp_path, "rafi", {"a01": 3})]
+    with pytest.raises(label_tools.SheetError, match=r"ana\.csv, a01"):
+        label_tools.read_sheets(paths, dataset)
+
+
+def test_unusable_sheets_are_rejected(tmp_path, dataset):
+    good = sheet(tmp_path, "rafi", {"a01": 3})
+    with pytest.raises(label_tools.SheetError, match="at least 2"):
+        label_tools.read_sheets([good], dataset)
+    with pytest.raises(label_tools.SheetError, match="unknown answer id"):
+        label_tools.read_sheets([sheet(tmp_path, "ana", {"zzz": 3}), good], dataset)
+    with pytest.raises(label_tools.SheetError, match="rename the file"):
+        label_tools.read_sheets([sheet(tmp_path, "my labels", {"a01": 3}), good], dataset)
+    duplicate = tmp_path / "dup.csv"
+    duplicate.write_text("id,score\na01,3\na01,2\n", encoding="utf-8")
+    with pytest.raises(label_tools.SheetError, match="appears twice"):
+        label_tools.read_sheets([duplicate, good], dataset)
+    no_scores = tmp_path / "bare.csv"
+    no_scores.write_text("id,answer\na01,text\n", encoding="utf-8")
+    with pytest.raises(label_tools.SheetError, match="'id' and 'score'"):
+        label_tools.read_sheets([no_scores, good], dataset)
+
+
+def test_import_command_prints_kappa_and_saves_a_report(tmp_path, dataset, capsys):
+    paths = [sheet(tmp_path, "ana", {"a01": 3, "a02": 1}), sheet(tmp_path, "rafi", {"a01": 2, "a02": 1})]
+    report = tmp_path / "report.json"
+    assert label_tools.main(["import", str(paths[0]), str(paths[1]), "--dataset", str(dataset), "--out", str(report)]) == 0
+    output = capsys.readouterr().out
+    assert "ana vs rafi: n=2" in output and "QWK" in output and "a01 [tech_hashmap]: ana=3  rafi=2" in output
+    assert json.loads(report.read_text(encoding="utf-8"))["pairs"][0]["n"] == 2
+
+
+def test_a_bad_sheet_is_a_clear_error_not_a_traceback(tmp_path, dataset, capsys):
+    good = sheet(tmp_path, "rafi", {"a01": 3})
+    assert label_tools.main(["import", str(good), "--dataset", str(dataset)]) == 2
+    assert "at least 2" in capsys.readouterr().err
