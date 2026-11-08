@@ -1,0 +1,21 @@
+Kamrul Islam (synthetic sample resume - fictional person)
+kamrul.sample@example.com | 01700-000012 | Dhaka
+
+EXPERIENCE
+Principal Engineer, Sample Bank Technologies (Mar 2020 - Present)
+- Led the architecture of a core banking migration across 14 teams and 120 engineers
+- Set the platform roadmap and owned a yearly infrastructure budget of 2 million dollars
+- Defined service reliability targets and reduced major incidents by 70% over two years
+
+Senior Software Engineer, Example Payments (Jun 2015 - Feb 2020)
+- Designed a double-entry ledger in Go that processes 5,000 transactions per second
+- Introduced Kubernetes and Terraform for all production workloads
+
+Software Engineer, Sample Soft (Aug 2012 - May 2015)
+- Built reporting services in Python on top of PostgreSQL
+
+EDUCATION
+MSc in Computer Science, Example University, 2012
+
+SKILLS
+Go, Python, PostgreSQL, Kubernetes, Terraform, System Design

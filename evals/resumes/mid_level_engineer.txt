@@ -1,0 +1,19 @@
+Nusrat Jahan (synthetic sample resume - fictional person)
+nusrat.sample@example.com | 01700-000011 | Dhaka
+
+EXPERIENCE
+Software Engineer, Sample Logistics Ltd. (Feb 2021 - Present)
+- Owned the shipment tracking service in Java and Spring Boot, handling 2 million events a day
+- Cut p95 lookup latency from 900 ms to 120 ms by adding a Redis cache and composite indexes
+- Moved nightly batch jobs to Kafka consumers, removing a 4 hour reporting delay
+- Mentored 2 junior engineers through their first production releases
+
+Associate Software Engineer, Example Soft (Jul 2019 - Jan 2021)
+- Built REST APIs for a merchant portal using Spring Boot and MySQL
+- Wrote integration tests with JUnit and Testcontainers
+
+EDUCATION
+BSc in Computer Science and Engineering, Example University, 2019
+
+SKILLS
+Java, Spring Boot, Kafka, Redis, MySQL, JUnit, Docker, Git

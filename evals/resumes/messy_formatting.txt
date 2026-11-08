@@ -1,0 +1,18 @@
+MEHNAZ   CHOWDHURY   (synthetic sample resume - fictional person)
+mehnaz.sample@example.com / +880-1700-000004
+
+
+WORK
+    Software Trainee @ Sample Digital  --  2024 to 2025
+  *  worked on the   admin dashboard using Laravel and MySQL
+•fixed a bug where invoices
+     were printed twice
+  ->  wrote PHP scripts to import   product data from Excel files
+1) Reviewed pull requests for two interns
+
+EDU: B.Sc. CSE, Sample Institute of Technology (2024)
+
+tech : php , laravel,mysql ;  javascript/ jquery ;Git
+PROJECT --- Shop Inventory
+ added barcode scanning to a shop inventory web app
+ - generated monthly sales reports as PDF

@@ -1,0 +1,98 @@
+Zahid Mahmud (synthetic sample resume - fictional person)
+zahid.sample@example.com | +880 1700-000009 | Dhaka | linkedin.com/in/zahid-sample
+
+SUMMARY
+Backend engineer with six years of experience building payment, logistics and reporting systems for companies in Bangladesh. I enjoy turning unclear business problems into small, well-tested services, and I care about operating what I build. Outside work I teach a weekend class for students who want to move from coursework to real software projects, and I contribute small fixes to open source libraries that my teams depend on. I am looking for a role where I can keep shipping code while helping newer engineers grow.
+
+EXPERIENCE
+
+Software Engineer II, Sample Pay Ltd. (Jan 2023 - Present)
+- Designed the settlement service in Go that reconciles 400,000 mobile wallet transactions a day
+- Replaced a nightly reconciliation script with an event-driven pipeline on Kafka
+- Reduced failed settlement retries by 45% by adding idempotency keys to every payout request
+- Wrote the runbook for payout incidents and led the on-call rotation for a team of 6
+- Added Prometheus metrics and Grafana dashboards for settlement lag and retry rates
+- Partnered with the compliance team to produce monthly audit exports from PostgreSQL
+- Reviewed design documents for two new services and mentored one junior engineer
+
+Software Engineer, Example Logistics (Mar 2021 - Dec 2022)
+- Built a route assignment API in Python and FastAPI used by 300 delivery agents
+- Modelled deliveries, agents and hubs in PostgreSQL and tuned the slowest reporting queries
+- Added Redis caching for hub lookups, cutting average response time from 600 ms to 140 ms
+- Containerized four services with Docker and moved them to a managed Kubernetes cluster
+- Introduced contract tests between the mobile app and the backend to catch breaking changes
+- Automated database migrations in the GitHub Actions deployment pipeline
+- Investigated a recurring duplicate delivery bug and fixed a race condition in the assignment worker
+
+Associate Software Engineer, Sample Soft (Jul 2019 - Feb 2021)
+- Maintained a Django reporting portal used by the finance department of a retail chain
+- Wrote Celery tasks that generate daily sales summaries and email them to managers
+- Fixed slow admin pages by removing repeated database queries from list views
+- Added pytest coverage for the invoice calculation module, from 35% to 80%
+- Migrated static assets to a CDN, which removed most page load complaints from branch offices
+
+Part-time Trainee Developer, Sample Digital Agency (Jan 2018 - Jun 2019)
+- Built landing pages for retail clients using HTML, CSS and jQuery
+- Wrote PHP plugins that synced product prices between a shop website and a warehouse spreadsheet
+- Set up nightly backups for twelve client databases and documented the restore steps
+- Tracked client bug reports and reduced the open backlog from 90 tickets to 15
+
+PROJECTS
+
+School Attendance Tool (volunteer project)
+- Built an SMS attendance tool for a rural school using a simple Python web service
+- Trained four teachers to use the tool and collected their feedback every month
+- Added a monthly attendance report that the head teacher prints for the district office
+
+Open Payroll (personal project)
+- Built a small payroll calculator in Python that handles Bangladesh income tax slabs
+- Published the tax slab tables as a versioned JSON file so others can reuse them
+
+Campus Jobs Board (weekend class project)
+- Guided eight students through building a jobs board in Django and PostgreSQL
+- Wrote the starter templates and the code review checklist used by the class
+
+EDUCATION
+BSc in Computer Science and Engineering, Example University, 2019
+Higher Secondary Certificate, Sample College, 2014
+Secondary School Certificate, Sample High School, 2012
+
+SKILLS
+Go, Python, FastAPI, Django, Celery, PostgreSQL, Redis, Kafka, Docker, Kubernetes, GitHub Actions, Prometheus, Grafana, pytest
+
+COURSES AND CERTIFICATES
+Designing Data-Intensive Applications reading group, Sample Tech Community, 2024, a twelve week study circle covering storage engines, replication, partitioning, transactions and stream processing, with short written summaries from each participant at the end of every chapter.
+Introduction to Site Reliability, Example Online Academy, 2023, an eight week course covering service level objectives, error budgets, incident response and blameless postmortems, finished with a capstone exercise on a simulated outage.
+Cloud Architecture Fundamentals, Example Online Academy, 2022, a six week survey of networking, identity, storage and compute services, with a final design review of a sample e-commerce system.
+Database Performance Workshop, Sample Tech Community, 2021, a two day in-person workshop on query planning, indexing strategies, connection pooling and reading execution plans on realistic data sets.
+Technical Writing for Engineers, Example Online Academy, 2020, a four week course on writing design documents, runbooks and clear pull request descriptions, including peer review of each assignment.
+Agile Project Delivery, Sample Training Centre, 2019, a three day course on planning, estimation and retrospectives.
+Secure Coding Practices, Sample Training Centre, 2019, a two day course on input validation, authentication mistakes, and handling secrets in application code.
+
+TALKS AND WRITING
+Spoke at a local developer meetup in 2024 about how a small team introduced idempotency keys without pausing feature work, with notes on what went wrong during the first rollout and how the team recovered from it.
+Spoke at a university career day in 2023 about the difference between coursework and production software, focusing on testing, code review and on-call responsibilities.
+Wrote a blog series in 2022 on debugging slow PostgreSQL queries, aimed at developers who have never read an execution plan, with worked examples from an anonymized delivery data set.
+Wrote a short guide in 2021 for new graduates on how to read an unfamiliar codebase during the first month of a job.
+
+VOLUNTEERING
+Weekend instructor, Sample Code Circle, since 2021. I run a small free class for second and third year students who have learned programming syntax but have not yet worked on a shared codebase. Each term we pick one realistic application, split it into small pieces of work, and practise branching, code review, writing tests and reading error logs together. Former students have told me that the code review sessions were the part they found most useful when they started their first jobs.
+Organizer, Sample Developer Meetup, 2022 to 2024. I helped arrange speakers and venues for a monthly meetup of around sixty people, kept the event calendar up to date, and looked after a small shared budget from local sponsors. I also wrote short summaries of each talk for members who could not attend, and maintained the list of open questions that the group wanted future speakers to cover.
+Mentor, Sample Women in Tech Programme, 2023. I met with two early-career engineers every two weeks for six months to talk through interview preparation, how to ask for feedback, and how to choose a first specialization.
+
+SELECTED READING
+I keep a public list of books and long articles that have changed how I work, including writing on distributed systems, on the history of software failures, on technical leadership for people who still write code, and on how to explain difficult ideas to readers who are new to a subject. I update it a few times a year with a short note on why each item was useful.
+
+AWARDS
+Employee of the Quarter, Example Logistics, 2022, for leading the fix of a long-standing duplicate delivery problem across the mobile and backend teams.
+Second place, Sample Inter-University Programming Contest, 2018, as part of a three-person team.
+Dean's List, Example University, 2017 and 2018.
+
+LANGUAGES
+English (professional working proficiency), Bangla (native), Hindi (conversational).
+
+INTERESTS
+Long-distance cycling around Dhaka on weekends, volunteering with a neighbourhood literacy programme, reading about the history of computing, and playing chess with friends at a local club on Friday evenings.
+
+REFERENCES
+Available on request from former managers at Sample Pay Ltd. and Example Logistics.

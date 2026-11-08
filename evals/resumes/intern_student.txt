@@ -1,0 +1,18 @@
+Mahin Rahman (synthetic sample resume - fictional person)
+mahin.sample@example.com | 01700-000010 | Dhaka
+
+EDUCATION
+BSc in Computer Science (third year), Example University, expected 2027
+
+EXPERIENCE
+Mobile Development Intern, Sample Labs (Jun 2025 - Aug 2025)
+- Added dark mode to an Android app written in Kotlin
+- Replaced hard-coded strings with resource files to prepare for translation
+
+PROJECTS
+Expense Splitter
+- Built an Android app with Jetpack Compose that splits shared expenses between friends
+- Stored groups and payments locally in a Room database
+
+SKILLS
+Kotlin, Android, Jetpack Compose, Room, Git

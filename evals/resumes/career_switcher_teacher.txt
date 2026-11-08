@@ -1,0 +1,27 @@
+Tanvir Hasan (synthetic sample resume - fictional person)
+tanvir.sample@example.com | +880 1700-000002 | Sylhet
+
+PROFILE
+High school mathematics teacher moving into software development after completing a one-year part-time bootcamp.
+
+EXPERIENCE
+Mathematics Teacher, Sample Model School (Jan 2018 - Present)
+- Taught algebra and statistics to classes of 40 students in grades 9 and 10
+- Built a Google Sheets tracker that flagged students falling behind each month
+- Mentored 3 junior teachers on lesson planning
+
+PROJECTS
+Quiz Maker (bootcamp capstone)
+- Developed a Django web app that lets teachers create and grade multiple choice quizzes
+- Modelled quizzes and attempts in PostgreSQL and wrote the reporting queries
+- Deployed the app on a small VPS using Nginx and Gunicorn
+
+Fee Reminder Script
+- Wrote a Python script that reads a CSV of unpaid fees and emails parents a reminder
+
+EDUCATION
+MSc in Mathematics, Example University, 2017
+Full Stack Web Development Bootcamp, Sample Code Academy, 2024
+
+TECHNICAL SKILLS
+Python, Django, PostgreSQL, HTML, CSS, Git, Nginx

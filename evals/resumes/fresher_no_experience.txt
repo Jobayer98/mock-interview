@@ -1,0 +1,24 @@
+Nadia Karim (synthetic sample resume - fictional person)
+nadia.sample@example.com | 01700-000001 | Chattogram
+
+SUMMARY
+Final-year computer science student looking for a first software role.
+
+EDUCATION
+BSc in Computer Science, Sample Institute of Technology, expected 2026, CGPA 3.62
+
+PROJECTS
+Library Seat Finder (course project)
+- Built a React front end that shows free library seats on a floor map
+- Wrote a Node.js and Express API backed by MongoDB to store seat check-ins
+- Added JWT login so only students can reserve a seat
+
+Bus Tracker (final-year project)
+- Collected GPS pings from a Flutter app and stored them in Firebase
+- Drew live bus positions on a map with the Google Maps API
+
+SKILLS
+JavaScript, React, Node.js, Express, MongoDB, Flutter, Firebase, C++
+
+ACTIVITIES
+Volunteer at the university programming club
