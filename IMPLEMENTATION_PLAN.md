@@ -48,7 +48,7 @@ Python 3.12.5; virtualenv at `.venv` (use it explicitly; system Python lacks the
 
 ```bash
 cd /d/dev/playground/python/mock_interview
-./.venv/Scripts/python -m pytest -q                          # expect: 412 passed
+./.venv/Scripts/python -m pytest -q                          # expect: 423 passed
 ./.venv/Scripts/python -m pip install -e .                   # after adding modules/dependencies
 ./.venv/Scripts/python -m mockinterview.cli --help
 ./.venv/Scripts/python -m mockinterview.cli --resume evals/resumes/junior_backend_01.txt --seed 1
@@ -94,8 +94,8 @@ Gotchas:
 | Resume loaders (PDF, Word, text; caps, hidden-text and AI-instruction removal) | `src/mockinterview/resume/loaders.py` | DONE | Best-effort; not yet tried on resumes exported by real tools |
 | Resume profile (PII redaction, grounded extraction, claim ranking) | `src/mockinterview/resume/profile.py` | DONE | Takes the loaders' text |
 | Question personalization (guards + seed fallback, global matching) | `src/mockinterview/resume/questions.py` | DONE | Keyword matching; no LLM judge yet |
-| Live voice agent (LiveKit, developer smoke test) | `src/mockinterview/live/` | Built, **not yet run with real voice** | Uses `claude -p`, so developer-only (I9) |
-| Tests | `tests/` | 412 passing | All use fakes (I13) |
+| Live voice agent (LiveKit, developer smoke test) | `src/mockinterview/live/` | Works end to end by voice; slow on `claude -p` | Uses `claude -p`, so developer-only (I9) |
+| Tests | `tests/` | 423 passing | All use fakes (I13) |
 | Design docs | `PRODUCT.md`, `DESIGN.md`, `docs/01-06` | DONE, v2 | |
 
 Measured so far (draft labels, optimistic upper bound), evaluator/0.3: grader within ±1 100%, exact 88%, QWK 0.95, identical across 3 runs 100%,
@@ -256,7 +256,7 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 ### V1 live mode (moved forward by user decision 2026-11-08)
 
-- **P1b-01 — LiveKit smoke test with `claude -p`** · TODO: the agent is built and passes tests through LiveKit's pipeline in text mode; **the one real voice run is still to do** and needs LiveKit credentials as environment variables · P0-13 (done)
+- **P1b-01 — LiveKit smoke test with `claude -p`** · DONE (one full 9-minute voice interview completed on 2026-11-08) · P0-13 (done)
   *Files:* `src/mockinterview/live/agent.py`, `live/bridge.py`, `tests/test_live_agent.py`, `tests/test_live_livekit.py`; optional dependency group `live` in `pyproject.toml`.
   *Run:* `./.venv/Scripts/python -m mockinterview.live.agent dev`, then join the room from a LiveKit test page. Set `MOCKINTERVIEW_RESUME` to tailor questions. The session and turn timings save to `data/sessions/live_*.json`.
   *What:* run the step engine inside a LiveKit voice agent by overriding `llm_node`, so `engine.step()` replaces the built-in LLM. Say actions go to text-to-speech, with the acknowledgement flushed early. Speech-to-text and text-to-speech come from LiveKit Inference for this test. `claude -p` stays behind the existing `LLM` protocol. Developer use only (I9): real juniors must use the API backend.
@@ -271,12 +271,11 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 ## 6. Next up (do in this order; stop and report after each)
 
-1. **P1b-01** LiveKit smoke test with `claude -p`.
-2. **P1a-09** `AnthropicLLM` backend with the user's API key, then re-measure **P0-14** on it.
-3. Expand the rest of V1 with the user before coding it: browser join page, live agent on the API backend, speech vendor choice, consent screen (P1a-03, P1a-04, P1a-06, P1a-08, P1b spikes).
-4. Alongside these: **P0-19** expand the question bank (flag everything `draft`), **P0-18** adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay, **P0-17** question-fit judge.
-5. When V1 can run live: **P0-30** (real juniors, live mode), which also supplies **P0-11** and then **P0-12**.
-6. When the app is complete: **P1a-01** (pre-sale page).
+1. **P1a-09** `AnthropicLLM` backend with the user's API key, then re-measure **P0-14** on it.
+2. Expand the rest of V1 with the user before coding it: browser join page, live agent on the API backend, speech vendor choice, consent screen (P1a-03, P1a-04, P1a-06, P1a-08, P1b spikes, including speech recognition of technical terms).
+3. Alongside these: **P0-19** expand the question bank (flag everything `draft`), **P0-18** adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay, **P0-17** question-fit judge.
+4. When V1 can run live: **P0-30** (real juniors, live mode), which also supplies **P0-11** and then **P0-12**.
+5. When the app is complete: **P1a-01** (pre-sale page).
 
 ## 7. Blocked on the user (collect, don't guess)
 
@@ -339,3 +338,4 @@ Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a + 
 - 2026-11-08 — P1b-01 built on branch `p1b-01-livekit-smoke`, not finished. The engine runs inside a LiveKit agent by overriding `llm_node`, each step runs to completion on a worker thread so interruptions cannot corrupt it, and speculative generation is off because each step changes the interview. LiveKit requires an LLM object even when `llm_node` replaces it, so a placeholder is passed. 397 tests pass, including turns through LiveKit's real pipeline in text mode. Not done: any run with real audio, so speech recognition, voices, interruptions and turn timing are all unmeasured.
 - 2026-11-08 — First real voice run of P1b-01 by the user: the worker connected and the agent spoke, but it felt scripted and too fast. The session log showed why: one spoken sentence was cut into two turns after a 0.5 s pause, so a fragment was accepted as the warm-up and the rest as the answer to the first question. Fixes: the turn now ends after 2 s of silence (6 s maximum), slower voice, shorter opening (`voice/0.4`). A second voice run is needed to confirm them. A fixed pause still cuts anyone who stops for longer than 2 s and makes every turn at least 2 s; the semantic turn detector comparison belongs to spike S2.
 - 2026-11-08 — Second voice run: the `slow` speed setting slurred the voice and the user left before answering, so the 2 s turn fix is still unconfirmed. Speed is now 0.9 on Cartesia's 0.6-1.5 scale, with English set. The interviewer now stays in character as a real interviewer (`voice/0.5`, `interviewer/0.6`, I18 rewritten), with the AI disclosure moved before the session and an honest answer if the candidate asks.
+- 2026-11-08 — P1b-01 done: the developer completed a full voice interview (9 min, 5 questions, 12 turn calls, 5 grades, $0.18 list cost). First audio after speech: median 1.6 s, which is the instant acknowledgement. The substantive reply took about 6 s more per turn because of `claude -p`. The real transcript exposed bugs fixed the same day: words spoken during the wait were taken as new answers and used up unheard follow-ups, and spoken phrasing such as "Could you please repeat?" or "Sorry. Skip it. I don't know." was graded as an answer. Still open from that session: technical words misheard by speech recognition (for example "idempotent"), and a fallback follow-up that confused the candidate. One developer session is not evidence of natural feel.
