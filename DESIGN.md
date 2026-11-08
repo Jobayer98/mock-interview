@@ -85,6 +85,8 @@ Evaluator/0.3 on draft labels: ±1 100%, exact 88%, QWK 0.95, consistency 100% (
 
 **Step engine (2026-11-08)**: `interview/engine.py` replaces the blocking loop. `start()` and `step(reply)` yield `Say`, `Wait` and `Finished` actions as they become ready, so an acknowledgement goes out before any slow call. `SessionState` is plain JSON-safe data, including wording draws, session clock start and the list of grading jobs, so a web request or voice turn can save and resume an interview. `InterviewSession` remains as the blocking adapter for the CLI, tests and simulations.
 
+**Resume loaders (P0-15)**: `resume/loaders.py`, `load_resume(path) -> (text, warnings)` for PDF, Word and text. A resume is untrusted, so text a reader could not see is removed before any model call. In a PDF that means invisible, tiny, off the page, or white with nothing dark behind it; white text on a banner or image is kept because designer templates use it. In Word it means hidden, tiny or white runs, including through styles, unless shaded. Sentences addressed to an AI are removed from every format. Known limits: scanned files are rejected rather than read (OCR is later), and hidden text inside PDF form XObjects is not examined.
+
 **Human labeling how-to (P0-10)**: `evals/label_tools.py`. Run commands from the project root with `./.venv/Scripts/python`.
 1. `evals/label_tools.py export` writes `evals/label_sheet.csv`, a blind sheet of every answer still marked `draft`, with no draft scores or reasons.
 2. Give each labeler their own copy named after them, for example `evals/labels/alice.csv`, because the file name becomes the labeler's name. They work separately and score 1-4 in the last column, leaving blank anything they cannot judge.

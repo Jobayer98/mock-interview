@@ -48,7 +48,7 @@ Python 3.12.5; virtualenv at `.venv` (use it explicitly; system Python lacks the
 
 ```bash
 cd /d/dev/playground/python/mock_interview
-./.venv/Scripts/python -m pytest -q                          # expect: 243 passed
+./.venv/Scripts/python -m pytest -q                          # expect: 341 passed
 ./.venv/Scripts/python -m pip install -e .                   # after adding modules/dependencies
 ./.venv/Scripts/python -m mockinterview.cli --help
 ./.venv/Scripts/python -m mockinterview.cli --resume evals/resumes/junior_backend_01.txt --seed 1
@@ -66,7 +66,7 @@ Gotchas:
 - The `cost_usd` reported by the CLI is **list-price equivalent**, useful for planning even though the subscription is flat-rate.
 - Use `/d/...` paths in Bash and `D:\...` in PowerShell/tools. `python` on PATH is the system interpreter; scripts needing the package use `.venv`.
 - Scratch scripts go in the session scratchpad, not in the repo. `data/sessions/*.json` and `evals/results/*.json` are generated outputs (keep baselines, delete throwaway smoke files when done).
-- Dependencies are declared in `pyproject.toml` (`pyyaml`; dev: `pytest`). Add new ones there and tell the user why.
+- Dependencies are declared in `pyproject.toml` (`pyyaml`, `pypdf`, `python-docx`; dev: `pytest`). Add new ones there and tell the user why.
 
 ## 3. Current state snapshot (2026-11-08)
 
@@ -89,16 +89,17 @@ Gotchas:
 | Scorecard (deterministic text, next actions, level bands) | `src/mockinterview/report/scorecard.py` | DONE | No LLM coaching yet |
 | Simulated session (real model, pre-written replies) | `evals/sim_session.py` | DONE | Cost, latency and wording only; not evidence of follow-up relevance |
 | Text CLI | `src/mockinterview/cli.py` | DONE | `--resume` supported |
-| Resume profile (PII redaction, grounded extraction, claim ranking) | `src/mockinterview/resume/profile.py` | DONE | Text input only |
+| Resume loaders (PDF, Word, text; caps, hidden-text and AI-instruction removal) | `src/mockinterview/resume/loaders.py` | DONE | Best-effort; not yet tried on resumes exported by real tools |
+| Resume profile (PII redaction, grounded extraction, claim ranking) | `src/mockinterview/resume/profile.py` | DONE | Takes the loaders' text |
 | Question personalization (guards + seed fallback, global matching) | `src/mockinterview/resume/questions.py` | DONE | Keyword matching; no LLM judge yet |
-| Tests | `tests/` | 243 passing | All use fakes (I13) |
+| Tests | `tests/` | 341 passing | All use fakes (I13) |
 | Design docs | `PRODUCT.md`, `DESIGN.md`, `docs/01-06` | DONE, v2 | |
 
 Measured so far (draft labels, optimistic upper bound), evaluator/0.3: grader within ±1 100%, exact 88%, QWK 0.95, identical across 3 runs 100%,
 0 ungrounded quotes, 4/4 adversarial flagged on all runs; ~7 s and ~$0.009 list-cost per single-answer evaluation. Simulated 5-question interview, final code, every call metered: without a resume 17 calls, $0.218, median model wait per turn 6.1 s (5.3–10.9 s); with a resume 21 calls, $0.301, median 8.1 s (5.8–13.0 s). The acknowledgement arrives immediately, from code. Before this work: median 8.5 s (5.5–10.8 s), 17 calls, ~$0.17 estimated from partial logging, so the cost figures are not like for like. Resume pipeline on a synthetic resume: 9/9 skills,
 0 fabricated bullets, 3 of 5 questions tailored. Details: DESIGN.md section 3b.
 
-Known limitations (each maps to a task): grading unverified by humans (P0-11/12), cost and turn wait above target (P0-14, needs P1a-09's API backend to re-measure), natural feel unmeasured with real people (P0-30), text resumes only (P0-15), keyword-based claim matching and no difficulty/fit judge (P0-16/17), no interviewer
+Known limitations (each maps to a task): grading unverified by humans (P0-11/12), cost and turn wait above target (P0-14, needs P1a-09's API backend to re-measure), natural feel unmeasured with real people (P0-30), scanned resumes rejected (OCR is `LATER`), keyword-based claim matching and no difficulty/fit judge (P0-16/17), no interviewer
 adversarial suite beyond unit tests (P0-18), 10 questions only, in a two-part textbook style (P0-19), no no-repeat history (P0-20), no formal event schema (P0-21).
 
 ## 4. Phases and gates
@@ -146,12 +147,12 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
   *What:* (a) record `cost_usd`, `latency_s`, `model` and purpose for **every** LLM call, retries included, in the session record with a per-session summary; (b) one light-model call per candidate answer returns `{move, utterance}`, and code enforces the limits (I7); (c) the strong evaluator runs once when a question closes, in the background so the next question is not delayed, on the candidate's turns with follow-up text as context (I5) and quotes verified against candidate text only. Keep `LLM.complete` unchanged (`model` param already exists; streaming and caching are P1a-09).
   *Acceptance:* `evals/sim_session.py` shows total list-cost ≤ $0.10 without a resume, reports the with-resume figure, and shows median turn wait < 6 s and below the 2026-11-08 baseline (median 8.5 s, 17 calls, ~$0.17 estimated); final-score agreement with the baseline run ≥ 90% within ±1 on the dataset (rerun `run_eval.py`, new results file). Record before/after in DESIGN.md.
 
-- **P0-15 — Resume loaders (PDF, DOCX, text)** · TODO · none
+- **P0-15 — Resume loaders (PDF, DOCX, text)** · DONE · none
   *Files:* new `src/mockinterview/resume/loaders.py`, `tests/test_loaders.py`; add `pypdf` and `python-docx` to `pyproject.toml`.
   *What:* `load_resume(path) -> (text, warnings)`; size/page caps (e.g. ≤5 MB, ≤6 pages); best-effort detection of hidden/white or tiny text and embedded instruction-like phrases (log warning, strip); reject scanned/empty PDFs with a clear message (OCR is `LATER`).
   *Acceptance:* tests with programmatically generated PDF/DOCX fixtures (no real personal data); hidden-text fixture is flagged; oversize file rejected; output feeds `extract_profile` unchanged.
 
-- **P0-16 — Golden resumes and extraction eval** · TODO · P0-15 helpful
+- **P0-16 — Golden resumes and extraction eval** · TODO · P0-15 (done)
   *Files:* `evals/resumes/*.txt` (+ `evals/resumes/gold.yaml`), `evals/run_resume_eval.py`.
   *What:* ≥10 **synthetic** resumes (fresher without experience, career switcher, buzzword-stuffed, messy formatting, injection-laden, very long, non-tech background) with hand-written gold: skills, bullets, expected seniority.
   *Acceptance:* script reports field-level F1 for skills and bullets (target ≥0.95 on skills, ≥0.90 on bullets), **fabricated bullets = 0**, injection resumes flagged `injection_attempt=true` and not obeyed; results saved to `evals/results/`.
@@ -259,10 +260,10 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 ## 6. Next up (do in this order; stop and report after each)
 
-1. **P0-15** Resume loaders (PDF/DOCX). 2. **P0-16** Golden resumes + extraction eval. 3. **P0-19** Expand the question bank (flag everything `draft`).
-4. **P0-18** Adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay (unblocked by P0-13). After P0-16: **P0-17**.
-5. In parallel as soon as the user supplies inputs: **P0-30** (real-user test; highest value next step), **P0-11** (real answers) and **P1a-01** (pre-sale page).
-6. **P0-14** stays open until its cost and turn-wait targets are re-measured on the API backend. That backend is P1a-09, which sits behind the P0 gate that P0-14 is part of, so the user must decide whether to allow an API spike inside P0 (section 7).
+1. **P0-16** Golden resumes + extraction eval. 2. **P0-19** Expand the question bank (flag everything `draft`).
+3. **P0-18** Adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay (unblocked by P0-13). After P0-16: **P0-17**.
+4. In parallel as soon as the user supplies inputs: **P0-30** (real-user test; highest value next step), **P0-11** (real answers) and **P1a-01** (pre-sale page).
+5. **P0-14** stays open until its cost and turn-wait targets are re-measured on the API backend. That backend is P1a-09, which sits behind the P0 gate that P0-14 is part of, so the user must decide whether to allow an API spike inside P0 (section 7).
 
 ## 7. Blocked on the user (collect, don't guess)
 
@@ -313,3 +314,4 @@ Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a, V
 - 2026-11-08 — Real CLI run verified end to end against the real model (`python -m mockinterview.cli`, piped answers). Project put under local git on `main`, with real candidates' data ignored.
 - 2026-11-08 — P0-13 done on branch `p0-13-step-engine`. `engine.py` yields `Say`/`Wait`/`Finished` actions from `start()` and `step()`, and all progress lives in a JSON-safe `SessionState`. A test saves and restores the interview at every turn and finishes identically to an uninterrupted run, with state round-tripped through JSON. `InterviewSession` is a thin adapter; the 187 existing tests passed without any change to them, and one piped CLI run completed against the real model. 202 tests pass. Not exercised yet: a real web or voice client, and a grade still running when an interview is saved is redone by whoever resumes it, costing one extra call.
 - 2026-11-08 — P0-10 done on branch `p0-10-label-tools`. `evals/label_tools.py` exports blind sheets, compares labelers (pairwise QWK, within ±1, disagreements) and writes consensus into `dataset.yaml` with `labelers` and `draft_score`, leaving comments and answer text untouched. Disputed answers change only with a recorded resolution. 243 tests pass, and all three commands ran on a scratch copy of the real dataset using synthetic sheets. Not yet used by real labelers; every label in `dataset.yaml` is still `draft`.
+- 2026-11-08 — P0-15 done on branch `p0-15-resume-loaders`. `load_resume` reads PDF, Word and text, enforces caps (5 MB, 6 PDF pages, 30,000 characters, because Word has no reliable page count), removes hidden text and sentences addressed to an AI, and rejects scanned, damaged or locked files with a clear message. Removing hidden PDF text keeps two-byte fonts intact (tested). 341 tests pass, and a generated PDF ran through the CLI against the real model with its hidden instruction removed. Limits: fixtures are generated, not exported by Word, Canva or browsers; hidden text inside PDF form XObjects is not examined; instruction removal is an English pattern list, so the data-block defences remain necessary.
