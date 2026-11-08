@@ -107,9 +107,10 @@ adversarial suite beyond unit tests (P0-18), 10 questions only, in a two-part te
 
 | Phase | Goal | Entry | Exit gate (all must hold) |
 |---|---|---|---|
-| **P0 Brain (text)** | Evaluator + resume-driven question engine proven offline | now | Grader within ±1 of **human** labels on ≥80% and identical-run consistency ≥90% on a reviewed set with ≥30 real answers; follow-up relevance ≥80% (human review of ≥20 transcripts, P0-30) with 0 leaked answers on the adversarial suite; fabrication rate 0 on golden resumes; per-session list-cost ≤ $0.10; median model wait per turn < 6 s on the dev backend; ≥5 real juniors complete a session and ≥70% rate "felt like a real interviewer" 4/5 or higher (P0-30) |
-| **P1a Revenue MVP** (text + voice-note, BDT passes) | Prove people will pay; cheap modes | Pre-sale (P1a-01) can start immediately and in parallel with P0. Product build starts when P0 exit gate passes **or** the user explicitly accepts the risk | ≥30 paying founding members; free->paid ≥4%; scorecards rated fair by ≥80% of users; cost per pass within docs/05 plan |
-| **P1b Live voice (premium, capped)** | Realtime LiveKit interview | P1a gate met + user approves spend | voice-to-voice p50 ≤1.0 s / p95 ≤2.0 s; ≥70% testers say natural; live-voice list-cost ≤ ~$1.00/session; accent WER acceptable |
+| **P0 Brain (text)** | Evaluator + resume-driven question engine proven offline | now | 0 leaked answers on the adversarial suite; fabrication rate 0 on golden resumes. The checks that need real people or the API backend moved to the V1 gate below (decision 2026-11-08); they were moved, not dropped |
+| **V1 Live release** (the P0 brain, a browser join page, live voice through LiveKit, the API backend) | Real juniors can take a live interview | User accepted the risk of building before the human checks (2026-11-08) | Grader within ±1 of **human** labels on ≥80% and identical-run consistency ≥90% on a reviewed set with ≥30 real answers; follow-up relevance ≥80% (human review of ≥20 transcripts, P0-30); ≥5 real juniors complete a live session and ≥70% rate "felt like a real interviewer" 4/5 or higher (P0-30); voice-to-voice p50 ≤1.0 s / p95 ≤2.0 s; live-voice list-cost ≤ ~$1.00/session; text-session list-cost ≤ $0.10 and median model wait per turn < 6 s (P0-14) |
+| **P1a Revenue MVP** (text + voice-note, BDT passes) | Prove people will pay; cheap modes | User accepted the risk on 2026-11-08, so the build does not wait for the human checks. Pre-sale (P1a-01) happens when the app is complete | ≥30 paying founding members; free->paid ≥4%; scorecards rated fair by ≥80% of users; cost per pass within docs/05 plan |
+| **P1b Live voice (premium, capped)** | Realtime LiveKit interview | Moved into V1 by user decision 2026-11-08; no longer waits for the P1a gate | voice-to-voice p50 ≤1.0 s / p95 ≤2.0 s; ≥70% testers say natural; live-voice list-cost ≤ ~$1.00/session; accent WER acceptable |
 | **P2 Progress and coaching** | Skill model, improvement plan, drills | P1a live with users | ≥40% do a 2nd session in 7 days; measurable gain on matched competencies after 3 sessions |
 | **P3 Breadth** | Mid/senior, coding, system design, more roles | P2 gate | New role live in <2 weeks of content work with evals passing |
 | **P4 Video/avatar (optional)** | Presence | P1b stable | A/B shows lift above cost; still no emotion inference |
@@ -222,8 +223,8 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
   *What:* a disconnect after an answer still grades it; separate short timeout for turn calls; a session time budget that stops follow-ups near the end and wraps up gracefully (injectable clock).
   *Acceptance:* disconnect test keeps the score; clock tests cover follow-up cut-off and early wrap-up.
 
-- **P0-30 — Interviewer review kit and real-user test** · BLOCKED-USER (tooling can start) · P0-22…P0-25
-  *What:* export anonymized transcripts into a review sheet for follow-up relevance and a 1-5 "felt like a real interviewer" rating; run ≥5 real juniors; their consented answers also feed P0-11.
+- **P0-30 — Interviewer review kit and real-user test** · BLOCKED-DEP (needs V1 running live; the review tooling can start) · P0-22…P0-25, V1 live
+  *What:* export anonymized transcripts into a review sheet for follow-up relevance and a 1-5 "felt like a real interviewer" rating; run ≥5 real juniors in live mode (decision 2026-11-08); their consented answers also feed P0-11.
   *Needs from user:* 5-10 junior candidates and who will sit with them.
   *Acceptance:* ≥20 transcripts reviewed, relevance and naturalness reported against the P0 gate.
 
@@ -237,7 +238,7 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 ### Phase P1a (expand into sub-tasks only when its entry condition is met, except P1a-01 which can start now)
 
-- **P1a-01 — Pre-sale landing page (static)** · BLOCKED-USER · none
+- **P1a-01 — Pre-sale landing page (static)** · LATER (when the app is complete, user decision 2026-11-08; then BLOCKED-USER on the inputs below) · none
   *Needs from user (ask in ONE message):* brand/product name; the plans and prices to test (defaults in docs/05: Sprint ~৳799, Voice Pro ~৳1,999; confirm or change); how people pay (bKash/Nagad number and account name, or a gateway link) and who verifies; where sign-ups go (email/Google Form/WhatsApp number); delivery date promise; refund wording; any real testimonials (none may be invented).
   *Files:* `web/presale/index.html` (+ `README.md` on hosting).
   *Acceptance:* English only, mobile-first (checked at 375 px), no fabricated testimonials/statistics/endorsements, clear "founding member pre-order" framing with refund terms and what is/ isn't included (only features on the P1a task list; docs/05's Sprint currently lists live voice, replay, progress and an improvement plan, which are P1b/P2), no third-party trackers without a consent notice. **Do not publish or host it without the user's explicit approval (I16).**
@@ -249,8 +250,15 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 - **P1a-06 — STT accent bake-off (spike S4)** · BLOCKED-USER · needs ≥50 consented clips of Bangladeshi-accented English tech answers; vendors to compare listed in docs/06 section 1; output `docs/07-spike-stt.md`
 - **P1a-07 — Passes, manual payment verification, entitlements, usage ledger, abuse limits** · LATER · pre-sale result
 - **P1a-08 — Consent/privacy flows (separate cross-border consent, deletion, retention)** · BLOCKED-USER (needs lawyer-approved text)
-- **P1a-09 — `AnthropicLLM` backend (API key from env var), prompt caching, streaming** · BLOCKED-USER (API key and budget). Includes extending the `LLM` protocol (streaming, message history, cache control, token usage, per-call deadline), which today cannot express these.
+- **P1a-09 — `AnthropicLLM` backend (API key from env var), prompt caching, streaming** · TODO after P1b-01 (the user has a key; a monthly budget is still to be set). Includes extending the `LLM` protocol (streaming, message history, cache control, token usage, per-call deadline), which today cannot express these.
 - **P1a-10 — Observability: per-call cost/latency table, spend caps, dashboard** · LATER
+
+### V1 live mode (moved forward by user decision 2026-11-08)
+
+- **P1b-01 — LiveKit smoke test with `claude -p`** · TODO (the agent can be built with fakes; a real run needs LiveKit credentials as environment variables) · P0-13 (done)
+  *Files:* new `src/mockinterview/live/agent.py`, `tests/test_live_agent.py`; add the LiveKit Agents package as an optional dependency and tell the user why.
+  *What:* run the step engine inside a LiveKit voice agent by overriding `llm_node`, so `engine.step()` replaces the built-in LLM. Say actions go to text-to-speech, with the acknowledgement flushed early. Speech-to-text and text-to-speech come from LiveKit Inference for this test. `claude -p` stays behind the existing `LLM` protocol. Developer use only (I9): real juniors must use the API backend.
+  *Acceptance:* tests with fakes cover turn handling and interruption of a turn; one full interview by voice completes through a LiveKit test page; every turn logs time from end of speech to first audio. This proves the wiring only. Natural feel cannot be judged on it, because `claude -p` measured about 6 s per turn against a 1 s target.
 
 ### Later phases (epics only; expand with the user before any coding)
 
@@ -261,10 +269,12 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 ## 6. Next up (do in this order; stop and report after each)
 
-1. **P0-19** Expand the question bank (flag everything `draft`).
-2. **P0-18** Adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay, **P0-17** question-fit judge (all unblocked).
-3. In parallel as soon as the user supplies inputs: **P0-30** (real-user test; highest value next step), **P0-11** (real answers) and **P1a-01** (pre-sale page).
-4. **P0-14** stays open until its cost and turn-wait targets are re-measured on the API backend. That backend is P1a-09, which sits behind the P0 gate that P0-14 is part of, so the user must decide whether to allow an API spike inside P0 (section 7).
+1. **P1b-01** LiveKit smoke test with `claude -p`.
+2. **P1a-09** `AnthropicLLM` backend with the user's API key, then re-measure **P0-14** on it.
+3. Expand the rest of V1 with the user before coding it: browser join page, live agent on the API backend, speech vendor choice, consent screen (P1a-03, P1a-04, P1a-06, P1a-08, P1b spikes).
+4. Alongside these: **P0-19** expand the question bank (flag everything `draft`), **P0-18** adversarial/safety suite, **P0-20** no-repeat history, **P0-21** event schema and replay, **P0-17** question-fit judge.
+5. When V1 can run live: **P0-30** (real juniors, live mode), which also supplies **P0-11** and then **P0-12**.
+6. When the app is complete: **P1a-01** (pre-sale page).
 
 ## 7. Blocked on the user (collect, don't guess)
 
@@ -272,10 +282,11 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 |---|---|---|
 | Real junior answers + 2 labelers | P0-11/12 | Source of answers, consent, who labels |
 | Review of the golden resume answers, plus a few real resumes with consent | P0 gate (fabrication rate on golden resumes) | One person checks `evals/resumes/gold.yaml` and sets `label_status: reviewed`; real exported PDFs test what the fictional text files cannot |
-| 5-10 real juniors for a live session | P0-30 and the P0 gate | Who, when, and consent for keeping their answers (can double as P0-11) |
+| 5-10 real juniors for a live session, once V1 can run live | P0-30 and the V1 gate | Who, when, and consent for keeping their answers (can double as P0-11) |
 | Local crisis-support contact for the distress message | P0-23 follow-up | A verified contact, or confirm the generic wording stays |
-| Pre-sale details | P1a-01 | Brand name, prices, payment method/number, sign-up destination, refund wording, delivery date |
-| Anthropic API key + monthly budget | P1a-09, and closing P0-14's cost gate | Provide via environment variable only; never paste into files. Decide whether an API-backend spike may run inside P0, since the P0 gate cannot be measured fairly through `claude -p`. LiveKit (P1b) does not remove this need: its Claude plugin requires `ANTHROPIC_API_KEY` |
+| Pre-sale details, when the app is complete | P1a-01 | Brand name, prices, payment method/number, sign-up destination, refund wording, delivery date |
+| LiveKit project credentials | P1b-01 | `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET` as environment variables only; never paste them into files |
+| Monthly API budget (the user has an Anthropic key) | P1a-09, and closing P0-14's cost gate | Set the key as an environment variable only; never paste it into files. LiveKit does not remove this need: its Claude plugin requires `ANTHROPIC_API_KEY` |
 | Audio clips with consent | P1a-06 | ≥50 clips of Bangladeshi-accented English answers |
 | Roles after junior software engineer; roles to prioritize for Bangladeshi employers | P3, content | Which roles/companies |
 | Registered business / merchant accounts; lawyer; team size and weekly hours | P1a-07/08, planning | Yes/no and timelines |
@@ -293,8 +304,11 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 | 2026-11-08 | Plan-before-implementation, plan must let any session continue without mistakes | User | This file + `CLAUDE.md` |
 | 2026-11-08 | Adopt the architecture review: natural-interview and trust tasks P0-22 to P0-32 go first; I4 and I5 widened; I17 and I18 added | User ("update my plan then implement one by one"; rule changes confirmed explicitly) | Section 5 tasks, section 6 order |
 | 2026-11-08 | Project is under local git | User | Real candidates' data is git-ignored; nothing is pushed anywhere without approval (I16) |
+| 2026-11-08 | V1 includes live voice through LiveKit, and real juniors test the finished V1 in live mode | User | The checks that need real people move from the P0 gate to a new V1 gate; the risk of building before them is accepted |
+| 2026-11-08 | Try `claude -p` through LiveKit first, then switch to the API key | User | P1b-01 comes first; `claude -p` stays developer-only (I9), so real juniors use the API |
+| 2026-11-08 | Pre-sale happens when the app is complete | User | P1a-01 moves to the end, so there is no proof of paying demand before the build |
 
-Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a, V2 = P1b + P2, V3 = P3 onward; V1 is text-first; the interviewer is neutral but friendly (persona name "Alex" is a placeholder constant in `interview/voice.py`); FX 122 BDT/USD, 2.5% gateway fee, per-mode session costs (docs/05), vendor latency/price claims (docs/02, 04), Bangladesh data-protection details (docs/06).
+Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a + live voice from P1b, V2 = P2, V3 = P3 onward; the interviewer is neutral but friendly (persona name "Alex" is a placeholder constant in `interview/voice.py`); FX 122 BDT/USD, 2.5% gateway fee, per-mode session costs (docs/05), vendor latency/price claims (docs/02, 04), Bangladesh data-protection details (docs/06).
 
 ## 9. Definition of done (checklist for every task)
 
@@ -318,3 +332,4 @@ Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a, V
 - 2026-11-08 — P0-10 done on branch `p0-10-label-tools`. `evals/label_tools.py` exports blind sheets, compares labelers (pairwise QWK, within ±1, disagreements) and writes consensus into `dataset.yaml` with `labelers` and `draft_score`, leaving comments and answer text untouched. Disputed answers change only with a recorded resolution. 243 tests pass, and all three commands ran on a scratch copy of the real dataset using synthetic sheets. Not yet used by real labelers; every label in `dataset.yaml` is still `draft`.
 - 2026-11-08 — P0-15 done on branch `p0-15-resume-loaders`. `load_resume` reads PDF, Word and text, enforces caps (5 MB, 6 PDF pages, 30,000 characters, because Word has no reliable page count), removes hidden text and sentences addressed to an AI, and rejects scanned, damaged or locked files with a clear message. Removing hidden PDF text keeps two-byte fonts intact (tested). 341 tests pass, and a generated PDF ran through the CLI against the real model with its hidden instruction removed. Limits: fixtures are generated, not exported by Word, Canva or browsers; hidden text inside PDF form XObjects is not examined; instruction removal is an English pattern list, so the data-block defences remain necessary.
 - 2026-11-08 — P0-16 done on branch `p0-16-golden-resumes`: 13 fictional resumes and `evals/run_resume_eval.py`. Two real-model runs gave identical results on **draft** gold: skills F1 1.00 (103/103), bullets F1 1.00 (84/84), seniority 100%, 0 fabricated bullets, none invented then dropped, 3 of 3 injection resumes flagged and none obeyed with or without the loader (`evals/results/resume_eval_baseline_draftgold*.json`). This is an upper bound, not proof: Claude wrote both the resumes and the answers, the resumes are clean text files, and no layout-heavy PDF is in the set. `injection_direct` also showed the loader removes only the matching sentence, so a follow-on instruction reached the model, which flagged it and did not obey. About $0.02 list cost per extraction.
+- 2026-11-08 — User decisions recorded: V1 includes live voice, real juniors test the finished V1 live, `claude -p` through LiveKit comes before the API key, and the pre-sale waits until the app is complete. Added the V1 gate and task P1b-01, and reordered "Next up". The human checks moved from the P0 gate to the V1 gate with their thresholds unchanged.
