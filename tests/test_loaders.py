@@ -157,6 +157,10 @@ def test_cli_reads_a_resume_through_the_loader_and_reports_what_it_removed(tmp_p
     assert llm.prompts and not [p for p in llm.prompts if "previous instructions" in p]
 
 
+def test_package_logs_stay_off_the_terminal_unless_an_application_asks():
+    assert any(isinstance(handler, logging.NullHandler) for handler in logging.getLogger("mockinterview").handlers)
+
+
 def test_cli_explains_an_unusable_resume_and_makes_no_model_call(tmp_path, monkeypatch, capsys):
     llm = Profile()
     assert run_cli(monkeypatch, llm, text_file(tmp_path, BODY, name="resume.doc")) == 2
