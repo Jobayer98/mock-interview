@@ -48,7 +48,7 @@ Python 3.12.5; virtualenv at `.venv` (use it explicitly; system Python lacks the
 
 ```bash
 cd /d/dev/playground/python/mock_interview
-./.venv/Scripts/python -m pytest -q                          # expect: 373 passed
+./.venv/Scripts/python -m pytest -q                          # expect: 397 passed
 ./.venv/Scripts/python -m pip install -e .                   # after adding modules/dependencies
 ./.venv/Scripts/python -m mockinterview.cli --help
 ./.venv/Scripts/python -m mockinterview.cli --resume evals/resumes/junior_backend_01.txt --seed 1
@@ -67,7 +67,7 @@ Gotchas:
 - The `cost_usd` reported by the CLI is **list-price equivalent**, useful for planning even though the subscription is flat-rate.
 - Use `/d/...` paths in Bash and `D:\...` in PowerShell/tools. `python` on PATH is the system interpreter; scripts needing the package use `.venv`.
 - Scratch scripts go in the session scratchpad, not in the repo. `data/sessions/*.json` and `evals/results/*.json` are generated outputs (keep baselines, delete throwaway smoke files when done).
-- Dependencies are declared in `pyproject.toml` (`pyyaml`, `pypdf`, `python-docx`; dev: `pytest`). Add new ones there and tell the user why.
+- Dependencies are declared in `pyproject.toml` (`pyyaml`, `pypdf`, `python-docx`; dev: `pytest`; live: `livekit-agents[silero]`). LiveKit's tests skip themselves if the `live` group is not installed. Add new ones there and tell the user why.
 
 ## 3. Current state snapshot (2026-11-08)
 
@@ -94,7 +94,8 @@ Gotchas:
 | Resume loaders (PDF, Word, text; caps, hidden-text and AI-instruction removal) | `src/mockinterview/resume/loaders.py` | DONE | Best-effort; not yet tried on resumes exported by real tools |
 | Resume profile (PII redaction, grounded extraction, claim ranking) | `src/mockinterview/resume/profile.py` | DONE | Takes the loaders' text |
 | Question personalization (guards + seed fallback, global matching) | `src/mockinterview/resume/questions.py` | DONE | Keyword matching; no LLM judge yet |
-| Tests | `tests/` | 373 passing | All use fakes (I13) |
+| Live voice agent (LiveKit, developer smoke test) | `src/mockinterview/live/` | Built, **not yet run with real voice** | Uses `claude -p`, so developer-only (I9) |
+| Tests | `tests/` | 397 passing | All use fakes (I13) |
 | Design docs | `PRODUCT.md`, `DESIGN.md`, `docs/01-06` | DONE, v2 | |
 
 Measured so far (draft labels, optimistic upper bound), evaluator/0.3: grader within ±1 100%, exact 88%, QWK 0.95, identical across 3 runs 100%,
@@ -255,8 +256,9 @@ Format: **ID — title** · status · depends. *Files* · *Acceptance* (objectiv
 
 ### V1 live mode (moved forward by user decision 2026-11-08)
 
-- **P1b-01 — LiveKit smoke test with `claude -p`** · TODO (the agent can be built with fakes; a real run needs LiveKit credentials as environment variables) · P0-13 (done)
-  *Files:* new `src/mockinterview/live/agent.py`, `tests/test_live_agent.py`; add the LiveKit Agents package as an optional dependency and tell the user why.
+- **P1b-01 — LiveKit smoke test with `claude -p`** · TODO: the agent is built and passes tests through LiveKit's pipeline in text mode; **the one real voice run is still to do** and needs LiveKit credentials as environment variables · P0-13 (done)
+  *Files:* `src/mockinterview/live/agent.py`, `live/bridge.py`, `tests/test_live_agent.py`, `tests/test_live_livekit.py`; optional dependency group `live` in `pyproject.toml`.
+  *Run:* `./.venv/Scripts/python -m mockinterview.live.agent dev`, then join the room from a LiveKit test page. Set `MOCKINTERVIEW_RESUME` to tailor questions. The session and turn timings save to `data/sessions/live_*.json`.
   *What:* run the step engine inside a LiveKit voice agent by overriding `llm_node`, so `engine.step()` replaces the built-in LLM. Say actions go to text-to-speech, with the acknowledgement flushed early. Speech-to-text and text-to-speech come from LiveKit Inference for this test. `claude -p` stays behind the existing `LLM` protocol. Developer use only (I9): real juniors must use the API backend.
   *Acceptance:* tests with fakes cover turn handling and interruption of a turn; one full interview by voice completes through a LiveKit test page; every turn logs time from end of speech to first audio. This proves the wiring only. Natural feel cannot be judged on it, because `claude -p` measured about 6 s per turn against a 1 s target.
 
@@ -333,3 +335,4 @@ Assumptions that are **not** decisions (verify before relying): V1 = P0 + P1a + 
 - 2026-11-08 — P0-15 done on branch `p0-15-resume-loaders`. `load_resume` reads PDF, Word and text, enforces caps (5 MB, 6 PDF pages, 30,000 characters, because Word has no reliable page count), removes hidden text and sentences addressed to an AI, and rejects scanned, damaged or locked files with a clear message. Removing hidden PDF text keeps two-byte fonts intact (tested). 341 tests pass, and a generated PDF ran through the CLI against the real model with its hidden instruction removed. Limits: fixtures are generated, not exported by Word, Canva or browsers; hidden text inside PDF form XObjects is not examined; instruction removal is an English pattern list, so the data-block defences remain necessary.
 - 2026-11-08 — P0-16 done on branch `p0-16-golden-resumes`: 13 fictional resumes and `evals/run_resume_eval.py`. Two real-model runs gave identical results on **draft** gold: skills F1 1.00 (103/103), bullets F1 1.00 (84/84), seniority 100%, 0 fabricated bullets, none invented then dropped, 3 of 3 injection resumes flagged and none obeyed with or without the loader (`evals/results/resume_eval_baseline_draftgold*.json`). This is an upper bound, not proof: Claude wrote both the resumes and the answers, the resumes are clean text files, and no layout-heavy PDF is in the set. `injection_direct` also showed the loader removes only the matching sentence, so a follow-on instruction reached the model, which flagged it and did not obey. About $0.02 list cost per extraction.
 - 2026-11-08 — User decisions recorded: V1 includes live voice, real juniors test the finished V1 live, `claude -p` through LiveKit comes before the API key, and the pre-sale waits until the app is complete. Added the V1 gate and task P1b-01, and reordered "Next up". The human checks moved from the P0 gate to the V1 gate with their thresholds unchanged.
+- 2026-11-08 — P1b-01 built on branch `p1b-01-livekit-smoke`, not finished. The engine runs inside a LiveKit agent by overriding `llm_node`, each step runs to completion on a worker thread so interruptions cannot corrupt it, and speculative generation is off because each step changes the interview. LiveKit requires an LLM object even when `llm_node` replaces it, so a placeholder is passed. 397 tests pass, including turns through LiveKit's real pipeline in text mode. Not done: any run with real audio, so speech recognition, voices, interruptions and turn timing are all unmeasured.
