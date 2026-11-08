@@ -70,7 +70,7 @@ class LiveInterview:
     async def close(self) -> dict | None:
         """The candidate has gone: finish grading what they answered. Safe to call more than once."""
         await self._finish_running_step()
-        if self.result is None:
+        if self.result is None and self._engine.state.phase != "new":
             queue = self._start_step(None)
             while await queue.get() is not None:
                 pass

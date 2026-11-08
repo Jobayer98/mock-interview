@@ -152,6 +152,11 @@ def test_closing_twice_is_safe():
     assert asyncio.run(run()) == (True, 1)
 
 
+def test_closing_before_the_interview_began_does_nothing():
+    live, _ = interview(Fake())
+    assert asyncio.run(live.close()) is None
+
+
 def test_a_stop_request_ends_the_interview():
     async def run():
         live, _ = interview(Fake(), questions=(HASH, TESTS))
