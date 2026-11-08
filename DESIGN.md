@@ -83,6 +83,8 @@ Next: LLM-based claim selection, difficulty/rubric-fit judge, PDF/DOCX input, us
 An intermediate run with the shorter turn prompt, before follow-up hints and memory were added, measured 5.4 s and $0.18, so the richer prompt cost about 0.7 s and $0.04. About 220 output tokens per turn are hidden reasoning that `--effort` and `MAX_THINKING_TOKENS` did not reduce, and the CLI reports nearly identical prices for Haiku 5.5 and Sonnet 5.5 on a trivial call, so model tiering saves little money here. Re-measure on the API backend before tuning further.
 Evaluator/0.3 on draft labels: ±1 100%, exact 88%, QWK 0.95, consistency 100% (optimistic; labels unverified). Simulated replies are pre-written, so none of this is evidence of follow-up relevance.
 
+**Step engine (2026-11-08)**: `interview/engine.py` replaces the blocking loop. `start()` and `step(reply)` yield `Say`, `Wait` and `Finished` actions as they become ready, so an acknowledgement goes out before any slow call. `SessionState` is plain JSON-safe data, including wording draws, session clock start and the list of grading jobs, so a web request or voice turn can save and resume an interview. `InterviewSession` remains as the blocking adapter for the CLI, tests and simulations.
+
 ## 4. Decision gate
 
 **If v1 passes:** grow bank to ~50 -> adaptive difficulty -> cross-session progress ->
