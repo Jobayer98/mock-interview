@@ -16,7 +16,7 @@ _DONT_KNOW = re.compile(
     re.IGNORECASE,
 )
 _REPEAT = re.compile(
-    r"\b(repeat (that|the question|it|yourself)|can you repeat|say (that|it) again|come again|what was the question|"
+    r"\b(repeat (that|the question|it|yourself)|(can|could|would) you (please )?repeat|please repeat|say (that|it) again|come again|what was the question|"
     r"(didn't|did not|couldn't|could not) (catch|hear) (that|it|the question|you)|one more time)\b"
     r"|^(pardon|sorry|what|huh|excuse me)$",
     re.IGNORECASE,
@@ -28,6 +28,8 @@ _CLARIFY = re.compile(
     r"|\b(didn't|did not|don't|do not) understand( the question| that| you| your question| what you (mean|are asking))?$",
     re.IGNORECASE,
 )
+_DID_NOT_UNDERSTAND = re.compile(r"\b(didn't|did not|don't|do not) understand\b", re.IGNORECASE)
+_POLITE_NOISE = re.compile(r"^(sorry|okay|ok|yes|yeah|please|um+|uh+)$", re.IGNORECASE)
 _THINKING = re.compile(
     r"^(let me (think|see)( about (it|that)| for a (second|sec|moment|minute))?|give me a (second|sec|moment|minute)|hold on|wait|thinking|"
     r"(one|just a) (second|sec|moment|minute)|hmm+)( please)?$",
@@ -82,6 +84,15 @@ META_REPLY = (
 )
 
 
+def _declined_in_parts(text: str) -> str | None:
+    """Spoken refusals come in pieces, like "Sorry. Skip it. I don't know." Every piece has to be a refusal or polite noise."""
+    parts = [part.strip() for part in re.split(r"[.!?,;\u2026]+", text) if part.strip()]
+    kinds = ["skip" if _SKIP.match(part) else "dont_know" if _DONT_KNOW.match(part) else None for part in parts if not _POLITE_NOISE.match(part)]
+    if not kinds or None in kinds:
+        return None
+    return "skip" if "skip" in kinds else "dont_know"
+
+
 def classify_reply(text: str) -> str:
     """Classify what the candidate wrote (never how they sound; I2). Only 'answer' goes on to an LLM.
 
@@ -101,11 +112,13 @@ def classify_reply(text: str) -> str:
         return "skip"
     if _DONT_KNOW.match(core):
         return "dont_know"
+    if words <= 10 and (declined := _declined_in_parts(normal)):
+        return declined
     if words <= 16 and _IDENTITY.search(core):
         return "identity"
     if words <= 16 and _REPEAT.search(core):
         return "repeat"
-    if words <= 20 and _CLARIFY.search(core):
+    if (words <= 20 and _CLARIFY.search(core)) or (words <= 12 and _DID_NOT_UNDERSTAND.search(core)):
         return "clarify"
     if _THINKING.match(core):
         return "thinking"

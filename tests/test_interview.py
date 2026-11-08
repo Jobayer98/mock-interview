@@ -98,6 +98,11 @@ def test_plan_shape_and_determinism():
     ("I want to kill myself", "crisis"),
     ("Are you a real person?", "identity"), ("Am I talking to a bot?", "identity"), ("Is this a mock interview?", "identity"), ("Are you AI?", "identity"),
     ("Let's stop here", "stop"),
+    # Phrasings from a real spoken session.
+    ("Sorry. I did not understand. Please... Could you please repeat?", "repeat"), ("Sorry. I did not understand your question.", "clarify"),
+    ("Sorry. Skip it. I don't know.", "skip"), ("Okay. I don't know.", "dont_know"), ("Sorry, I did not understand.", "clarify"),
+    ("I don't know. I have not enough knowledge about that topic, but I searched the web.", "answer"),
+    ("And yeah,", "answer"), ("Yes, sorry, I tried that.", "answer"),
     ("A bot is a program that runs tasks automatically for users on chat platforms and handles lots of requests every day.", "answer"),
     ("A dictionary uses hashing for O(1) lookup, and I'd use it for counting words.", "answer"),
     # Real answers that contain the phrases above.
