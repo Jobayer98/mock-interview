@@ -2,6 +2,7 @@ import io as io_module
 import json
 import re
 import threading
+from dataclasses import asdict
 
 import pytest
 
@@ -192,6 +193,19 @@ def test_acknowledgements_do_not_repeat_back_to_back():
     phrasing = voice.Phrasing(seed=3)
     picks = [phrasing.acknowledgement() for _ in range(60)]
     assert all(a != b for a, b in zip(picks, picks[1:]))
+
+
+def test_phrasing_is_plain_data_and_resumes_with_the_same_wording():
+    phrasing = voice.Phrasing(seed=5)
+    phrasing.acknowledgement(), phrasing.transition("start", "technical")
+    saved = json.loads(json.dumps(asdict(phrasing)))
+    resumed = voice.Phrasing(**saved)
+    assert [phrasing.acknowledgement() for _ in range(10)] == [resumed.acknowledgement() for _ in range(10)]
+    assert phrasing.transition("technical", "technical") == resumed.transition("technical", "technical")
+
+
+def test_phrasing_without_a_seed_picks_one():
+    assert isinstance(voice.Phrasing().seed, int)
 
 
 def test_warmup_is_ungraded_and_never_reaches_the_grader():

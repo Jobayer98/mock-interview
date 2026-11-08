@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import random
 import re
+from dataclasses import dataclass, field
 
 VOICE_VERSION = "voice/0.3"
 PERSONA_NAME = "Alex"  # placeholder persona; see IMPLEMENTATION_PLAN.md section 8
@@ -80,25 +81,37 @@ def has_no_questions(reply: str) -> bool:
     return "?" not in cleaned and len(cleaned.split()) <= 8 and bool(_NO_QUESTIONS.match(cleaned))
 
 
+@dataclass
 class Phrasing:
-    """Picks acknowledgements and transitions with no immediate repeat. Seeded so sessions and tests are reproducible."""
+    """Picks acknowledgements and transitions with no immediate repeat.
 
-    def __init__(self, seed: int | None = None):
-        self._rng = random.Random(seed)
-        self._last_ack: str | None = None
-        self._used_transitions: list[str] = []
+    Every field is plain data and each pick comes from the seed and a draw counter, so a saved interview resumes with the same wording.
+    """
+
+    seed: int | None = None
+    draws: int = 0
+    last_ack: str | None = None
+    used_transitions: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if self.seed is None:
+            self.seed = random.randrange(2**32)
+
+    def _rng(self) -> random.Random:
+        self.draws += 1
+        return random.Random(f"{self.seed}:{self.draws}")
 
     def acknowledgement(self) -> str:
-        choice = self._rng.choice([a for a in ACKNOWLEDGEMENTS if a != self._last_ack])
-        self._last_ack = choice
+        choice = self._rng().choice([a for a in ACKNOWLEDGEMENTS if a != self.last_ack])
+        self.last_ack = choice
         return choice
 
     def no_problem(self) -> str:
-        return self._rng.choice(NO_PROBLEM)
+        return self._rng().choice(NO_PROBLEM)
 
     def transition(self, previous_type: str, next_type: str, *, is_last: bool = False) -> str:
         options = TRANSITIONS.get((previous_type, next_type), ("Let's move on.",))
-        fresh = [t for t in options if t not in self._used_transitions] or list(options)
-        choice = self._rng.choice(fresh)
-        self._used_transitions.append(choice)
+        fresh = [t for t in options if t not in self.used_transitions] or list(options)
+        choice = self._rng().choice(fresh)
+        self.used_transitions.append(choice)
         return f"{choice} {LAST_QUESTION_CUE}" if is_last else choice
