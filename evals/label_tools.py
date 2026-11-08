@@ -2,6 +2,7 @@
 
     python evals/label_tools.py export
     python evals/label_tools.py import evals/labels/alice.csv evals/labels/bob.csv
+    python evals/label_tools.py adjudicate evals/labels/alice.csv evals/labels/bob.csv [--resolved evals/labels/resolved.csv]
 
 Sheets never contain draft scores or reasons, so labelers stay independent of the Claude-written drafts (I10).
 Filled sheets can hold real candidates' answers, so they stay out of git.
@@ -9,13 +10,17 @@ Filled sheets can hold real candidates' answers, so they stay out of git.
 from __future__ import annotations
 
 import argparse
+import copy
 import csv
 import io
 import json
 import re
 import sys
+from collections import Counter
 from itertools import combinations
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -28,6 +33,7 @@ DEFAULT_SHEET = ROOT / "evals" / "label_sheet.csv"
 MIN_LABELERS = 2
 LABELER_NAME = re.compile(r"^[A-Za-z0-9_-]+$")
 _FORMULA_STARTS = ("=", "+", "-", "@")
+_ITEM_START = re.compile(r"^(\s*)- id:\s*(\S+)\s*$")
 
 
 class SheetError(ValueError):
@@ -162,6 +168,110 @@ def _cmd_import(args: argparse.Namespace) -> int:
     return 0
 
 
+def consensus(scores: dict[str, int]) -> int | None:
+    """The score more than half the labelers gave. Two labelers must therefore match exactly, and nothing is ever averaged."""
+    score, votes = Counter(scores.values()).most_common(1)[0]
+    return score if votes * 2 > len(scores) else None
+
+
+def _edited_item(block: list[str], indent: str, newline: str, update: dict, draft_score: int | None) -> list[str]:
+    block = list(block)
+
+    def position(key: str) -> int | None:
+        prefix = f"{indent}{key}:"  # answer text is indented deeper, so words inside it cannot match
+        return next((i for i, line in enumerate(block) if line.startswith(prefix)), None)
+
+    def put(key: str, value, after: str) -> None:
+        line, at = f"{indent}{key}: {value}{newline}", position(key)
+        if at is not None:
+            block[at] = line
+            return
+        anchor = position(after)
+        if anchor is None:
+            raise SheetError(f"dataset item has no {after!r} line: {block[0].strip()}")
+        block.insert(anchor + 1, line)
+
+    put("score", update["score"], after="question_id")
+    if draft_score is not None:
+        put("draft_score", draft_score, after="score")
+    put("label_status", "reviewed", after="score")
+    put("labelers", json.dumps(update["labelers"]), after="label_status")
+    return block
+
+
+def _rewrite(text: str, document: dict, updates: dict[str, dict]) -> str:
+    """Change only the lines that must change, so comments and folded answers survive, then prove the result means what was intended."""
+    newline = "\r\n" if "\r\n" in text else "\n"
+    by_id = {answer["id"]: answer for answer in document["answers"]}
+    lines = text.splitlines(keepends=True)
+    found = [(i, m) for i, line in enumerate(lines) if (m := _ITEM_START.match(line)) and m.group(2) in by_id]
+    item_indent = found[0][1].group(1) if found else ""
+    starts = [(i, m) for i, m in found if m.group(1) == item_indent]
+    for position, (start, match) in reversed(list(enumerate(starts))):
+        item = match.group(2)
+        if item in updates:
+            end = starts[position + 1][0] if position + 1 < len(starts) else len(lines)
+            draft_score = by_id[item]["score"] if by_id[item]["label_status"] == "draft" else None
+            lines[start:end] = _edited_item(lines[start:end], item_indent + "  ", newline, updates[item], draft_score)
+    result = "".join(lines)
+
+    expected = copy.deepcopy(document)
+    for answer in expected["answers"]:
+        if answer["id"] in updates:
+            if answer["label_status"] == "draft":
+                answer["draft_score"] = answer["score"]
+            answer.update(score=updates[answer["id"]]["score"], label_status="reviewed", labelers=updates[answer["id"]]["labelers"])
+    if yaml.safe_load(result) != expected:
+        raise SheetError("the dataset could not be updated safely, so nothing was written")
+    return result
+
+
+def adjudicate(sheets: dict[str, dict[str, int]], dataset: Path = DATASET_FILE, resolutions: dict[str, int] | None = None, *,
+               dry_run: bool = False) -> dict:
+    """Write human consensus into the dataset. Disputed answers change only with a recorded resolution; the grader's scores play no part."""
+    resolutions = resolutions or {}
+    text = dataset.read_bytes().decode("utf-8")
+    document = yaml.safe_load(text)
+    updates: dict[str, dict] = {}
+    unresolved, too_few, changed, resolved = [], [], [], set()
+    for answer in document["answers"]:
+        item, scores = answer["id"], _scores_for(answer["id"], sheets)
+        if not scores:
+            continue
+        if len(scores) < MIN_LABELERS:
+            too_few.append(item)
+            continue
+        final = consensus(scores)
+        if final is None:
+            if item not in resolutions:
+                unresolved.append({"id": item, "scores": scores})
+                continue
+            final = resolutions[item]
+            resolved.add(item)
+        updates[item] = {"score": final, "labelers": sorted(scores)}
+        if final != answer.get("draft_score", answer["score"]):
+            changed.append(item)
+    stray = sorted(set(resolutions) - resolved)
+    if stray:
+        raise SheetError(f"resolutions were given for answers that are not in dispute: {', '.join(stray)}")
+    new_text = _rewrite(text, document, updates)
+    if updates and not dry_run:
+        dataset.write_bytes(new_text.encode("utf-8"))
+    return {"reviewed": sorted(updates), "changed_from_draft": sorted(changed), "unresolved": unresolved, "too_few_labels": too_few, "written": bool(updates) and not dry_run}
+
+
+def _cmd_adjudicate(args: argparse.Namespace) -> int:
+    known_ids = {a["id"] for a in load_dataset(args.dataset)}
+    resolutions = _read_scores(args.resolved, known_ids) if args.resolved else None
+    report = adjudicate(read_sheets(args.sheets, args.dataset), args.dataset, resolutions, dry_run=args.dry_run)
+    print(f"{'would mark' if args.dry_run else 'marked'} {len(report['reviewed'])} answers reviewed; {len(report['changed_from_draft'])} differ from the draft score")
+    for item in report["unresolved"]:
+        print(f"  unresolved {item['id']}: " + "  ".join(f"{name}={score}" for name, score in item["scores"].items()) + " (add it to a --resolved sheet after discussion)")
+    if report["too_few_labels"]:
+        print(f"  fewer than {MIN_LABELERS} labels, left as they were: {', '.join(report['too_few_labels'])}")
+    return 0
+
+
 def _cmd_export(args: argparse.Namespace) -> int:
     count = export_sheet(args.out, args.dataset)
     print(f"wrote {count} answers to {args.out}. Give each labeler their own copy, named after them, and score 1-4 in the last column.")
@@ -180,6 +290,12 @@ def main(argv: list[str] | None = None) -> int:
     compare.add_argument("--out", type=Path, help="also save the report as JSON")
     compare.add_argument("--dataset", type=Path, default=DATASET_FILE)
     compare.set_defaults(run=_cmd_import)
+    settle = commands.add_parser("adjudicate", help="write consensus scores into the dataset")
+    settle.add_argument("sheets", nargs="+", type=Path)
+    settle.add_argument("--resolved", type=Path, help="CSV with id and score columns, for answers settled by discussion")
+    settle.add_argument("--dry-run", action="store_true", help="report what would change without writing")
+    settle.add_argument("--dataset", type=Path, default=DATASET_FILE)
+    settle.set_defaults(run=_cmd_adjudicate)
     args = parser.parse_args(argv)
     try:
         return args.run(args)
