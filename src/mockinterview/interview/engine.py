@@ -28,6 +28,7 @@ MEMORY_ITEMS = 4
 RECENT_OPENERS = 3
 WARMUP_MEMORY_WORDS = 40
 GRADER_THREADS = 2
+CONTINUATION_KINDS = {"answer", "filler", "thinking"}  # anything else, such as stop or distress, always gets its own turn
 SAY_KINDS = frozenset({"intro", "warmup", "ack", "question", "follow_up", "clarify", "meta_guard", "support", "closing", "outro"})
 
 NON_ANSWER_LINES = {
@@ -37,6 +38,7 @@ NON_ANSWER_LINES = {
     "thinking": (voice.TAKE_YOUR_TIME, "clarify"),
     "filler": (voice.STILL_HERE, "clarify"),
     "distress": (voice.SUPPORT, "support"),
+    "identity": (voice.IDENTITY, "clarify"),
 }
 
 
@@ -171,6 +173,17 @@ class InterviewEngine:
             raise EngineStateError(f"cannot take a reply in phase {self.state.phase!r}")
         return handlers[self.state.phase](None if reply is None else redact_contact(reply)[0])
 
+    def continue_answer(self, reply: str) -> bool:
+        """Add words spoken while the interviewer was thinking to the latest answer. Returns False if they need a proper turn."""
+        text = redact_contact(reply)[0]
+        if classify_reply(text) not in CONTINUATION_KINDS:
+            return False
+        target = next((record for record in reversed(self.state.records) if record["answers"]), None)
+        self._log("candidate", text=text, question_id=target["question_id"] if target else "warmup", reply_kind="continuation")
+        if target is not None:
+            target["answers"][-1] = f"{target['answers'][-1]} {text}"
+        return True
+
     def settle_grades(self) -> float:
         """Finish every recorded grading job, running any that no thread owns. Returns the seconds spent waiting."""
         started = time.time()
@@ -231,6 +244,10 @@ class InterviewEngine:
             s.ended_early = True
             yield self._end_for(kind, "warmup")
             yield from self._finish()
+            return
+        if kind == "identity":
+            yield self._say(voice.IDENTITY.format(question=voice.WARMUP), "clarify", question_id="warmup")
+            yield Wait()
             return
         if kind == "answer":
             s.memory.append(["warmup", " ".join(reply.split()[:WARMUP_MEMORY_WORDS])])
@@ -347,8 +364,13 @@ class InterviewEngine:
         yield Wait()
 
     def _on_closing(self, reply: str | None) -> Iterator[Action]:
-        if reply is not None and self._classify_and_log(reply, "closing") == "crisis":
+        kind = None if reply is None else self._classify_and_log(reply, "closing")
+        if kind == "crisis":
             yield self._end_for("crisis", "closing")
+            yield from self._finish()
+            return
+        if kind == "identity":
+            yield self._say(voice.IDENTITY.format(question=voice.GOODBYE), "outro")
             yield from self._finish()
             return
         asked = reply is not None and not voice.has_no_questions(reply)

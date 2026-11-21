@@ -71,7 +71,7 @@ def main(argv: list[str] | None = None) -> int:
             print("Note: the resume contained text aimed at the AI. It was ignored, and standard questions will be used.")
         for r in report:
             print(f"  - {'tailored' if r['personalized'] else 'standard '} {r.get('question', r['seed_id'])}")
-    print("\nHow this works: press Enter on a blank line to send each answer. Type 'skip' to pass on a question, or 'stop' to end the interview.")
+    print("\nThis is a practice interview with an AI interviewer, who will stay in character.\nHow this works: press Enter on a blank line to send each answer. Type 'skip' to pass on a question, or 'stop' to end the interview.")
     session = InterviewSession(llm, ConsoleIO(), questions, model=args.model, turn_model=args.turn_model,
                                turn_llm=ClaudeCliLLM(model=args.turn_model, timeout_s=args.turn_timeout), time_budget_s=args.minutes * 60)
     started = time.time()

@@ -7,6 +7,7 @@ dependencies = ["pyyaml>=6", "pypdf>=5", "python-docx>=1.1"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+live = ["livekit-agents[silero]~=1.8"]
 
 [build-system]
 requires = ["setuptools>=68"]

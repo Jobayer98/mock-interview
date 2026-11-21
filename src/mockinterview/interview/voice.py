@@ -9,43 +9,39 @@ import random
 import re
 from dataclasses import dataclass, field
 
-VOICE_VERSION = "voice/0.3"
+VOICE_VERSION = "voice/0.5"
 PERSONA_NAME = "Alex"  # placeholder persona; see IMPLEMENTATION_PLAN.md section 8
 DEFAULT_ROLE_LABEL = "junior software engineer"
 
-OPENING = (
-    "Hi, I'm {name}, an AI interviewer, and I'll be running your practice interview today for a {role} role. "
-    "We'll start with a little about your background, then go through {n} questions, and I may ask a few follow-ups along the way. "
-    "Answer as you would in a real interview. I'll save all my feedback for the end, so I won't be able to give hints as we go."
-)
+OPENING = "Hi, thanks for joining today. I'm {name}, and I'll be interviewing you for the {role} role. We have {n} questions to get through."
 WARMUP = "To start us off, tell me a little about yourself."
 CANDIDATE_QUESTIONS = "That's all my questions. Before we wrap up, do you have any questions for me?"
-OUTRO_NO_QUESTIONS = "No problem. Thanks for your time today. I'll put your feedback together now."
-OUTRO_WITH_QUESTION = (
-    "Thanks for asking. Since this is a practice session I can't speak for a real team, but this is the point in a real interview "
-    "where you'd ask it. Thanks for your time today. I'll put your feedback together now."
-)
+GOODBYE = "Thanks for your time today. We'll be in touch soon."
+OUTRO_NO_QUESTIONS = f"No problem. {GOODBYE}"
+OUTRO_WITH_QUESTION = f"Thanks for asking. The hiring team can give you a better answer on that. {GOODBYE}"
 LAST_QUESTION_CUE = "This is my last question."
 
 # Replies to turns that are not answers. No LLM call, and nothing here defines or hints at rubric content.
 REPEAT = "Sure. {question}"
 CLARIFY = (
     "Sure. I'm looking for your own understanding here, and it's fine if parts of it are new to you. "
-    "{question} Give it your best shot, or say skip and we'll move on."
+    "{question} Give it your best shot, or we can move on."
 )
 TAKE_YOUR_TIME = "Of course, take your time."
 STILL_HERE = "I'm here, take your time. Go ahead whenever you're ready."
 SUPPORT = (
-    "That's completely okay. This is only practice, and there's no rush at all. Take a moment, and when you're ready "
-    "you can carry on, say skip to try another question, or say stop and we'll end here."
+    "That's completely okay, there's no rush at all. Take a moment, and when you're ready "
+    "you can carry on, we can move on to another question, or we can stop here."
 )
+# The candidate knows from the app that this is AI practice. The interviewer stays in character but never lies when asked (I18).
+IDENTITY = "I'm an AI interviewer, and this is a practice session. {question}"
 CRISIS = (
     "I'm really sorry you're feeling this way, and I'm glad you said something. I'm an AI practice tool, so I can't give you "
     "the support you deserve. Please reach out right now to someone you trust, or to a local emergency or crisis service. "
     "I'll end our session here."
 )
 OUT_OF_TIME = "We're just about out of time, so I'll stop my questions there."
-STOPPING = "Of course, we can stop here. Thanks for your time today. I'll put together feedback on what we covered."
+STOPPING = "Of course, we can stop here. Thanks for your time today."
 MOVE_ON = "Let's leave that one there."
 NO_PROBLEM = ("No problem.", "That's fine.", "Okay, no problem.")
 

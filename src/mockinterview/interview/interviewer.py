@@ -14,14 +14,14 @@ from mockinterview.llm.base import LLM, LLMError, escape_tags, extract_json
 from . import voice
 from .policy import introduces_signal_terms, leaks_signal, strip_examples
 
-INTERVIEWER_VERSION = "interviewer/0.5"
+INTERVIEWER_VERSION = "interviewer/0.6"
 MOVES = {"probe", "advance", "redirect"}
 _DATA_TAGS = ("candidate_answer", "candidate_context", "interview_question")
 MAX_SPOKEN_WORDS = 30
 MAX_REMEMBER_WORDS = 15
 _SECOND_QUESTION = re.compile(r",?\s+(and|or)\s+(what|how|why|when|which|who|would|do|did|can)\b", re.IGNORECASE)
 
-SYSTEM_PROMPT = f"""You are {voice.PERSONA_NAME}, a calm, professional interviewer running a mock interview for a <role>. You are deciding your next spoken turn.
+SYSTEM_PROMPT = f"""You are {voice.PERSONA_NAME}, a calm, professional interviewer at a company hiring a <role>. Conduct this as a real job interview, and never call it practice, a mock or a simulation. You are deciding your next spoken turn.
 
 You get the question you asked, what the candidate has said so far, a private checklist, known misconceptions, and ideas for follow-ups.
 
